@@ -1,0 +1,36 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package logica;
+import datos.DALAutomovil;
+import entidades.Automovil;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author Asus
+ */
+public class BLAutomovil {
+   public static int insertarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
+        String mensaje = null;
+        if (placa.trim().length() > 0 && modelo.trim().length() > 0 && marca.trim().length() > 0) {
+            Automovil auto = new Automovil(placa, modelo, color, marca, garajeId);
+            mensaje = DALAutomovil.insertarAutomovil(auto);
+            if (mensaje == null) {
+                JOptionPane.showMessageDialog(null, "Automóvil registrado correctamente", "Éxito", 1);
+                return 0;
+            } else {
+                JOptionPane.showMessageDialog(null, mensaje, "Error", 0);
+                return 1;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Datos no válidos", "Error", 0);
+            return 2;
+        }
+    }
+
+    public static ArrayList<Automovil> listarAutomoviles() {
+        return DALAutomovil.listarAutomoviles();
+    } 
+}

@@ -1,0 +1,78 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package datos;
+import entidades.Cliente;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author Asus
+ */
+public class DALCliente {
+    private static Connection cn;
+    private static CallableStatement cs;
+    private static ResultSet rs;
+
+    public static String insertarCliente(Cliente c) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            cs = cn.prepareCall("{call sp_insertar_cliente(?, ?, ?, ?, ?)}");
+            cs.setString(1, c.getDni());
+            cs.setString(2, c.getNombre());
+            cs.setString(3, c.getDireccion());
+            cs.setString(4, c.getTelefono());
+
+            if (c.getSponsor() == null || c.getSponsor().isEmpty()) {
+                cs.setNull(5, Types.VARCHAR);
+            } else {
+                cs.setString(5, c.getSponsor());
+            }
+
+            cs.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+        } finally {
+            try {
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }
+
+    public static ArrayList<Cliente> listarClientes() {
+        ArrayList<Cliente> lista = new ArrayList<>();
+        try {
+            cn = Conexion.realizarconexion();
+            cs = cn.prepareCall("{call sp_listar_clientes()}");
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                Cliente c = new Cliente(
+                    rs.getString("dni"),
+                    rs.getString("nombre"),
+                    rs.getString("direccion"),
+                    rs.getString("telefono"),
+                    rs.getString("sponsor") 
+                );
+                lista.add(c);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+            }
+        }
+        return lista;
+    }
+}
