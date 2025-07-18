@@ -39,6 +39,35 @@ public class DALAgencia {
         }
         return mensaje;
     }
+    
+    public static Agencia buscarAgenciaPorId(int idAgencia) {
+    Agencia agencia = null;
+    try {
+        cn = Conexion.realizarconexion();
+        String sql = "{call sp_buscar_agencia_por_id(?)}";
+        cs = cn.prepareCall(sql);
+        cs.setInt(1, idAgencia);
+        rs = cs.executeQuery();
+
+        if (rs.next()) {
+            agencia = new Agencia();
+            agencia.setAgenciaId(idAgencia);
+            agencia.setNombre(rs.getString("nombre"));
+            agencia.setDireccion(rs.getString("direccion"));
+        }
+    } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (cs != null) cs.close();
+            if (cn != null) cn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    return agencia;
+}
 
     public static ArrayList<Agencia> listarAgencias() {
         ArrayList<Agencia> lista = new ArrayList<>();
