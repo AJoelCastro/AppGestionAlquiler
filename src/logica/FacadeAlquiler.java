@@ -35,7 +35,13 @@ public class FacadeAlquiler {
         return agencia.buscarAgenciaPorId(idAgencia);
     }
     
+    public boolean editarAgencia(int idAgencia, String nuevoNom, String nuevaDir){
+        return agencia.editarAgencia(idAgencia, nuevoNom, nuevaDir);
+    }
     
+    public boolean eliminarAgencia(int idAgencia){
+        return agencia.eliminarAgencia(idAgencia);
+    }
     
     public void registrarAutomovil(String placa, String modelo, String color, String marca, int garajeId){
         auto.insertarAutomovil(placa, modelo, color, marca, garajeId);
