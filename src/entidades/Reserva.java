@@ -24,10 +24,10 @@ public class Reserva {
     private String nombreAgencia; // solo para mostrar
 
     public Reserva() {
-       this(0,0,new GregorianCalendar(),new GregorianCalendar(),0,false);
+       this(0,0,0,new GregorianCalendar(),new GregorianCalendar(),0,false);
     }
     
-    public Reserva(int clienteId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, double precioTotal, boolean entregado) {
+    public Reserva(int reservaId,int clienteId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, double precioTotal, boolean entregado) {
         this.clienteId = clienteId;
         this.agenciaId = agenciaId;
         this.fechaInicio = fechaInicio;
