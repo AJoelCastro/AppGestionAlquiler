@@ -37,7 +37,34 @@ public class BLReserva {
         }
     }
     
+    public static Reserva buscarReservaPorId(int idReserva){
+       ArrayList<Reserva> listaR = DALReserva.listarReservas();
+       for(Reserva reserva: listaR){
+           if(reserva.getReservaId()==idReserva);
+               return DALReserva.buscarReservaPorId(idReserva);
+       }
+       return null;
+    }
     
+    public static boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
+        Reserva reserva = buscarReservaPorId(reservaId);
+            if (reserva != null) {
+                reserva.setPrecioTotal(nuevoPrecioT);
+                reserva.setEntregado(cambiarEstado);
+                DALReserva.actualizarReserva(reserva);
+                return true; 
+            }
+    return false; 
+    }
+    
+    public static boolean eliminarReserva(int idReserva) {
+        Reserva reserva = buscarReservaPorId(idReserva);
+            if (reserva != null) {
+                DALReserva.eliminarReserva(idReserva);
+                return true; 
+            }
+    return false; 
+}
 
     public static ArrayList<Reserva> listarReservas() {
         return DALReserva.listarReservas();
