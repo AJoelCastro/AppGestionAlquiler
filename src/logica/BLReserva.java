@@ -7,14 +7,35 @@ package logica;
 import datos.DALReserva;
 import entidades.Reserva;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
  * @author Asus
  */
 public class BLReserva {
-   public static int insertarReserva(Reserva r) {
-        return DALReserva.insertarReserva(r);
+    public static int insertarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado,String nombreC,String nombreAg) {
+        if (IdCliente > 0 && IdAgencia > 0
+                && fechaI != null && fechaF != null
+                && precioT >= 0 && nombreC != null && !nombreC.trim().isEmpty()
+                && nombreAg != null && !nombreAg.trim().isEmpty()) {
+
+            Reserva reserva = new Reserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado, nombreC, nombreAg);
+            int mensaje = DALReserva.insertarReserva(reserva);
+
+            if (mensaje == -1) {
+                showMessageDialog(null, "Reserva registrada", "Resultado", 1);
+                return 0;
+            } else {
+                showMessageDialog(null, mensaje, "Error", 0);
+                return 1;
+            }
+
+        } else {
+            showMessageDialog(null, "Datos no válidos", "Error", 0);
+            return 3;
+        }
     }
 
     public static ArrayList<Reserva> listarReservas() {

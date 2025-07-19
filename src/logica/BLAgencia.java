@@ -34,7 +34,26 @@ public class BLAgencia {
             return 2;
         }
     }
-
+    
+    public static Agencia buscarAgenciaPorId(int idAgencia){
+       ArrayList<Agencia> listaA = DALAgencia.listarAgencias();
+       for(Agencia agencia: listaA){
+           if(agencia.getAgenciaId()==idAgencia)
+               return DALAgencia.buscarAgenciaPorId(idAgencia);
+       }
+       return null;
+    }
+    
+    public static boolean editarAgencia(int idAgencia, String nuevoNombre, String nuevaDireccion) {
+    Agencia agencia = buscarAgenciaPorId(idAgencia);
+    if (agencia != null) {
+                agencia.setNombre(nuevoNombre);
+                agencia.setDireccion(nuevaDireccion);
+                DALAgencia.actualizarAgencia(agencia);
+                return true; 
+            }
+    return false; 
+}
     public static ArrayList<Agencia> listarAgencias() {
         return DALAgencia.listarAgencias();
     }
