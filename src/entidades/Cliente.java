@@ -9,6 +9,7 @@ package entidades;
  * @author Asus
  */
 public class Cliente {
+    private int idCliente;
     private String dni;
     private String nombre;
     private String direccion;
@@ -16,10 +17,11 @@ public class Cliente {
     private String sponsor; // puede ser DNI o nombre según el uso
 
     public Cliente() {
-        this("00000000", "ND", "ND", "ND", null);
-    };
+        this(0,"00000000", "ND", "ND", "ND", null);
+    }
 
-    public Cliente(String dni, String nombre, String direccion, String telefono, String sponsor) {
+    public Cliente(int idCliente,String dni, String nombre, String direccion, String telefono, String sponsor) {
+        this.idCliente = idCliente;
         this.dni = dni;
         this.nombre = nombre;
         this.direccion = direccion;
@@ -27,6 +29,14 @@ public class Cliente {
         this.sponsor = sponsor;
     }
 
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+    
     public String getDni() {
         return dni;
     }

@@ -47,12 +47,24 @@ public class FacadeAlquiler {
         auto.insertarAutomovil(placa, modelo, color, marca, garajeId);
     }
     
+    public Automovil buscarAutomovilPorPlaca(String placa){
+        return auto.buscarAutomovilPorPlaca(placa);
+    }
+    
+    public boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId){
+        return auto.editarAutomovil(placa, nuevoModelo, nuevoColor, nuevaMarca, nuevoGarajeId);
+    }
+    
+    public boolean eliminarAutomovil(String placa){
+        return auto.eliminarAutomovil(placa);
+    }
+    
     public void registrarGaraje(String nombre, String ubicacion){
         garaje.insertarGaraje(nombre, ubicacion);
     }
     
-    public void registrarCliente(String dni, String nombre, String direccion, String telefono, String sponsor) {
-        cliente.insertarCliente(dni, nombre, direccion, telefono, sponsor);
+    public void registrarCliente(Cliente c) {
+        cliente.insertarCliente(c);
     }
     
     public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado, String nombreC, String nombreAg) {

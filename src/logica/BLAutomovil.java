@@ -3,16 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package logica;
+
 import datos.DALAutomovil;
 import entidades.Automovil;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author Asus
  */
 public class BLAutomovil {
-   public static int insertarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
+
+    public static int insertarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
         String mensaje = null;
         if (placa.trim().length() > 0 && modelo.trim().length() > 0 && marca.trim().length() > 0) {
             Automovil auto = new Automovil(placa, modelo, color, marca, garajeId);
@@ -30,7 +33,39 @@ public class BLAutomovil {
         }
     }
 
+    public static Automovil buscarAutomovilPorPlaca(String placaAuto) {
+        ArrayList<Automovil> listaAutos = DALAutomovil.listarAutomoviles();
+        for (Automovil autos : listaAutos) {
+            if (autos.getPlaca().equals(placaAuto)) {
+                return DALAutomovil.buscarAutomovilPorPlaca(placaAuto);
+            }
+        }
+        return null;
+    }
+
+    public static boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId) {
+        Automovil auto = buscarAutomovilPorPlaca(placa);
+        if (auto != null) {
+            auto.setModelo(nuevoModelo);
+            auto.setColor(nuevoColor);
+            auto.setMarca(nuevaMarca);
+            auto.setGarajeId(nuevoGarajeId);
+            DALAutomovil.actualizarAutomovil(auto);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean eliminarAutomovil(String placa) {
+        Automovil auto = buscarAutomovilPorPlaca(placa);
+        if (auto != null) {
+            DALAutomovil.eliminarAutomovil(placa);
+            return true;
+        }
+        return false;
+    }
+
     public static ArrayList<Automovil> listarAutomoviles() {
         return DALAutomovil.listarAutomoviles();
-    } 
+    }
 }
