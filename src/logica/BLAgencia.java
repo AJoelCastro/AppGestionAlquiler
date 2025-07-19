@@ -34,7 +34,16 @@ public class BLAgencia {
             return 2;
         }
     }
-
+    
+    public static Agencia buscarAgenciaPorId(int idAgencia){
+       ArrayList<Agencia> listaA = DALAgencia.listarAgencias();
+       for(Agencia agencia: listaA){
+           if(agencia.getAgenciaId()==idAgencia)
+               return DALAgencia.buscarAgenciaPorId(idAgencia);
+       }
+       return null;
+    }
+    
     public static ArrayList<Agencia> listarAgencias() {
         return DALAgencia.listarAgencias();
     }
