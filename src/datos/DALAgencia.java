@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package datos;
+
 import entidades.*;
 import java.util.*;
 import java.sql.*;
@@ -13,7 +14,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
  * @author Asus
  */
 public class DALAgencia {
-   private static Connection cn = null;
+
+    private static Connection cn = null;
     private static CallableStatement cs = null;
     private static Statement st = null;
     private static ResultSet rs = null;
@@ -31,43 +33,53 @@ public class DALAgencia {
             mensaje = ex.getMessage();
         } finally {
             try {
-                if (cs != null) cs.close();
-                if (cn != null) cn.close();
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (SQLException ex) {
                 mensaje = ex.getMessage();
             }
         }
         return mensaje;
     }
-    
-public static Agencia buscarAgenciaPorId(int idAgencia) {
-    Agencia agencia = null;
-    try {
-        cn = Conexion.realizarconexion();
-        String sql = "{call sp_buscar_agencia_por_id(?)}";
-        cs = cn.prepareCall(sql);
-        cs.setInt(1, idAgencia);
-        rs = cs.executeQuery();
 
-        if (rs.next()) {
-            agencia = new Agencia();
-            agencia.setAgenciaId(idAgencia);
-            agencia.setNombre(rs.getString("nombre"));
-            agencia.setDireccion(rs.getString("direccion"));
-        }
-    } catch (ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-    } finally {
+    public static Agencia buscarAgenciaPorId(int idAgencia) {
+        Agencia agencia = null;
         try {
-            if (rs != null) rs.close();
-            if (cs != null) cs.close();
-            if (cn != null) cn.close();
-        } catch (SQLException ex) {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_agencia_por_id(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, idAgencia);
+            rs = cs.executeQuery();
+
+            if (rs.next()) {
+                agencia = new Agencia();
+                agencia.setAgenciaId(idAgencia);
+                agencia.setNombre(rs.getString("nombre"));
+                agencia.setDireccion(rs.getString("direccion"));
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
+        return agencia;
     }
-    return agencia;
-}
 
     public static String actualizarAgencia(Agencia agencia) {
         String mensaje = null;
@@ -82,14 +94,44 @@ public static Agencia buscarAgenciaPorId(int idAgencia) {
             mensaje = ex.getMessage();
         } finally {
             try {
-                if (cs != null) cs.close();
-                if (cn != null) cn.close();
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (SQLException ex) {
                 mensaje = ex.getMessage();
             }
         }
         return mensaje;
     }
+
+    public static String eliminarAgencia(int idAgencia) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_eliminar_agencia(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, idAgencia);
+            cs.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+        } finally {
+            try {
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }
+
     public static ArrayList<Agencia> listarAgencias() {
         ArrayList<Agencia> lista = new ArrayList<>();
         try {
@@ -108,9 +150,15 @@ public static Agencia buscarAgenciaPorId(int idAgencia) {
             showMessageDialog(null, ex.getMessage(), "Error", 0);
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (st != null) st.close();
-                if (cn != null) cn.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
             } catch (SQLException ex) {
                 showMessageDialog(null, ex.getMessage(), "Error", 0);
             }
