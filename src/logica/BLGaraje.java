@@ -30,6 +30,35 @@ public class BLGaraje {
             return 2;
         }
     }
+    
+    public static Garaje buscarGarajePorId(int idGaraje){
+       ArrayList<Garaje> listaG = DALGaraje.listarGarajes();
+       for(Garaje garaje: listaG){
+           if(garaje.getIdGaraje()==idGaraje);
+               return DALGaraje.buscarGarajePorId(idGaraje);
+       }
+       return null;
+    }
+    
+    public static boolean editarGaraje(int idGaraje, String nuevoNombre, String nuevaUbicacion) {
+        Garaje garaje = buscarGarajePorId(idGaraje);
+            if(garaje != null) {
+                garaje.setNombre(nuevoNombre);
+                garaje.setUbicacion(nuevaUbicacion);
+                DALGaraje.actualizarGaraje(garaje);
+                return true; 
+            }
+    return false; 
+    }
+    
+    public static boolean eliminarGaraje(int idGaraje) {
+        Garaje garaje = buscarGarajePorId(idGaraje);
+            if (garaje != null) {
+                DALGaraje.eliminarGaraje(idGaraje);
+                return true; 
+            }
+    return false; 
+}
 
     public static ArrayList<Garaje> listarGarajes() {
         return DALGaraje.listarGarajes();
