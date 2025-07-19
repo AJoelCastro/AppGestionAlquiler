@@ -15,13 +15,12 @@ import static javax.swing.JOptionPane.showMessageDialog;
  * @author Asus
  */
 public class BLReserva {
-    public static int insertarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado,String nombreC,String nombreAg) {
+    public static int insertarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, double precioT, boolean estado) {
         if (IdCliente > 0 && IdAgencia > 0
                 && fechaI != null && fechaF != null
-                && precioT >= 0 && nombreC != null && !nombreC.trim().isEmpty()
-                && nombreAg != null && !nombreAg.trim().isEmpty()) {
+                && precioT >= 0) {
 
-            Reserva reserva = new Reserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado, nombreC, nombreAg);
+            Reserva reserva = new Reserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado);
             int mensaje = DALReserva.insertarReserva(reserva);
 
             if (mensaje == -1) {
@@ -37,6 +36,35 @@ public class BLReserva {
             return 3;
         }
     }
+    
+    public static Reserva buscarReservaPorId(int idReserva){
+       ArrayList<Reserva> listaR = DALReserva.listarReservas();
+       for(Reserva reserva: listaR){
+           if(reserva.getReservaId()==idReserva);
+               return DALReserva.buscarReservaPorId(idReserva);
+       }
+       return null;
+    }
+    
+    public static boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
+        Reserva reserva = buscarReservaPorId(reservaId);
+            if (reserva != null) {
+                reserva.setPrecioTotal(nuevoPrecioT);
+                reserva.setEntregado(cambiarEstado);
+                DALReserva.actualizarReserva(reserva);
+                return true; 
+            }
+    return false; 
+    }
+    
+    public static boolean eliminarReserva(int idReserva) {
+        Reserva reserva = buscarReservaPorId(idReserva);
+            if (reserva != null) {
+                DALReserva.eliminarReserva(idReserva);
+                return true; 
+            }
+    return false; 
+}
 
     public static ArrayList<Reserva> listarReservas() {
         return DALReserva.listarReservas();

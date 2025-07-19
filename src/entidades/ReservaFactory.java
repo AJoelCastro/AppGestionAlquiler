@@ -17,13 +17,7 @@ public class ReservaFactory {
             double precioTotal, boolean entregado, 
             String nombreCliente, String nombreAgencia) {
         return new Reserva(reservaId, clienteId, agenciaId, fechaInicio, fechaFin, 
-                precioTotal, entregado, nombreCliente, nombreAgencia);
-    }
-    
-    public static Reserva crearReservaSinId(int clienteId, int agenciaId, 
-            GregorianCalendar fechaInicio, GregorianCalendar fechaFin, 
-            double precioTotal, boolean entregado) {
-        return new Reserva(clienteId, agenciaId, fechaInicio, fechaFin, 
                 precioTotal, entregado);
     }
+   
 }
