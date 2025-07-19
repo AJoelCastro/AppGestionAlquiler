@@ -10,8 +10,8 @@ package entidades;
  */
 public class GarajeFactory {
     
-    public static Garaje crearGarajeCompleto(String nombre, String ubicacion) {
-        return new Garaje(nombre, ubicacion);
+    public static Garaje crearGarajeCompleto(int idGaraje,String nombre, String ubicacion) {
+        return new Garaje(idGaraje,nombre, ubicacion);
     }
     
     public static Garaje crearGarajeVacio() {

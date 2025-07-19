@@ -11,12 +11,12 @@ import entidades.Cliente;
  * @author Arturo
  */
 public class ClienteFactory {
-    public static Cliente crearClienteConSponsor(int idCliente,String dni, String nombre, String direccion, String telefono, String sponsor) {
-        return new Cliente(idCliente, dni, nombre, direccion, telefono, sponsor);
+    public static Cliente crearClienteConSponsor(int idCliente, String dni, String nombre, String direccion, String telefono, String sponsor) {
+        return new Cliente(idCliente,dni, nombre, direccion, telefono, sponsor);
     }
 
     public static Cliente crearClienteSinSponsor(int idCliente,String dni, String nombre, String direccion, String telefono) {
-        return new Cliente(idCliente, dni, nombre, direccion, telefono, null);
+        return new Cliente(idCliente,dni, nombre, direccion, telefono, null);
     }
 
     public static Cliente crearClienteVacio() {

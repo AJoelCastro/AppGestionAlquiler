@@ -31,6 +31,37 @@ public class BLCliente {
             return 2;
         }
     }
+    
+    public static Cliente buscarClientePorId(int idCliente){
+       ArrayList<Cliente> listaC = DALCliente.listarClientes();
+       for(Cliente c: listaC){
+           if(c.getIdCliente()==idCliente);
+               return DALCliente.buscarClientePorId(idCliente);
+       }
+       return null;
+    }
+    
+    public static boolean editarCliente(int idCliente, String nuevoNombre, String nuevaDireccion, String nuevoTelefono) {
+        Cliente Cliente = buscarClientePorId(idCliente);
+            if (Cliente != null) {
+                Cliente.setNombre(nuevoNombre);
+                Cliente.setDireccion(nuevaDireccion);
+                Cliente.setTelefono(nuevoTelefono);
+                DALCliente.actualizarCliente(Cliente);
+                return true; 
+            }
+    return false; 
+    }
+    
+    public static boolean eliminarCliente(int idCliente) {
+        Cliente cliente = buscarClientePorId(idCliente);
+            if (cliente != null) {
+                DALCliente.eliminarCliente(idCliente);
+                return true; 
+            }
+    return false; 
+}
+    
     public static ArrayList<Cliente> listarClientes() {
         return DALCliente.listarClientes();
     }
