@@ -45,8 +45,8 @@ public class FacadeAlquiler {
         garaje.insertarGaraje(nombre, ubicacion);
     }
     
-    public void registrarCliente(Cliente c) {
-        cliente.insertarCliente(c);
+    public void registrarCliente(String dni, String nombre, String direccion, String telefono, String sponsor) {
+        cliente.insertarCliente(dni, nombre, direccion, telefono, sponsor);
     }
     
     public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado, String nombreC, String nombreAg) {
