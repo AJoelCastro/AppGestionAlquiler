@@ -40,7 +40,7 @@ public class DALAgencia {
         return mensaje;
     }
     
-    public static Agencia buscarAgenciaPorId(int idAgencia) {
+public static Agencia buscarAgenciaPorId(int idAgencia) {
     Agencia agencia = null;
     try {
         cn = Conexion.realizarconexion();
