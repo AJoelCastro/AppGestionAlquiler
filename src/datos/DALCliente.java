@@ -45,7 +45,101 @@ public class DALCliente {
         }
         return mensaje;
     }
+    
+    public static Cliente buscarClientePorId(int idCliente) {
+        Cliente cliente = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_cliente_por_id(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1,idCliente);
+            rs = cs.executeQuery();
 
+            if (rs.next()) {
+                cliente = new Cliente();
+                cliente.setIdCliente(idCliente);
+                cliente.setDni(rs.getString("dni"));
+                cliente.setNombre(rs.getString("mombre"));
+                cliente.setDireccion(rs.getString("direccion"));
+                cliente.setTelefono(rs.getString("telefono"));
+                cliente.setSponsor(rs.getString("sponsor_id")); 
+
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cliente;
+    }
+
+       public static String actualizarCliente(Cliente cliente) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_actualizar_cliente(?, ?, ?, ?, ?)}";
+            cs.setString(1, cliente.getDni());
+            cs.setString(2, cliente.getNombre());
+            cs.setString(3, cliente.getDireccion());
+            cs.setString(4, cliente.getTelefono());
+
+            if (cliente.getSponsor() == null || cliente.getSponsor().isEmpty()) {
+                cs.setNull(5, Types.VARCHAR);
+            } else {
+                cs.setString(5, cliente.getSponsor());
+            }
+
+            cs.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+        } finally {
+            try {
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }
+       
+       public static String eliminarCliente(int idCliente) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_eliminar_cliente(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1,idCliente);
+            cs.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+        } finally {
+            try {
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }   
+    
     public static ArrayList<Cliente> listarClientes() {
         ArrayList<Cliente> lista = new ArrayList<>();
         try {
