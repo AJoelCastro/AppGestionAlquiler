@@ -44,6 +44,16 @@ public class BLAgencia {
        return null;
     }
     
+    public static boolean editarAgencia(int idAgencia, String nuevoNombre, String nuevaDireccion) {
+    Agencia agencia = buscarAgenciaPorId(idAgencia);
+    if (agencia != null) {
+                agencia.setNombre(nuevoNombre);
+                agencia.setDireccion(nuevaDireccion);
+                DALAgencia.actualizarAgencia(agencia);
+                return true; 
+            }
+    return false; 
+}
     public static ArrayList<Agencia> listarAgencias() {
         return DALAgencia.listarAgencias();
     }
