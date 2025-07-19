@@ -54,6 +54,16 @@ public class BLAgencia {
             }
     return false; 
 }
+        public static boolean eliminarAgencia(int idAgencia) {
+    Agencia agencia = buscarAgenciaPorId(idAgencia);
+    if (agencia != null) {
+                DALAgencia.eliminarAgencia(idAgencia);
+                return true; 
+            }
+    return false; 
+}
+    
+    
     public static ArrayList<Agencia> listarAgencias() {
         return DALAgencia.listarAgencias();
     }
