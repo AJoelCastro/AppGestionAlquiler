@@ -12,9 +12,12 @@ import javax.swing.JOptionPane;
  * @author Asus
  */
 public class BLCliente {
-    public static int insertarCliente(String dni, String nombre, String direccion, String telefono, String sponsor) {
-        if (dni.trim().length() == 8 && !nombre.trim().isEmpty() && !direccion.trim().isEmpty() && !telefono.trim().isEmpty()) {
-            Cliente c = new Cliente(dni, nombre, direccion, telefono, sponsor);
+    public static int insertarCliente(Cliente c) {
+        if (c.getDni().trim().length() == 8 &&
+            !c.getNombre().trim().isEmpty() &&
+            !c.getDireccion().trim().isEmpty() &&
+            !c.getTelefono().trim().isEmpty()) {
+            
             String mensaje = DALCliente.insertarCliente(c);
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Cliente registrado correctamente");
@@ -28,7 +31,6 @@ public class BLCliente {
             return 2;
         }
     }
-
     public static ArrayList<Cliente> listarClientes() {
         return DALCliente.listarClientes();
     }
