@@ -54,6 +54,7 @@ public class DALCliente {
             rs = cs.executeQuery();
             while (rs.next()) {
                 Cliente c = new Cliente(
+                    rs.getInt("cliente_id"),
                     rs.getString("dni"),
                     rs.getString("nombre"),
                     rs.getString("direccion"),
