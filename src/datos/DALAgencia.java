@@ -69,6 +69,27 @@ public static Agencia buscarAgenciaPorId(int idAgencia) {
     return agencia;
 }
 
+    public static String actualizarAgencia(Agencia agencia) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_actualizar_agencia(?, ?)}";
+            cs = cn.prepareCall(sql);
+            cs.setString(1, agencia.getNombre());
+            cs.setString(2, agencia.getDireccion());
+            cs.executeUpdate();
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+        } finally {
+            try {
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }
     public static ArrayList<Agencia> listarAgencias() {
         ArrayList<Agencia> lista = new ArrayList<>();
         try {
