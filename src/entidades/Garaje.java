@@ -9,18 +9,28 @@ package entidades;
  * @author Asus
  */
 public class Garaje {
+    private int idGaraje;
     private String nombre;
     private String ubicacion;
 
     public Garaje() {
-        this("ND", "ND");
+        this(0,"ND", "ND");
     }
 
-    public Garaje(String nombre, String ubicacion) {
+    public Garaje(int idGaraje,String nombre, String ubicacion) {
+        this.idGaraje = idGaraje;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
     }
 
+    public int getIdGaraje() {
+        return idGaraje;
+    }
+
+    public void setIdGaraje(int idGaraje) {
+        this.idGaraje = idGaraje;
+    }
+    
     public String getNombre() {
         return nombre;
     }
