@@ -44,7 +44,7 @@ public class DALGaraje {
             cs = cn.prepareCall("{call sp_listar_garajes()}");
             rs = cs.executeQuery();
             while (rs.next()) {
-                lista.add(new Garaje(rs.getString("nombre"), rs.getString("ubicacion")));
+                lista.add(new Garaje(rs.getInt("garaje_id"),rs.getString("nombre"), rs.getString("ubicacion")));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
