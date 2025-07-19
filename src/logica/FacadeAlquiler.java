@@ -27,47 +27,84 @@ public class FacadeAlquiler {
         this.garaje = new BLGaraje();
     }
 
-    public void registrarAgencia(String nombre, String direccion){
+    public void registrarAgencia(String nombre, String direccion) {
         agencia.insertarAgencia(nombre, direccion);
     }
-    
-    public Agencia buscarAgenciaPorId(int idAgencia){
+
+    public Agencia buscarAgenciaPorId(int idAgencia) {
         return agencia.buscarAgenciaPorId(idAgencia);
     }
-    
-    public boolean editarAgencia(int idAgencia, String nuevoNom, String nuevaDir){
+
+    public boolean editarAgencia(int idAgencia, String nuevoNom, String nuevaDir) {
         return agencia.editarAgencia(idAgencia, nuevoNom, nuevaDir);
     }
-    
-    public boolean eliminarAgencia(int idAgencia){
+
+    public boolean eliminarAgencia(int idAgencia) {
         return agencia.eliminarAgencia(idAgencia);
     }
-    
-    public void registrarAutomovil(String placa, String modelo, String color, String marca, int garajeId){
+
+    public void registrarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
         auto.insertarAutomovil(placa, modelo, color, marca, garajeId);
     }
-    
-    public Automovil buscarAutomovilPorPlaca(String placa){
+
+    public Automovil buscarAutomovilPorPlaca(String placa) {
         return auto.buscarAutomovilPorPlaca(placa);
     }
-    
-    public boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId){
+
+    public boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId) {
         return auto.editarAutomovil(placa, nuevoModelo, nuevoColor, nuevaMarca, nuevoGarajeId);
     }
-    
-    public boolean eliminarAutomovil(String placa){
+
+    public boolean eliminarAutomovil(String placa) {
         return auto.eliminarAutomovil(placa);
     }
-    
-    public void registrarGaraje(String nombre, String ubicacion){
+
+    public void registrarGaraje(String nombre, String ubicacion) {
         garaje.insertarGaraje(nombre, ubicacion);
     }
-    
+
+    public Garaje buscarGarajePorId(int idGaraje) {
+        return garaje.buscarGarajePorId(idGaraje);
+    }
+
+    public boolean editarGaraje(int idGaraje, String nuevoNombre, String nuevaUbicacion) {
+        return garaje.editarGaraje(idGaraje, nuevoNombre, nuevaUbicacion);
+    }
+
+    public boolean eliminarGaraje(int idGaraje) {
+        return garaje.eliminarGaraje(idGaraje);
+    }
+
     public void registrarCliente(Cliente c) {
         cliente.insertarCliente(c);
     }
-    
-    public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado, String nombreC, String nombreAg) {
-        reserva.insertarReserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado, nombreC, nombreAg);
+
+    public Cliente buscarClientePorId(int idCliente) {
+        return cliente.buscarClientePorId(idCliente);
     }
+
+    public boolean editarCliente(int idCliente, String nuevoNombre, String nuevaDireccion, String nuevoTelefono) {
+        return cliente.editarCliente(idCliente, nuevoNombre, nuevaDireccion, nuevoTelefono);
+    }
+
+    public boolean eliminarCliente(int idCliente) {
+        return cliente.eliminarCliente(idCliente);
+    }
+
+    public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado) {
+        reserva.insertarReserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado);
+    }
+
+    public Reserva buscarReservaPorId(int idReserva) {
+        return reserva.buscarReservaPorId(idReserva);
+    }
+
+    public boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
+        return reserva.editarReserva(reservaId,nuevoPrecioT,cambiarEstado);
+    }
+
+    public boolean eliminarReserva(int idReserva) {
+        return reserva.eliminarReserva(idReserva);
+    }
+
 }
