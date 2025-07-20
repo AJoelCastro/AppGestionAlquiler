@@ -143,12 +143,12 @@ public class DALGaraje {
         return lista;
     }
     
-     public static ArrayList<Automovil> listarAutomovilesPorGaraje(String garaje) {
+     public static ArrayList<Automovil> listarAutomovilesPorGaraje(int garaje) {
         ArrayList<Automovil> lista = new ArrayList<>();
         try {
             cn = Conexion.realizarconexion();
             cs = cn.prepareCall("{call sp_listar_automovil_por_garaje(?)}");
-            cs.setString(1, garaje);
+            cs.setInt(1, garaje);
             rs = cs.executeQuery();
             while (rs.next()) {
                 lista.add(new Automovil(
