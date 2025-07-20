@@ -56,8 +56,8 @@ public class FacadeAlquiler {
         return auto.buscarAutomovilPorPlaca(placa);
     }
 
-    public boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId) {
-        return auto.editarAutomovil(placa, nuevoModelo, nuevoColor, nuevaMarca, nuevoGarajeId);
+    public boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca) {
+        return auto.editarAutomovil(placa, nuevoModelo, nuevoColor, nuevaMarca);
     }
 
     public boolean eliminarAutomovil(String placa) {
@@ -67,6 +67,11 @@ public class FacadeAlquiler {
     public String verificarDisponibilidadAutomovil(String placa) { 
         return auto.verificarDisponibilidadAutomovil(placa);
     }
+    
+    public ArrayList<Automovil> listarAutomoviles() {
+        return auto.listarAutomoviles();
+    }
+    
     public void registrarGaraje(String nombre, String ubicacion) {
         garaje.insertarGaraje(nombre, ubicacion);
     }
@@ -105,6 +110,10 @@ public class FacadeAlquiler {
 
     public boolean eliminarCliente(int idCliente) {
         return cliente.eliminarCliente(idCliente);
+    }
+    
+    public ArrayList<Cliente> listarClientes() {
+        return cliente.listarClientes();
     }
 
     public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado) {

@@ -61,10 +61,10 @@ public class DALCliente {
                 cliente = new Cliente();
                 cliente.setIdCliente(idCliente);
                 cliente.setDni(rs.getString("dni"));
-                cliente.setNombre(rs.getString("mombre"));
+                cliente.setNombre(rs.getString("nombre"));
                 cliente.setDireccion(rs.getString("direccion"));
                 cliente.setTelefono(rs.getString("telefono"));
-                cliente.setSponsor(rs.getString("sponsor_id")); 
+                cliente.setSponsor(rs.getString("sponsor"));
 
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -87,31 +87,41 @@ public class DALCliente {
         return cliente;
     }
 
-       public static String actualizarCliente(Cliente cliente) {
+    public static String actualizarCliente(Cliente cliente) {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_actualizar_cliente(?, ?, ?, ?, ?)}";
-            cs.setString(1, cliente.getDni());
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, cliente.getIdCliente());
             cs.setString(2, cliente.getNombre());
             cs.setString(3, cliente.getDireccion());
             cs.setString(4, cliente.getTelefono());
 
-            if (cliente.getSponsor() == null || cliente.getSponsor().isEmpty()) {
+            // Corregir el manejo del sponsor
+            if (cliente.getSponsor() == null || cliente.getSponsor().isEmpty() || 
+                cliente.getSponsor().equals("Sin sponsor") || cliente.getSponsor().trim().equals("")) {
                 cs.setNull(5, Types.VARCHAR);
             } else {
                 cs.setString(5, cliente.getSponsor());
             }
 
-            cs.executeUpdate();
+            int filasAfectadas = cs.executeUpdate();
+
+            // Verificar si realmente se actualizó algo
+            if (filasAfectadas == 0) {
+                mensaje = "No se encontró el cliente o no se realizaron cambios";
+            }
+
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
+            ex.printStackTrace(); // Para debugging
         } finally {
             try {
                 if (cs != null) cs.close();
                 if (cn != null) cn.close();
             } catch (SQLException ex) {
-                mensaje = ex.getMessage();
+                if (mensaje == null) mensaje = ex.getMessage();
             }
         }
         return mensaje;
@@ -173,7 +183,7 @@ public class DALCliente {
         return lista;
     }
     
-        public static ArrayList<Reserva> listarReservasPorCliente(int idCliente) {
+    public static ArrayList<Reserva> listarReservasPorCliente(int idCliente) {
     ArrayList<Reserva> reservas = new ArrayList<>();
     try {
         cn = Conexion.realizarconexion();
@@ -222,5 +232,6 @@ public class DALCliente {
             ex.printStackTrace();
         }
     }
-    return reservas;}
+    return reservas;
+    }
 }

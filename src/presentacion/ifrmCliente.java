@@ -5,6 +5,7 @@
 package presentacion;
 import datos.*;
 import entidades.*;
+import javax.swing.JOptionPane;
 import logica.*;
 /**
  *
@@ -193,23 +194,38 @@ public class ifrmCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-//    int respuesta;
-//        dni = txtDni.getText();
-//        nombre = txtNombre.getText();
-//        direccion = txtDireccion.getText();
-//        telefono = txtTelefono.getText();
-//        sponsor = txtSponsor.getText();
-//        respuesta = BLCliente.insertarCliente(dni, nombre, direccion, telefono, sponsor);
-//        if(respuesta==0 || respuesta==3) {
-//            limpiar();
-//            activar(false);
-//            btnNuevo.requestFocus();
-//        } else {
-//            if(respuesta==2) {
-//                txtDni.setText(null);
-//                txtDni.requestFocus();
-//            } 
-//        }
+        int respuesta;
+        String dni = txtDni.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String direccion = txtDireccion.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String sponsor = txtSponsor.getText().trim();
+
+        if (sponsor.isEmpty()) {
+            sponsor = null;
+        }
+
+        Cliente c = new Cliente(0, dni, nombre, direccion, telefono, sponsor);
+        respuesta = BLCliente.insertarCliente(c);
+
+        switch (respuesta) {
+            case 0:
+                limpiar();
+                activar(false);
+                btnNuevo.requestFocus();
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos", "Error", 0);
+                break;
+            case 2:
+                txtDni.setText("");
+                txtDni.requestFocus();
+                break;
+            case 3:
+                txtDni.setText("");
+                txtDni.requestFocus();
+                break;
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -232,5 +248,5 @@ public class ifrmCliente extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtSponsor;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
-private String dni, nombre,direccion,telefono,sponsor;
+    private String dni, nombre,direccion,telefono,sponsor;
 }
