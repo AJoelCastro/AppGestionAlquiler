@@ -73,6 +73,21 @@ public class BLAutomovil {
         }
         return false;
     }
+    
+    public static String verificarDisponibilidadAutomovil(String placa) {
+        Automovil auto = buscarAutomovilPorPlaca(placa);
+        String estado;
+        if (auto != null) {
+            ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
+            for (ReservaAutomovil reservaA : listaRA) {
+                if(reservaA.getPlaca().equals(placa));
+                    estado = "En reserva";
+                return estado;
+            }
+        }
+        estado = "Disponible";
+        return estado;
+    }
 
     public static ArrayList<Automovil> listarAutomoviles() {
         return DALAutomovil.listarAutomoviles();

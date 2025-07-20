@@ -133,13 +133,13 @@ public class DALAutomovil {
         return mensaje;
     }
         
-    public static String verificarDisponibilidadAutomovil(int idAutomovil) {
+    public static String verificarDisponibilidadAutomovil(String placa) {
         String estado = null;
         try {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_verificar_disponibilidad_automovil(?)}";
             cs = cn.prepareCall(sql);
-            cs.setInt(1, idAutomovil);
+            cs.setString(1, placa);
             rs = cs.executeQuery();
 
             if (rs.next()) {
