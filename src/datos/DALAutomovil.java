@@ -56,7 +56,6 @@ public class DALAutomovil {
             if (rs.next()) {
                 auto = new Automovil();
                 auto.setPlaca(placaAuto);
-                auto.setPlaca(rs.getString("placa"));
                 auto.setModelo(rs.getString("modelo"));
                 auto.setColor(rs.getString("color"));
                 auto.setMarca(rs.getString("marca"));
@@ -178,8 +177,8 @@ public class DALAutomovil {
                     rs.getString("modelo"),
                     rs.getString("color"),
                     rs.getString("marca"),
-                    rs.getInt("garaje_id"),
-                    rs.getString("estado")
+                    rs.getString("estado"),
+                    rs.getInt("garaje_id")
                 ));
             }
         } catch (ClassNotFoundException | SQLException e) {
