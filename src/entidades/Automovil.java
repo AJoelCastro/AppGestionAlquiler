@@ -20,7 +20,7 @@ public class Automovil {
         this.color = color;
         this.marca = marca;
         this.nombreGaraje = nombreGaraje;
-        this.estado = "disponible";
+        this.estado = "Disponible";
     }
 
     public Automovil(String placa, String modelo, String color, String marca, int garajeId, String estado) {
