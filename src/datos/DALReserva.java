@@ -115,6 +115,7 @@ public class DALReserva {
                 Reserva reserva = new Reserva();
                 reserva.setReservaId(rs.getInt("reserva_id"));
                 reserva.setClienteId(idCliente);
+                reserva.setAgenciaId(rs.getInt("agencia_id"));
                 
                 Date sqlFechaInicio = rs.getDate("fecha_inicio");
                 if (sqlFechaInicio != null) {
@@ -308,5 +309,157 @@ public class DALReserva {
             }
         }
         return mensaje;
+    }
+    // Agregar estos métodos a la clase DALReserva
+
+    public static ArrayList<Reserva> buscarReservasPorFecha(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_reservas_por_fecha(?,?)}";
+            cs = cn.prepareCall(sql);
+            cs.setDate(1, new java.sql.Date(fechaInicio.getTimeInMillis()));
+            cs.setDate(2, new java.sql.Date(fechaFin.getTimeInMillis()));
+            rs = cs.executeQuery();
+
+            while (rs.next()) {
+                Reserva reserva = new Reserva();
+                reserva.setReservaId(rs.getInt("reserva_id"));
+                reserva.setClienteId(rs.getInt("cliente_id"));
+                reserva.setAgenciaId(rs.getInt("agencia_id"));
+
+                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                if (sqlFechaInicio != null) {
+                    GregorianCalendar fi = new GregorianCalendar();
+                    fi.setTime(sqlFechaInicio);
+                    reserva.setFechaInicio(fi);
+                }
+
+                Date sqlFechaFin = rs.getDate("fecha_fin");
+                if (sqlFechaFin != null) {
+                    GregorianCalendar ff = new GregorianCalendar();
+                    ff.setTime(sqlFechaFin);
+                    reserva.setFechaFin(ff);
+                }
+
+                reserva.setPrecioTotal(rs.getDouble("precio_total"));
+                reserva.setEntregado(rs.getBoolean("entregado"));
+                reserva.setNombreCliente(rs.getString("cliente_nombre"));
+                reserva.setNombreAgencia(rs.getString("agencia_nombre"));
+
+                reservas.add(reserva);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return reservas;
+    }
+
+    public static ArrayList<Reserva> buscarReservasPorAgencia(int agenciaId) {
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_reservas_por_agencia(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, agenciaId);
+            rs = cs.executeQuery();
+
+            while (rs.next()) {
+                Reserva reserva = new Reserva();
+                reserva.setReservaId(rs.getInt("reserva_id"));
+                reserva.setClienteId(rs.getInt("cliente_id"));
+                reserva.setAgenciaId(rs.getInt("agencia_id"));
+
+                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                if (sqlFechaInicio != null) {
+                    GregorianCalendar fi = new GregorianCalendar();
+                    fi.setTime(sqlFechaInicio);
+                    reserva.setFechaInicio(fi);
+                }
+
+                Date sqlFechaFin = rs.getDate("fecha_fin");
+                if (sqlFechaFin != null) {
+                    GregorianCalendar ff = new GregorianCalendar();
+                    ff.setTime(sqlFechaFin);
+                    reserva.setFechaFin(ff);
+                }
+
+                reserva.setPrecioTotal(rs.getDouble("precio_total"));
+                reserva.setEntregado(rs.getBoolean("entregado"));
+                reserva.setNombreCliente(rs.getString("cliente_nombre"));
+                reserva.setNombreAgencia(rs.getString("agencia_nombre"));
+
+                reservas.add(reserva);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return reservas;
+    }
+    // Agregar este método a la clase DALReserva
+
+    public static ArrayList<Reserva> listarReservasActivas() {
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_listar_reservas_activas()}";
+            cs = cn.prepareCall(sql);
+            rs = cs.executeQuery();
+
+            while (rs.next()) {
+                Reserva reserva = new Reserva();
+                reserva.setReservaId(rs.getInt("reserva_id"));
+                reserva.setClienteId(rs.getInt("cliente_id"));
+                reserva.setAgenciaId(rs.getInt("agencia_id"));
+
+                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                if (sqlFechaInicio != null) {
+                    GregorianCalendar fi = new GregorianCalendar();
+                    fi.setTime(sqlFechaInicio);
+                    reserva.setFechaInicio(fi);
+                }
+
+                Date sqlFechaFin = rs.getDate("fecha_fin");
+                if (sqlFechaFin != null) {
+                    GregorianCalendar ff = new GregorianCalendar();
+                    ff.setTime(sqlFechaFin);
+                    reserva.setFechaFin(ff);
+                }
+
+                reserva.setPrecioTotal(rs.getDouble("precio_total"));
+                reserva.setEntregado(rs.getBoolean("entregado"));
+                reserva.setNombreCliente(rs.getString("cliente_nombre"));
+                reserva.setNombreAgencia(rs.getString("agencia_nombre"));
+
+                reservas.add(reserva);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return reservas;
     }
 }
