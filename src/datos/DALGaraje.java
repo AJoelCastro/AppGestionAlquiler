@@ -77,8 +77,9 @@ public class DALGaraje {
         try {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_actualizar_garaje(?, ?)}";
-            cs.setString(1, garaje.getNombre());
-            cs.setString(2, garaje.getUbicacion());
+            cs.setInt(1, garaje.getIdGaraje());
+            cs.setString(2, garaje.getNombre());
+            cs.setString(3, garaje.getUbicacion());
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();

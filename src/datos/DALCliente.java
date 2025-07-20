@@ -4,8 +4,10 @@
  */
 package datos;
 import entidades.Cliente;
+import entidades.Reserva;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 /**
  *
@@ -170,4 +172,55 @@ public class DALCliente {
         }
         return lista;
     }
+    
+        public static ArrayList<Reserva> listarReservasPorCliente(int idCliente) {
+    ArrayList<Reserva> reservas = new ArrayList<>();
+    try {
+        cn = Conexion.realizarconexion();
+        String sql = "{call sp_listar_reservas_por_cliente(?)}";
+        cs = cn.prepareCall(sql);
+        cs.setInt(1, idCliente);
+        rs = cs.executeQuery();
+
+        while (rs.next()) {
+            Reserva r = new Reserva();
+            r.setReservaId(rs.getInt("reserva_id"));
+            r.setClienteId(idCliente);
+            r.setAgenciaId(rs.getInt("agencia_id"));
+
+            // Convertir fechas SQL a GregorianCalendar
+            java.sql.Timestamp sqlInicio = rs.getTimestamp("fecha_inicio");
+            if (sqlInicio != null) {
+                GregorianCalendar fechaInicio = new GregorianCalendar();
+                fechaInicio.setTimeInMillis(sqlInicio.getTime());
+                r.setFechaInicio(fechaInicio);
+            }
+
+            java.sql.Timestamp sqlFin = rs.getTimestamp("fecha_fin");
+            if (sqlFin != null) {
+                GregorianCalendar fechaFin = new GregorianCalendar();
+                fechaFin.setTimeInMillis(sqlFin.getTime());
+                r.setFechaFin(fechaFin);
+            }
+
+            r.setPrecioTotal(rs.getDouble("precio_total"));
+            r.setEntregado(rs.getBoolean("entregado"));
+            r.setNombreAgencia(rs.getString("agencia"));
+            // si el SP devuelve lista de autos
+            // r.setAutosReservados(rs.getString("automoviles")); 
+
+            reservas.add(r);
+        }
+    } catch (ClassNotFoundException | SQLException ex) {
+        ex.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (cs != null) cs.close();
+            if (cn != null) cn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    return reservas;}
 }
