@@ -1,28 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entidades;
 
-/**
- *
- * @author Asus
- */
 public class Automovil {
     private String placa, modelo, color, marca;
     private int garajeId;
     private String nombreGaraje; // solo para mostrar
+    private String estado; // nuevo campo
 
     public Automovil() {
-        this("", "", "", "", 0);
+        this("", "", "", "", 0, "disponible");
     }
 
     public Automovil(String placa, String modelo, String color, String marca, int garajeId) {
-        this.placa = placa;
-        this.modelo = modelo;
-        this.color = color;
-        this.marca = marca;
-        this.garajeId = garajeId;
+        this(placa, modelo, color, marca, garajeId, "disponible");
     }
 
     public Automovil(String placa, String modelo, String color, String marca, String nombreGaraje) {
@@ -31,6 +20,16 @@ public class Automovil {
         this.color = color;
         this.marca = marca;
         this.nombreGaraje = nombreGaraje;
+        this.estado = "disponible";
+    }
+
+    public Automovil(String placa, String modelo, String color, String marca, int garajeId, String estado) {
+        this.placa = placa;
+        this.modelo = modelo;
+        this.color = color;
+        this.marca = marca;
+        this.garajeId = garajeId;
+        this.estado = estado;
     }
 
     public String getPlaca() {
@@ -80,5 +79,12 @@ public class Automovil {
     public void setNombreGaraje(String nombreGaraje) {
         this.nombreGaraje = nombreGaraje;
     }
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }

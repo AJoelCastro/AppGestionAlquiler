@@ -23,19 +23,20 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?)}");
+            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?, ?)}");
             cs.setString(1, auto.getPlaca());
             cs.setString(2, auto.getModelo());
             cs.setString(3, auto.getColor());
             cs.setString(4, auto.getMarca());
             cs.setInt(5, auto.getGarajeId());
+            cs.setString(6, auto.getEstado()); // nuevo
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             mensaje = e.getMessage();
         } finally {
             try {
-                cs.close();
-                cn.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
             } catch (SQLException e) {
                 mensaje = e.getMessage();
             }
@@ -60,7 +61,7 @@ public class DALAutomovil {
                 auto.setMarca(rs.getString("marca"));
                 auto.setGarajeId(rs.getInt("garaje_id"));
                 auto.setNombreGaraje(rs.getString("ubicacion")); //???
-
+                auto.setEstado(rs.getString("estado"));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -86,30 +87,28 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?)}";
+            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?, ?)}";
             cs = cn.prepareCall(sql);
             cs.setString(1, auto.getPlaca());
             cs.setString(2, auto.getModelo());
             cs.setString(3, auto.getColor());
             cs.setString(4, auto.getMarca());
             cs.setInt(5, auto.getGarajeId());
+            cs.setString(6, auto.getEstado()); // nuevo
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
         } finally {
             try {
-                if (cs != null) {
-                    cs.close();
-                }
-                if (cn != null) {
-                    cn.close();
-                }
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
             } catch (SQLException ex) {
                 mensaje = ex.getMessage();
             }
         }
         return mensaje;
     }
+
 
     public static String eliminarAutomovil(String placaAuto) {
         String mensaje = null;
@@ -175,7 +174,13 @@ public class DALAutomovil {
             cs = cn.prepareCall("{call sp_listar_automovil()}");
             rs = cs.executeQuery();
             while (rs.next()) {
-                lista.add(new Automovil(rs.getString("placa"), rs.getString("modelo"), rs.getString("color"), rs.getString("marca"), rs.getString("garaje")
+                lista.add(new Automovil(
+                    rs.getString("placa"),
+                    rs.getString("modelo"),
+                    rs.getString("color"),
+                    rs.getString("marca"),
+                    rs.getInt("garaje"),
+                    rs.getString("estado")
                 ));
             }
         } catch (ClassNotFoundException | SQLException e) {
