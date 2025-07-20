@@ -63,7 +63,10 @@ public class FacadeAlquiler {
     public boolean eliminarAutomovil(String placa) {
         return auto.eliminarAutomovil(placa);
     }
-
+    
+    public String verificarDisponibilidadAutomovil(String placa) { 
+        return auto.verificarDisponibilidadAutomovil(placa);
+    }
     public void registrarGaraje(String nombre, String ubicacion) {
         garaje.insertarGaraje(nombre, ubicacion);
     }
@@ -78,6 +81,10 @@ public class FacadeAlquiler {
 
     public boolean eliminarGaraje(int idGaraje) {
         return garaje.eliminarGaraje(idGaraje);
+    }
+    
+    public ArrayList<Automovil> listarAutomovilesPorGaraje(int idGaraje) {
+        return garaje.listarAutomovilesPorGaraje(idGaraje);
     }
 
     public void registrarCliente(Cliente c) {
@@ -111,5 +118,6 @@ public class FacadeAlquiler {
     public boolean eliminarReserva(int idReserva) {
         return reserva.eliminarReserva(idReserva);
     }
-
+    
+    
 }
