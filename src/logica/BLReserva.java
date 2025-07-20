@@ -78,4 +78,9 @@ public class BLReserva {
 
     public static ArrayList<Reserva> listarReservas() {
         return DALReserva.listarReservas();
-    }}
+    }
+    
+    public static ArrayList<Reserva> listarReservasActivas() {
+        return DALReserva.listarReservasActivas();
+}
+}
