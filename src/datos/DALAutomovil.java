@@ -132,6 +132,33 @@ public class DALAutomovil {
         }
         return mensaje;
     }
+        
+    public static String verificarDisponibilidadAutomovil(int idAutomovil) {
+        String estado = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_verificar_disponibilidad_automovil(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, idAutomovil);
+            rs = cs.executeQuery();
+
+            if (rs.next()) {
+                estado = rs.getString("estado_disponibilidad");
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return estado;
+    }
+
 
     public static ArrayList<Automovil> listarAutomoviles() {
         ArrayList<Automovil> lista = new ArrayList<>();
