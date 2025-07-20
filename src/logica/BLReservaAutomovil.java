@@ -21,7 +21,7 @@ public class BLReservaAutomovil {
         }
         return resultado;
     }
-
+    
     public static ArrayList<ReservaAutomovil> listarReservaAutomovil() {
         return DALReservaAutomovil.listarReservaAutomovil();
     }
