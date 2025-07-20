@@ -23,13 +23,12 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?, ?)}");
-            cs.setString(1, auto.getPlaca());
-            cs.setString(2, auto.getModelo());
-            cs.setString(3, auto.getColor());
-            cs.setString(4, auto.getMarca());
+            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?)}");
+            cs.setString(1, auto.getModelo());
+            cs.setString(2, auto.getColor());
+            cs.setString(3, auto.getMarca());
+            cs.setString(4, auto.getEstado()); // nuevo
             cs.setInt(5, auto.getGarajeId());
-            cs.setString(6, auto.getEstado()); // nuevo
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             mensaje = e.getMessage();
@@ -59,9 +58,8 @@ public class DALAutomovil {
                 auto.setModelo(rs.getString("modelo"));
                 auto.setColor(rs.getString("color"));
                 auto.setMarca(rs.getString("marca"));
-                auto.setGarajeId(rs.getInt("garaje_id"));
-                auto.setNombreGaraje(rs.getString("ubicacion")); //???
                 auto.setEstado(rs.getString("estado"));
+                auto.setGarajeId(rs.getInt("garaje_id"));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -87,14 +85,13 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?, ?)}";
+            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?)}";
             cs = cn.prepareCall(sql);
-            cs.setString(1, auto.getPlaca());
-            cs.setString(2, auto.getModelo());
-            cs.setString(3, auto.getColor());
-            cs.setString(4, auto.getMarca());
+            cs.setString(1, auto.getModelo());
+            cs.setString(2, auto.getColor());
+            cs.setString(3, auto.getMarca());
+            cs.setString(4, auto.getEstado()); // nuevo
             cs.setInt(5, auto.getGarajeId());
-            cs.setString(6, auto.getEstado()); // nuevo
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
