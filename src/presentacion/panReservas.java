@@ -51,15 +51,15 @@ public class panReservas extends javax.swing.JPanel {
         modelo.addColumn("ID");
         modelo.addColumn("Nombre");
         modelo.addColumn("Dirección");
-        tblAgencias.setModel(modelo);
+        tblReservas.setModel(modelo);
 
         // Opcional: hacer que la tabla no sea editable
-        tblAgencias.setDefaultEditor(Object.class, null);
+        tblReservas.setDefaultEditor(Object.class, null);
     }
 
     // 4. Agregar este método para cargar los datos en la tabla:
     private void cargarAgenciasEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
         modelo.setRowCount(0); // Limpiar la tabla
 
         try {
@@ -108,7 +108,7 @@ public class panReservas extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAgencias = new javax.swing.JTable();
+        tblReservas = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -116,7 +116,7 @@ public class panReservas extends javax.swing.JPanel {
 
         btnListar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
-        btnListar.setText("  Listar Agencia");
+        btnListar.setText("  Listar Reservas");
         btnListar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +126,7 @@ public class panReservas extends javax.swing.JPanel {
 
         btnActualizar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
-        btnActualizar.setText("  Actualizar Agencia");
+        btnActualizar.setText("  Actualizar Reservas");
         btnActualizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,7 +136,8 @@ public class panReservas extends javax.swing.JPanel {
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        btnEliminar.setText("  Eliminar Agencia");
+        btnEliminar.setText("  Eliminar Reservas");
+        btnEliminar.setToolTipText("");
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,7 +147,7 @@ public class panReservas extends javax.swing.JPanel {
 
         btnRegistrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         btnRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
-        btnRegistrar.setText("  Registrar Agencia");
+        btnRegistrar.setText("  Registrar Reservas");
         btnRegistrar.setToolTipText("");
         btnRegistrar.setActionCommand("Agregar Préstamo");
         btnRegistrar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -173,7 +174,7 @@ public class panReservas extends javax.swing.JPanel {
             }
         });
 
-        tblAgencias.setModel(new javax.swing.table.DefaultTableModel(
+        tblReservas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -184,7 +185,7 @@ public class panReservas extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblAgencias);
+        jScrollPane1.setViewportView(tblReservas);
 
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -216,7 +217,7 @@ public class panReservas extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addContainerGap(194, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -293,7 +294,7 @@ public class panReservas extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable tblAgencias;
+    private javax.swing.JTable tblReservas;
     private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
