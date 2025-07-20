@@ -110,6 +110,10 @@ public class FacadeAlquiler {
     public Reserva buscarReservaPorId(int idReserva) {
         return reserva.buscarReservaPorId(idReserva);
     }
+    
+    public Reserva buscarReservaPorIdCliente(int idCliente) {
+        return reserva.buscarReservaPorIdCliente(idCliente);
+    }
 
     public boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
         return reserva.editarReserva(reservaId,nuevoPrecioT,cambiarEstado);
