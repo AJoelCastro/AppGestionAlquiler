@@ -192,40 +192,4 @@ public class DALAutomovil {
         return lista;
     }
 
-    public static ArrayList<Automovil> listarAutomovilesPorGaraje(String garaje) {
-        ArrayList<Automovil> lista = new ArrayList<>();
-        try {
-            cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_listar_automovil_por_garaje(?)}");
-            cs.setString(1, garaje);
-            rs = cs.executeQuery();
-            while (rs.next()) {
-                lista.add(new Automovil(
-                        rs.getString("placa"),
-                        rs.getString("modelo"),
-                        rs.getString("color"),
-                        rs.getString("marca"),
-                        rs.getString("garaje")
-                ));
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (cs != null) {
-                    cs.close();
-                }
-                if (cn != null) {
-                    cn.close();
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
-            }
-        }
-        return lista;
-    }
-
 }

@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package logica;
+import datos.DALAutomovil;
 import datos.DALGaraje;
+import entidades.Automovil;
 import entidades.Garaje;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -62,5 +64,9 @@ public class BLGaraje {
 
     public static ArrayList<Garaje> listarGarajes() {
         return DALGaraje.listarGarajes();
+    }
+    
+    public static ArrayList<Automovil> listarAutomovilesPorGaraje(int idGaraje) {
+        return DALGaraje.listarAutomovilesPorGaraje(idGaraje);
     }
 }
