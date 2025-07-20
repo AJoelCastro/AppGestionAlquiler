@@ -60,8 +60,9 @@ public class BLReserva {
     public static boolean eliminarReserva(int idReserva) {
         Reserva reserva = buscarReservaPorId(idReserva);
             if (reserva != null) {
-                DALReserva.eliminarReserva(idReserva);
-                return true; 
+                if(reserva.isEntregado()){
+                    DALReserva.eliminarReserva(idReserva);
+                    return true; }
             }
     return false; 
 }
