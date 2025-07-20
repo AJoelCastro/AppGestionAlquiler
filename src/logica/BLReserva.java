@@ -46,6 +46,15 @@ public class BLReserva {
        return null;
     }
     
+    public static Reserva buscarReservaPorIdCliente(int idCliente){
+       ArrayList<Reserva> listaR = DALReserva.listarReservas();
+       for(Reserva reserva: listaR){
+           if(reserva.getClienteId()==idCliente);
+               return DALReserva.buscarReservaPorId(idCliente);
+       }
+       return null;
+    }
+    
     public static boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
         Reserva reserva = buscarReservaPorId(reservaId);
             if (reserva != null) {
