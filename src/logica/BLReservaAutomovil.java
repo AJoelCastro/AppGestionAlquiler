@@ -25,4 +25,8 @@ public class BLReservaAutomovil {
     public static ArrayList<ReservaAutomovil> listarReservaAutomovil() {
         return DALReservaAutomovil.listarReservaAutomovil();
     }
+    
+    public static double obtenerTotalAlquiler(int reservaId) {
+        return DALReservaAutomovil.obtenerTotalAlquiler(reservaId);
+    }
 }
