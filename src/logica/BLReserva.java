@@ -50,7 +50,7 @@ public class BLReserva {
        ArrayList<Reserva> listaR = DALReserva.listarReservas();
        for(Reserva reserva: listaR){
            if(reserva.getClienteId()==idCliente);
-               return DALReserva.buscarReservaPorId(idCliente);
+               return DALReserva.buscarReservaPorIdCliente(idCliente);
        }
        return null;
     }
