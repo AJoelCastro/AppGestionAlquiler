@@ -116,25 +116,33 @@ public class FacadeAlquiler {
         return cliente.listarClientes();
     }
 
-    public void registrarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, float precioT, Boolean estado) {
-        reserva.insertarReserva(reservaId, IdCliente, IdAgencia, fechaI, fechaF, precioT, estado);
+    public int registrarReserva(int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF) {
+        return reserva.insertarReserva(IdCliente, IdAgencia, fechaI, fechaF);
     }
 
     public Reserva buscarReservaPorId(int idReserva) {
         return reserva.buscarReservaPorId(idReserva);
     }
     
-    public Reserva buscarReservaPorIdCliente(int idCliente) {
-        return reserva.buscarReservaPorIdCliente(idCliente);
+    public ArrayList<Reserva> buscarReservasPorCliente(int idCliente) {
+        return reserva.buscarReservasPorCliente(idCliente);
     }
 
-    public boolean editarReserva(int reservaId, double nuevoPrecioT, boolean cambiarEstado) {
-        return reserva.editarReserva(reservaId,nuevoPrecioT,cambiarEstado);
+    public boolean actualizarPrecioReserva(int reservaId) {
+        return reserva.actualizarPrecioReserva(reservaId);
+    }
+    public boolean cambiarEstadoReserva(int reservaId, boolean entregado) {
+        return reserva.cambiarEstadoReserva(reservaId, entregado);
     }
 
     public boolean eliminarReserva(int idReserva) {
         return reserva.eliminarReserva(idReserva);
     }
-    
+    public ArrayList<Reserva> listarReservas() {
+        return reserva.listarReservas();
+    }
+    public boolean editarReserva(int reservaId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+        return reserva.editarReserva(reservaId, agenciaId, fechaInicio, fechaFin);
+    }
     
 }
