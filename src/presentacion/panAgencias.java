@@ -28,8 +28,8 @@ public class panAgencias extends javax.swing.JPanel {
      */
     public panAgencias() {
         initComponents();
-        facade = new FacadeAlquiler(); // Inicializar el facade
-        configurarTabla(); // Configurar las columnas de la tabla
+        facade = new FacadeAlquiler();
+        configurarTabla();
     }
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
@@ -53,14 +53,12 @@ public class panAgencias extends javax.swing.JPanel {
         modelo.addColumn("Dirección");
         tblAgencias.setModel(modelo);
 
-        // Opcional: hacer que la tabla no sea editable
         tblAgencias.setDefaultEditor(Object.class, null);
     }
 
-    // 4. Agregar este método para cargar los datos en la tabla:
     private void cargarAgenciasEnTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
-        modelo.setRowCount(0); // Limpiar la tabla
+        modelo.setRowCount(0);
 
         try {
             ArrayList<Agencia> agencias = facade.listarAgencias();
@@ -86,24 +84,21 @@ public class panAgencias extends javax.swing.JPanel {
             return;
         }
 
-        // Obtener los datos de la fila seleccionada
         DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
         int idAgencia = (int) modelo.getValueAt(filaSeleccionada, 0);
         String nombreActual = (String) modelo.getValueAt(filaSeleccionada, 1);
         String direccionActual = (String) modelo.getValueAt(filaSeleccionada, 2);
 
-        // Mostrar diálogos para obtener los nuevos datos
         String nuevoNombre = JOptionPane.showInputDialog(this, 
             "Ingrese el nuevo nombre:", nombreActual);
 
-        if (nuevoNombre == null) return; // Usuario canceló
+        if (nuevoNombre == null) return;
 
         String nuevaDireccion = JOptionPane.showInputDialog(this, 
             "Ingrese la nueva dirección:", direccionActual);
 
-        if (nuevaDireccion == null) return; // Usuario canceló
+        if (nuevaDireccion == null) return;
 
-        // Validar que los campos no estén vacíos
         if (nuevoNombre.trim().isEmpty() || nuevaDireccion.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos", 
                                         "Error", JOptionPane.ERROR_MESSAGE);
@@ -111,19 +106,131 @@ public class panAgencias extends javax.swing.JPanel {
         }
 
         try {
-            // Actualizar usando el facade
             boolean exito = facade.editarAgencia(idAgencia, nuevoNombre.trim(), nuevaDireccion.trim());
 
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Agencia actualizada correctamente", 
                                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                cargarAgenciasEnTabla(); // Refrescar la tabla
+                cargarAgenciasEnTabla();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo actualizar la agencia. Verifique que el ID exista.", 
                                             "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al actualizar la agencia: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void eliminarAgencia() {
+        int filaSeleccionada = tblAgencias.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una agencia de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
+        int idAgencia = (int) modelo.getValueAt(filaSeleccionada, 0);
+        String nombre = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String direccion = (String) modelo.getValueAt(filaSeleccionada, 2);
+
+        String mensaje = String.format(
+            "¿Está seguro de que desea eliminar la siguiente agencia?\n\n" +
+            "ID: %d\n" +
+            "Nombre: %s\n" +
+            "Dirección: %s\n\n" +
+            "Esta acción no se puede deshacer.",
+            idAgencia, nombre, direccion
+        );
+
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            mensaje,
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                boolean exito = facade.eliminarAgencia(idAgencia);
+
+                if (exito) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Agencia eliminada correctamente", 
+                        "Éxito", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                    cargarAgenciasEnTabla();
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo eliminar la agencia. Verifique que no tenga registros relacionados.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al eliminar la agencia: " + e.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void buscarAgencia() {
+        String textoBusqueda = jTextField1.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            ArrayList<Agencia> todasLasAgencias = facade.listarAgencias();
+            boolean encontrado = false;
+
+            try {
+                int idBusqueda = Integer.parseInt(textoBusqueda);
+                for (Agencia agencia : todasLasAgencias) {
+                    if (agencia.getAgenciaId() == idBusqueda) {
+                        Object[] fila = {
+                            agencia.getAgenciaId(),
+                            agencia.getNombre(),
+                            agencia.getDireccion()
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                        break;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                String busquedaLower = textoBusqueda.toLowerCase();
+                for (Agencia agencia : todasLasAgencias) {
+                    if (agencia.getNombre().toLowerCase().contains(busquedaLower) || 
+                        agencia.getDireccion().toLowerCase().contains(busquedaLower)) {
+                        Object[] fila = {
+                            agencia.getAgenciaId(),
+                            agencia.getNombre(),
+                            agencia.getDireccion()
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                }
+            }
+
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(this, "No se encontraron agencias que coincidan con: " + textoBusqueda, 
+                                            "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+                cargarAgenciasEnTabla();
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar agencias: " + e.getMessage(), 
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -213,6 +320,13 @@ public class panAgencias extends javax.swing.JPanel {
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator1.setOpaque(true);
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarAgencia();
+                }
+            }
+        });
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -308,7 +422,7 @@ public class panAgencias extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
+        buscarAgencia();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -317,7 +431,7 @@ public class panAgencias extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        eliminarAgencia();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

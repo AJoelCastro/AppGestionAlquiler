@@ -85,12 +85,11 @@ public class DALAgencia {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_agencia(?, ?)}";
+            String sql = "{call sp_actualizar_agencia(?, ?, ?)}";
             cs = cn.prepareCall(sql);
             cs.setInt(1, agencia.getAgenciaId());
             cs.setString(2, agencia.getNombre());
             cs.setString(3, agencia.getDireccion());
-
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();

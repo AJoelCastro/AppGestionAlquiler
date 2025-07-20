@@ -225,6 +225,7 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;&quot;, botonBlanco,presionadoBuscar,encimaBuscar)"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {&#xa;    public void keyPressed(java.awt.event.KeyEvent evt) {&#xa;        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {&#xa;            buscarAgencia();&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">

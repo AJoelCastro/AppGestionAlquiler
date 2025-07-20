@@ -45,23 +45,41 @@ public class BLAgencia {
     }
     
     public static boolean editarAgencia(int idAgencia, String nuevoNombre, String nuevaDireccion) {
-    Agencia agencia = buscarAgenciaPorId(idAgencia);
-    if (agencia != null) {
-                agencia.setNombre(nuevoNombre);
-                agencia.setDireccion(nuevaDireccion);
-                DALAgencia.actualizarAgencia(agencia);
-                return true; 
+        Agencia agencia = buscarAgenciaPorId(idAgencia);
+        if (agencia != null) {
+            agencia.setNombre(nuevoNombre);
+            agencia.setDireccion(nuevaDireccion);
+            agencia.setAgenciaId(idAgencia);
+
+            String resultado = DALAgencia.actualizarAgencia(agencia);
+
+            if (resultado == null) {
+                return true;
+            } else {
+                System.err.println("Error al actualizar agencia: " + resultado);
+                return false;
             }
-    return false; 
-}
-        public static boolean eliminarAgencia(int idAgencia) {
-    Agencia agencia = buscarAgenciaPorId(idAgencia);
-    if (agencia != null) {
-                DALAgencia.eliminarAgencia(idAgencia);
-                return true; 
+        }
+        return false; 
+    }
+    public static boolean eliminarAgencia(int idAgencia) {
+        Agencia agencia = buscarAgenciaPorId(idAgencia);
+        if (agencia != null) {
+            try {
+                String resultado = DALAgencia.eliminarAgencia(idAgencia);
+                if (resultado == null) {
+                    return true;
+                } else {
+                    System.err.println("Error al eliminar agencia ID " + idAgencia + ": " + resultado);
+                    return false;
+                }
+            } catch (Exception e) {
+                System.err.println("Excepción al eliminar agencia ID " + idAgencia + ": " + e.getMessage());
+                return false;
             }
-    return false; 
-}
+        }
+        return false; // Agencia no encontrada
+    }
     
     
     public static ArrayList<Agencia> listarAgencias() {
