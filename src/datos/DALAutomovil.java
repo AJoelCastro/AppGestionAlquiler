@@ -23,12 +23,13 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?)}");
-            cs.setString(1, auto.getModelo());
-            cs.setString(2, auto.getColor());
-            cs.setString(3, auto.getMarca());
-            cs.setString(4, auto.getEstado()); // nuevo
-            cs.setInt(5, auto.getGarajeId());
+            cs = cn.prepareCall("{call sp_insertar_automovil(?,?, ?, ?, ?, ?)}");
+            cs.setString(1, auto.getPlaca());
+            cs.setString(2, auto.getModelo());
+            cs.setString(3, auto.getColor());
+            cs.setString(4, auto.getMarca());
+            cs.setString(5, auto.getEstado()); // nuevo
+            cs.setInt(6, auto.getGarajeId());
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             mensaje = e.getMessage();
