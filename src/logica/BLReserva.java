@@ -16,7 +16,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
  */
 public class BLReserva {
     public static int insertarReserva(int reservaId, int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF, double precioT, boolean estado) {
-        if (IdCliente > 0 && IdAgencia > 0
+        if (IdCliente > 0 && IdCliente > 0 && IdAgencia > 0
                 && fechaI != null && fechaF != null
                 && precioT >= 0) {
 
