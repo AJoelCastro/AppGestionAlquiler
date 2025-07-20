@@ -255,12 +255,12 @@ public class DALReserva {
         return lista;
     }
 
-    public static ArrayList<Reserva> listarReservasNoEntregadas() {
+    public static ArrayList<Reserva> listarReservasActivas() {
         ArrayList<Reserva> lista = new ArrayList<>();
 
         try {
             cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_listar_reservas_no_entregadas()}");
+            cs = cn.prepareCall("{call sp_listar_reservas_activas()}");
             rs = cs.executeQuery();
 
             while (rs.next()) {
