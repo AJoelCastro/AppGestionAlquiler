@@ -18,22 +18,27 @@ import javax.swing.JOptionPane;
 public class BLCliente {
 
     public static int insertarCliente(Cliente c) {
-        if (c.getDni().trim().length() == 8
-                && !c.getNombre().trim().isEmpty()
-                && !c.getDireccion().trim().isEmpty()
-                && !c.getTelefono().trim().isEmpty()) {
+        if (c.getDni().trim().length() != 8
+                || c.getNombre().trim().isEmpty()
+                || c.getDireccion().trim().isEmpty()
+                || c.getTelefono().trim().isEmpty()) {
 
-            String mensaje = DALCliente.insertarCliente(c);
-            if (mensaje == null) {
-                JOptionPane.showMessageDialog(null, "Cliente registrado correctamente");
-                return 0;
-            } else {
-                JOptionPane.showMessageDialog(null, mensaje, "Error", 0);
-                return 1;
-            }
-        } else {
             JOptionPane.showMessageDialog(null, "Datos no válidos", "Error", 0);
-            return 2;
+            return 2; 
+        }
+
+        if (buscarClientePorDni(c.getDni()) != null) {
+            JOptionPane.showMessageDialog(null, "El Dni ingresado ya esta registrado", "Error", 0);
+            return 3; 
+        }
+
+        String mensaje = DALCliente.insertarCliente(c);
+        if (mensaje == null) {
+            JOptionPane.showMessageDialog(null, "Cliente registrado correctamente");
+            return 0; 
+        } else {
+            JOptionPane.showMessageDialog(null, mensaje, "Error en la BD", 0);
+            return 1; 
         }
     }
 
@@ -42,6 +47,15 @@ public class BLCliente {
         for (Cliente c : listaC) {
             if (c.getIdCliente() == idCliente);
             return DALCliente.buscarClientePorId(idCliente);
+        }
+        return null;
+    }
+
+    public static Cliente buscarClientePorDni(String dni) {
+        ArrayList<Cliente> listaC = DALCliente.listarClientes();
+        for (Cliente c : listaC) {
+            if (c.getDni().equals(dni));
+            return DALCliente.buscarClientePorDni(dni);
         }
         return null;
     }
@@ -64,12 +78,13 @@ public class BLCliente {
             int cantReserv = 0;
             ArrayList<Reserva> listaR = DALReserva.listarReservas();
             for (Reserva reserva : listaR) {
-                if(reserva.getClienteId()== idCliente);
-                    cantReserv++;
+                if (reserva.getClienteId() == idCliente);
+                cantReserv++;
             }
-            if(cantReserv==0) {
+            if (cantReserv == 0) {
                 DALCliente.eliminarCliente(idCliente);
-                return true; }
+                return true;
+            }
         }
         return false;
     }
@@ -77,7 +92,7 @@ public class BLCliente {
     public static ArrayList<Cliente> listarClientes() {
         return DALCliente.listarClientes();
     }
-    
+
 //    public static ArrayList<Reserva> obtenerReservasPorCliente(int idCliente) {
 //        return DALCliente.listarReservasPorCliente(idCliente);
 //    }
