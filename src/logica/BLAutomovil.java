@@ -63,7 +63,7 @@ public class BLAutomovil {
             int cantReserv = 0;
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
-                if (reservaA.getPlaca().equals(placa)) { // QUITAR el punto y coma aquí
+                if(reservaA.getPlaca().equals(placa)){
                     cantReserv++;
                 }
             }
@@ -80,8 +80,8 @@ public class BLAutomovil {
         if (auto != null) {
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
-                if (reservaA.getPlaca().equals(placa)) { // QUITAR el punto y coma aquí
-                    return "En reserva";
+                if (reservaA.getPlaca().equals(placa)) {
+                    return "En Reserva";
                 }
             }
         }
