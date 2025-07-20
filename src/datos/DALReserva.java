@@ -103,6 +103,57 @@ public class DALReserva {
         return reserva;
     }
 
+    public static Reserva buscarReservaPorIdCliente(int idCliente) {
+        Reserva reserva = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_reserva_por_id_cliente(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setInt(1, idCliente);
+            rs = cs.executeQuery();
+
+            if (rs.next()) {
+                reserva = new Reserva();
+                reserva.setReservaId(idCliente);
+                reserva.setClienteId(rs.getInt("cliente_id"));
+                reserva.setAgenciaId(rs.getInt("agencia_id"));
+                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                if (sqlFechaInicio != null) {
+                    GregorianCalendar fechaInicio = new GregorianCalendar();
+                    fechaInicio.setTime(sqlFechaInicio);
+                    reserva.setFechaInicio(fechaInicio);
+                }
+
+                Date sqlFechaFin = rs.getDate("fecha_fin");
+                if (sqlFechaFin != null) {
+                    GregorianCalendar fechaFin = new GregorianCalendar();
+                    fechaFin.setTime(sqlFechaFin);
+                    reserva.setFechaFin(fechaFin);
+                }
+                reserva.setPrecioTotal(rs.getDouble("precio_total"));
+                reserva.setEntregado(rs.getBoolean("entregado"));
+
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return reserva;
+    }
+
     public static String actualizarReserva(Reserva r) {
         String mensaje = null;
         try {
