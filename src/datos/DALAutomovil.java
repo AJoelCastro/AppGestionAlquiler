@@ -56,7 +56,7 @@ public class DALAutomovil {
                 auto.setColor(rs.getString("color"));
                 auto.setMarca(rs.getString("marca"));
                 auto.setGarajeId(rs.getInt("garaje_id"));
-                auto.setNombreGaraje(rs.getString("direccion")); //???
+                auto.setNombreGaraje(rs.getString("ubicacion")); //???
 
             }
         } catch (ClassNotFoundException | SQLException ex) {
