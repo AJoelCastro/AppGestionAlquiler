@@ -20,7 +20,7 @@ public class BLAutomovil {
     public static int insertarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
         String mensaje = null;
         if (placa.trim().length() > 0 && modelo.trim().length() > 0 && marca.trim().length() > 0) {
-            Automovil auto = new Automovil(placa, modelo, color, marca, garajeId, "disponible");
+            Automovil auto = new Automovil(placa, modelo, color, marca, "disponible", garajeId);
             mensaje = DALAutomovil.insertarAutomovil(auto);
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Automóvil registrado correctamente", "Éxito", 1);
