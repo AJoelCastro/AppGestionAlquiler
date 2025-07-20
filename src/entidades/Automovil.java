@@ -7,11 +7,11 @@ public class Automovil {
     private String estado; // nuevo campo
 
     public Automovil() {
-        this("", "", "", "", 0, "disponible");
+        this("", "", "", "",  "disponible",0);
     }
 
     public Automovil(String placa, String modelo, String color, String marca, int garajeId) {
-        this(placa, modelo, color, marca, garajeId, "disponible");
+        this(placa, modelo, color, marca, "disponible",garajeId);
     }
 
     public Automovil(String placa, String modelo, String color, String marca, String nombreGaraje) {
@@ -20,10 +20,10 @@ public class Automovil {
         this.color = color;
         this.marca = marca;
         this.nombreGaraje = nombreGaraje;
-        this.estado = "disponible";
+        this.estado = "Disponible";
     }
 
-    public Automovil(String placa, String modelo, String color, String marca, int garajeId, String estado) {
+    public Automovil(String placa, String modelo, String color, String marca, String estado,int garajeId) {
         this.placa = placa;
         this.modelo = modelo;
         this.color = color;

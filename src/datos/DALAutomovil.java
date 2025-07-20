@@ -23,13 +23,13 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            cs = cn.prepareCall("{call sp_insertar_automovil(?, ?, ?, ?, ?, ?)}");
+            cs = cn.prepareCall("{call sp_insertar_automovil(?,?, ?, ?, ?, ?)}");
             cs.setString(1, auto.getPlaca());
             cs.setString(2, auto.getModelo());
             cs.setString(3, auto.getColor());
             cs.setString(4, auto.getMarca());
-            cs.setInt(5, auto.getGarajeId());
-            cs.setString(6, auto.getEstado()); // nuevo
+            cs.setString(5, auto.getEstado()); // nuevo
+            cs.setInt(6, auto.getGarajeId());
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             mensaje = e.getMessage();
@@ -59,9 +59,8 @@ public class DALAutomovil {
                 auto.setModelo(rs.getString("modelo"));
                 auto.setColor(rs.getString("color"));
                 auto.setMarca(rs.getString("marca"));
-                auto.setGarajeId(rs.getInt("garaje_id"));
-                auto.setNombreGaraje(rs.getString("ubicacion")); //???
                 auto.setEstado(rs.getString("estado"));
+                auto.setGarajeId(rs.getInt("garaje_id"));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -89,12 +88,12 @@ public class DALAutomovil {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?, ?)}";
             cs = cn.prepareCall(sql);
-            cs.setString(1, auto.getPlaca());
+            cs.setString(1, auto.getPlaca());      
             cs.setString(2, auto.getModelo());
             cs.setString(3, auto.getColor());
             cs.setString(4, auto.getMarca());
-            cs.setInt(5, auto.getGarajeId());
-            cs.setString(6, auto.getEstado()); // nuevo
+            cs.setString(5, auto.getEstado()); 
+            cs.setInt(6, auto.getGarajeId());
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
@@ -145,7 +144,7 @@ public class DALAutomovil {
             rs = cs.executeQuery();
 
             if (rs.next()) {
-                estado = rs.getString("estado_disponibilidad");
+                estado = rs.getString("estado");
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -179,8 +178,8 @@ public class DALAutomovil {
                     rs.getString("modelo"),
                     rs.getString("color"),
                     rs.getString("marca"),
-                    rs.getInt("garaje"),
-                    rs.getString("estado")
+                    rs.getString("estado"),
+                    rs.getInt("garaje_id")
                 ));
             }
         } catch (ClassNotFoundException | SQLException e) {
