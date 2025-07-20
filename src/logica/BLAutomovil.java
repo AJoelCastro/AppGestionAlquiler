@@ -87,7 +87,7 @@ public class BLAutomovil {
             return "Disponible";
         }
 
-        return "No encontrado";
+        return "En Mantenimiento";
     }
 
     public static ArrayList<Automovil> listarAutomoviles() {
