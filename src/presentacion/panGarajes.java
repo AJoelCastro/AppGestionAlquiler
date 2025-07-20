@@ -16,17 +16,33 @@ import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 import logica.*;
 
+
 /**
  *
- * @author ArcosArce
+ * @author sanar
  */
-public class panConductores extends javax.swing.JPanel {
+public class panGarajes extends javax.swing.JPanel {
 
     /**
-     * Creates new form panConductores
+     * Creates new form panPrestamos
      */
-    public panConductores() {
+    public panGarajes() {
         initComponents();
+    }
+    private void centrarInternalFrame (JInternalFrame interna) {
+        int x,y;
+        
+        x=dspFondo.getWidth()/2 - interna.getWidth()/2;
+        y=dspFondo.getHeight()/2- interna.getHeight()/2;
+        if(interna.isShowing())
+        interna.setLocation(x,y);
+        
+        else {
+            dspFondo.add(interna);
+            interna.setLocation(x,y);
+            interna.show();
+        };
+        
     }
 
     /**
@@ -38,6 +54,8 @@ public class panConductores extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoPrestamos.png"));
         Image image = icon.getImage();
         dspFondo = new javax.swing.JDesktopPane(){
@@ -65,6 +83,8 @@ public class panConductores extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jRadioButton4 = new javax.swing.JRadioButton();
         jRadioButton5 = new javax.swing.JRadioButton();
+
+        setBackground(new java.awt.Color(255, 255, 255));
 
         dspFondo.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -110,16 +130,19 @@ public class panConductores extends javax.swing.JPanel {
         });
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
-        jLabel1.setText("Control de Préstamos");
+        jLabel1.setText("Control de Garajes");
 
+        buttonGroup1.add(jRadioButton3);
         jRadioButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         jRadioButton3.setText("Codigo");
 
         jTextField1.setBorder(null);
 
+        buttonGroup1.add(jRadioButton2);
         jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         jRadioButton2.setText("Codigo");
 
+        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         jRadioButton1.setText("Libro");
 
@@ -153,6 +176,7 @@ public class panConductores extends javax.swing.JPanel {
 
         jLabel3.setText("Filtrar por:");
 
+        buttonGroup2.add(jRadioButton4);
         jRadioButton4.setText("Fecha de Prestamo");
         jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,6 +184,7 @@ public class panConductores extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup2.add(jRadioButton5);
         jRadioButton5.setText("Nombre de Usuario");
         jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -274,25 +299,25 @@ public class panConductores extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         // TODO add your handling code here:
@@ -304,6 +329,8 @@ public class panConductores extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

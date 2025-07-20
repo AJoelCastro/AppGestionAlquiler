@@ -147,12 +147,12 @@ public class MenuEjemplo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosActionPerformed
-        JPanel panel = new panConductores();
+        JPanel panel = new panAgencias();
         showPanel(panel);
     }//GEN-LAST:event_btnLibrosActionPerformed
 
     private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
-        JPanel panel = new panReservas();
+        JPanel panel = new panGarajes();
         showPanel(panel);
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
