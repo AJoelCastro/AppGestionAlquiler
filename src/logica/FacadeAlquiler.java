@@ -5,6 +5,7 @@
 package logica;
 
 import entidades.*;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
@@ -46,7 +47,11 @@ public class FacadeAlquiler {
     public void registrarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
         auto.insertarAutomovil(placa, modelo, color, marca, garajeId);
     }
-
+    
+    public ArrayList<Agencia> listarAgencias() {
+        return agencia.listarAgencias();
+    }
+    
     public Automovil buscarAutomovilPorPlaca(String placa) {
         return auto.buscarAutomovilPorPlaca(placa);
     }

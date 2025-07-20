@@ -193,23 +193,23 @@ public class ifrmCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-int respuesta;
-        dni = txtDni.getText();
-        nombre = txtNombre.getText();
-        direccion = txtDireccion.getText();
-        telefono = txtTelefono.getText();
-        sponsor = txtSponsor.getText();
-        respuesta = BLCliente.insertarCliente(dni, nombre, direccion, telefono, sponsor);
-        if(respuesta==0 || respuesta==3) {
-            limpiar();
-            activar(false);
-            btnNuevo.requestFocus();
-        } else {
-            if(respuesta==2) {
-                txtDni.setText(null);
-                txtDni.requestFocus();
-            } 
-        }
+//    int respuesta;
+//        dni = txtDni.getText();
+//        nombre = txtNombre.getText();
+//        direccion = txtDireccion.getText();
+//        telefono = txtTelefono.getText();
+//        sponsor = txtSponsor.getText();
+//        respuesta = BLCliente.insertarCliente(dni, nombre, direccion, telefono, sponsor);
+//        if(respuesta==0 || respuesta==3) {
+//            limpiar();
+//            activar(false);
+//            btnNuevo.requestFocus();
+//        } else {
+//            if(respuesta==2) {
+//                txtDni.setText(null);
+//                txtDni.requestFocus();
+//            } 
+//        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

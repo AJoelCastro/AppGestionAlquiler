@@ -21,13 +21,15 @@ public class panAdministradores extends javax.swing.JPanel {
      */
     public panAdministradores() {
         initComponents();
+        JPanel panel = new panInicio();
+        showPanel(panel);
     }
             
     private void showPanel(JPanel panel) {
         panContenido.removeAll();
 
-        panel.setSize(panContenido.getSize());
-        panel.setLocation(0, 0);
+//        panel.setSize(panContenido.getSize());
+//        panel.setLocation(0, 0);
         
         panContenido.add(panel);
 
@@ -49,9 +51,12 @@ public class panAdministradores extends javax.swing.JPanel {
         panFondo = new javax.swing.JPanel();
         panContenido = new javax.swing.JPanel();
         btnInicio = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
-        btnPrestamos = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
-        btnLibros = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnAgencias = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnGarajes = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         jToggleButton1 = new javax.swing.JToggleButton();
+        btnClientes = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnAutomoviles = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnReservas = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
 
         panFondo.setBackground(new java.awt.Color(8, 100, 60));
 
@@ -61,7 +66,7 @@ public class panAdministradores extends javax.swing.JPanel {
         btnInicio.setBackground(new java.awt.Color(30, 30, 30));
         btnInicio.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnInicio.setForeground(new java.awt.Color(255, 255, 255));
-        btnInicio.setText("  Inicio");
+        btnInicio.setText("Inicio");
         btnInicio.setHideActionText(true);
         btnInicio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnInicio.addActionListener(new java.awt.event.ActionListener() {
@@ -70,25 +75,25 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnPrestamos.setBackground(new java.awt.Color(30, 30, 30));
-        btnPrestamos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        btnPrestamos.setForeground(new java.awt.Color(255, 255, 255));
-        btnPrestamos.setText("  Reservas");
-        btnPrestamos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnPrestamos.addActionListener(new java.awt.event.ActionListener() {
+        btnAgencias.setBackground(new java.awt.Color(30, 30, 30));
+        btnAgencias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnAgencias.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgencias.setText("Agencias");
+        btnAgencias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAgencias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrestamosActionPerformed(evt);
+                btnAgenciasActionPerformed(evt);
             }
         });
 
-        btnLibros.setBackground(new java.awt.Color(30, 30, 30));
-        btnLibros.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        btnLibros.setForeground(new java.awt.Color(255, 255, 255));
-        btnLibros.setText("  Conductores");
-        btnLibros.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnLibros.addActionListener(new java.awt.event.ActionListener() {
+        btnGarajes.setBackground(new java.awt.Color(30, 30, 30));
+        btnGarajes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnGarajes.setForeground(new java.awt.Color(255, 255, 255));
+        btnGarajes.setText("Garajes");
+        btnGarajes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGarajes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLibrosActionPerformed(evt);
+                btnGarajesActionPerformed(evt);
             }
         });
 
@@ -101,6 +106,40 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
+        btnClientes.setBackground(new java.awt.Color(30, 30, 30));
+        btnClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnClientes.setForeground(new java.awt.Color(255, 255, 255));
+        btnClientes.setText("Clientes");
+        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientesActionPerformed(evt);
+            }
+        });
+
+        btnAutomoviles.setBackground(new java.awt.Color(30, 30, 30));
+        btnAutomoviles.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnAutomoviles.setForeground(new java.awt.Color(255, 255, 255));
+        btnAutomoviles.setText("Automoviles");
+        btnAutomoviles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAutomoviles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAutomovilesActionPerformed(evt);
+            }
+        });
+
+        btnReservas.setBackground(new java.awt.Color(30, 30, 30));
+        btnReservas.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnReservas.setForeground(new java.awt.Color(255, 255, 255));
+        btnReservas.setText("Reservas");
+        btnReservas.setActionCommand("Reservas");
+        btnReservas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReservas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReservasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panFondoLayout = new javax.swing.GroupLayout(panFondo);
         panFondo.setLayout(panFondoLayout);
         panFondoLayout.setHorizontalGroup(
@@ -108,9 +147,12 @@ public class panAdministradores extends javax.swing.JPanel {
             .addGroup(panFondoLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLibros, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnAgencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                    .addComponent(btnGarajes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAutomoviles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20)
                 .addComponent(panContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
@@ -130,9 +172,15 @@ public class panAdministradores extends javax.swing.JPanel {
                         .addGap(40, 40, 40)
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
-                        .addComponent(btnPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAgencias, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGarajes, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAutomoviles, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
@@ -153,19 +201,34 @@ public class panAdministradores extends javax.swing.JPanel {
         showPanel(panel);
     }//GEN-LAST:event_btnInicioActionPerformed
 
-    private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
-//        JPanel panel = new panReservas();
-//        showPanel(panel);
-    }//GEN-LAST:event_btnPrestamosActionPerformed
+    private void btnAgenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgenciasActionPerformed
+        JPanel panel = new panAgencias();
+        showPanel(panel);
+    }//GEN-LAST:event_btnAgenciasActionPerformed
 
-    private void btnLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosActionPerformed
-//        JPanel panel = new panConductores();
-//        showPanel(panel);
-    }//GEN-LAST:event_btnLibrosActionPerformed
+    private void btnGarajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGarajesActionPerformed
+        JPanel panel = new panGarajes();
+        showPanel(panel);
+    }//GEN-LAST:event_btnGarajesActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         cerrarSesion();
     }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        JPanel panel = new panClientes();
+        showPanel(panel);
+    }//GEN-LAST:event_btnClientesActionPerformed
+
+    private void btnAutomovilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutomovilesActionPerformed
+        JPanel panel = new panAutomoviles();
+        showPanel(panel);
+    }//GEN-LAST:event_btnAutomovilesActionPerformed
+
+    private void btnReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservasActionPerformed
+        JPanel panel = new panReservas();
+        showPanel(panel);
+    }//GEN-LAST:event_btnReservasActionPerformed
     
     /**
     * Método para cerrar la sesión actual y regresar al login
@@ -253,9 +316,12 @@ public class panAdministradores extends javax.swing.JPanel {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgencias;
+    private javax.swing.JButton btnAutomoviles;
+    private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnGarajes;
     private javax.swing.JButton btnInicio;
-    private javax.swing.JButton btnLibros;
-    private javax.swing.JButton btnPrestamos;
+    private javax.swing.JButton btnReservas;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JPanel panContenido;
     private javax.swing.JPanel panFondo;
