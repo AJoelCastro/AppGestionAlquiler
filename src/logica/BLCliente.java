@@ -78,7 +78,7 @@ public class BLCliente {
         return DALCliente.listarClientes();
     }
     
-    public static ArrayList<Reserva> obtenerReservasPorCliente(int idCliente) {
-    return DALCliente.listarReservasPorCliente(idCliente);
-} 
+//    public static ArrayList<Reserva> obtenerReservasPorCliente(int idCliente) {
+//        return DALCliente.listarReservasPorCliente(idCliente);
+//    }
 }
