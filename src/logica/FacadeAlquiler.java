@@ -83,6 +83,10 @@ public class FacadeAlquiler {
         return garaje.eliminarGaraje(idGaraje);
     }
     
+    public ArrayList<Garaje> listarGarajes() {
+        return garaje.listarGarajes();
+    }
+    
     public ArrayList<Automovil> listarAutomovilesPorGaraje(int idGaraje) {
         return garaje.listarAutomovilesPorGaraje(idGaraje);
     }

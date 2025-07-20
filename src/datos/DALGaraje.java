@@ -73,11 +73,12 @@ public class DALGaraje {
         return garaje;
     }
         
-       public static String actualizarGaraje(Garaje garaje) {
+    public static String actualizarGaraje(Garaje garaje) {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_garaje(?, ?)}";
+            String sql = "{call sp_actualizar_garaje(?, ?, ?)}";
+            cs = cn.prepareCall(sql);
             cs.setInt(1, garaje.getIdGaraje());
             cs.setString(2, garaje.getNombre());
             cs.setString(3, garaje.getUbicacion());
@@ -101,8 +102,14 @@ public class DALGaraje {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_eliminar_garaje(?)}";
             cs = cn.prepareCall(sql);
-            cs.setInt(1,idGaraje);
-            cs.executeUpdate();
+            cs.setInt(1, idGaraje);
+
+            int filasAfectadas = cs.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                mensaje = "No se encontró el garaje con el ID especificado o no se pudo eliminar debido a restricciones.";
+            }
+
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
         } finally {
@@ -114,30 +121,41 @@ public class DALGaraje {
                     cn.close();
                 }
             } catch (SQLException ex) {
-                mensaje = ex.getMessage();
+                if (mensaje == null) mensaje = ex.getMessage();
             }
         }
         return mensaje;
-    }   
+    }  
 
     public static ArrayList<Garaje> listarGarajes() {
         ArrayList<Garaje> lista = new ArrayList<>();
+        Connection cn = null;
+        CallableStatement cs = null;
+        ResultSet rs = null;
+
         try {
             cn = Conexion.realizarconexion();
             cs = cn.prepareCall("{call sp_listar_garajes()}");
             rs = cs.executeQuery();
+
             while (rs.next()) {
-                lista.add(new Garaje(rs.getInt("garaje_id"),rs.getString("nombre"), rs.getString("ubicacion")));
+                lista.add(new Garaje(
+                    rs.getInt("garaje_id"),
+                    rs.getString("nombre"), 
+                    rs.getString("ubicacion")
+                ));
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
-            try {
-                rs.close();
-                cs.close();
-                cn.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+            if (rs != null) {
+                try { rs.close(); } catch (SQLException e) { /* log error */ }
+            }
+            if (cs != null) {
+                try { cs.close(); } catch (SQLException e) { /* log error */ }
+            }
+            if (cn != null) {
+                try { cn.close(); } catch (SQLException e) { /* log error */ }
             }
         }
         return lista;

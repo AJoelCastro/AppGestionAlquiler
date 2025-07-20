@@ -36,8 +36,9 @@ public class BLGaraje {
     public static Garaje buscarGarajePorId(int idGaraje){
        ArrayList<Garaje> listaG = DALGaraje.listarGarajes();
        for(Garaje garaje: listaG){
-           if(garaje.getIdGaraje()==idGaraje);
-               return DALGaraje.buscarGarajePorId(idGaraje);
+           if(garaje.getIdGaraje()==idGaraje) {
+                return DALGaraje.buscarGarajePorId(idGaraje);
+            }
        }
        return null;
     }
@@ -50,17 +51,17 @@ public class BLGaraje {
                 DALGaraje.actualizarGaraje(garaje);
                 return true; 
             }
-    return false; 
+        return false; 
     }
     
     public static boolean eliminarGaraje(int idGaraje) {
         Garaje garaje = buscarGarajePorId(idGaraje);
-            if (garaje != null) {
-                DALGaraje.eliminarGaraje(idGaraje);
-                return true; 
-            }
-    return false; 
-}
+        if (garaje != null) {
+            String mensaje = DALGaraje.eliminarGaraje(idGaraje);
+            return mensaje == null; 
+        }
+        return false; 
+    }
 
     public static ArrayList<Garaje> listarGarajes() {
         return DALGaraje.listarGarajes();

@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 import logica.*;
+import logica.FacadeAlquiler;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -28,6 +30,8 @@ public class panGarajes extends javax.swing.JPanel {
      */
     public panGarajes() {
         initComponents();
+        facade = new FacadeAlquiler();
+        configurarTabla();
     }
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
@@ -43,6 +47,194 @@ public class panGarajes extends javax.swing.JPanel {
             interna.show();
         };
         
+    }
+    private void configurarTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Ubicación");
+        tblGarajes.setModel(modelo);
+
+        tblGarajes.setDefaultEditor(Object.class, null);
+    }
+
+    private void cargarGarajesEnTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) tblGarajes.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            ArrayList<Garaje> garajes = facade.listarGarajes();
+            for (Garaje garaje : garajes) {
+                Object[] fila = {
+                    garaje.getIdGaraje(),
+                    garaje.getNombre(),
+                    garaje.getUbicacion()
+                };
+                modelo.addRow(fila);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los garajes: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void actualizarGaraje() {
+        int filaSeleccionada = tblGarajes.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un garaje de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblGarajes.getModel();
+        int idGaraje = (int) modelo.getValueAt(filaSeleccionada, 0);
+        String nombreActual = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String ubicacionActual = (String) modelo.getValueAt(filaSeleccionada, 2);
+
+        String nuevoNombre = JOptionPane.showInputDialog(this, 
+            "Ingrese el nuevo nombre:", nombreActual);
+
+        if (nuevoNombre == null) return;
+
+        String nuevaUbicacion = JOptionPane.showInputDialog(this, 
+            "Ingrese la nueva ubicación:", ubicacionActual);
+
+        if (nuevaUbicacion == null) return;
+
+        if (nuevoNombre.trim().isEmpty() || nuevaUbicacion.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos", 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            boolean exito = facade.editarGaraje(idGaraje, nuevoNombre.trim(), nuevaUbicacion.trim());
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Garaje actualizado correctamente", 
+                                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarGarajesEnTabla();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el garaje. Verifique que el ID exista.", 
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar el garaje: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void eliminarGaraje() {
+        int filaSeleccionada = tblGarajes.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un garaje de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblGarajes.getModel();
+        int idGaraje = (int) modelo.getValueAt(filaSeleccionada, 0);
+        String nombre = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String ubicacion = (String) modelo.getValueAt(filaSeleccionada, 2);
+
+        String mensaje = String.format(
+            "¿Está seguro de que desea eliminar el siguiente garaje?\n\n" +
+            "ID: %d\n" +
+            "Nombre: %s\n" +
+            "Ubicación: %s\n\n" +
+            "Esta acción no se puede deshacer.",
+            idGaraje, nombre, ubicacion
+        );
+
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            mensaje,
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                boolean exito = facade.eliminarGaraje(idGaraje);
+
+                if (exito) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Garaje eliminado correctamente", 
+                        "Éxito", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                    cargarGarajesEnTabla();
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo eliminar el garaje. Verifique que no tenga registros relacionados.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al eliminar el garaje: " + e.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void buscarGaraje() {
+        String textoBusqueda = txtBusqueda.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblGarajes.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            ArrayList<Garaje> todosLosGarajes = facade.listarGarajes();
+            boolean encontrado = false;
+
+            try {
+                int idBusqueda = Integer.parseInt(textoBusqueda);
+                for (Garaje garaje : todosLosGarajes) {
+                    if (garaje.getIdGaraje() == idBusqueda) {
+                        Object[] fila = {
+                            garaje.getIdGaraje(),
+                            garaje.getNombre(),
+                            garaje.getUbicacion()
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                        break;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                String busquedaLower = textoBusqueda.toLowerCase();
+                for (Garaje garaje : todosLosGarajes) {
+                    if (garaje.getNombre().toLowerCase().contains(busquedaLower) || 
+                        garaje.getUbicacion().toLowerCase().contains(busquedaLower)) {
+                        Object[] fila = {
+                            garaje.getIdGaraje(),
+                            garaje.getNombre(),
+                            garaje.getUbicacion()
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                }
+            }
+
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(this, "No se encontraron garajes que coincidan con: " + textoBusqueda, 
+                                            "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+                cargarGarajesEnTabla();
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar garajes: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -66,102 +258,87 @@ public class panGarajes extends javax.swing.JPanel {
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        jButton4 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton5 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton3 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton2 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnListar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnEditar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnRegistrar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        txtBusqueda = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jLabel2 = new javax.swing.JLabel();
+        btnBusqueda = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPrestamos = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
+        tblGarajes = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         dspFondo.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
-        jButton4.setText("  Listar Préstamos");
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnListar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
+        btnListar.setText("  Listar Garaje");
+        btnListar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnListarActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
-        jButton5.setText("  Editar Préstamo");
-        jButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
+        btnEditar.setText("  Editar Garaje");
+        btnEditar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        jButton3.setText("  Eliminar Préstamo");
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
+        btnEliminar.setText("  Eliminar Garaje");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
-        jButton2.setText("  Agregar Préstamo");
-        jButton2.setActionCommand("Agregar Préstamo");
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
+        btnRegistrar.setText("  Registrar Garaje");
+        btnRegistrar.setActionCommand("Agregar Préstamo");
+        btnRegistrar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         jLabel1.setText("Control de Garajes");
 
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton3.setText("Codigo");
-
-        jTextField1.setBorder(null);
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton2.setText("Codigo");
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton1.setText("Libro");
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarGaraje();
+                }
+            }
+        });
+        txtBusqueda.setBorder(null);
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator1.setOpaque(true);
 
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBusqueda.setForeground(new java.awt.Color(255, 255, 255));
+        btnBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
+        btnBusqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBusquedaActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jLabel2.setText("Buscar por:");
-
-        tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
+        tblGarajes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -172,42 +349,17 @@ public class panGarajes extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblPrestamos);
+        jScrollPane1.setViewportView(tblGarajes);
 
-        jLabel3.setText("Filtrar por:");
-
-        buttonGroup2.add(jRadioButton4);
-        jRadioButton4.setText("Fecha de Prestamo");
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup2.add(jRadioButton5);
-        jRadioButton5.setText("Nombre de Usuario");
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
-            }
-        });
-
-        dspFondo.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnEditar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnRegistrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jTextField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(txtBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -216,35 +368,20 @@ public class panGarajes extends javax.swing.JPanel {
             .addGroup(dspFondoLayout.createSequentialGroup()
                 .addGap(164, 164, 164)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(70, 70, 70)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(dspFondoLayout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addComponent(jLabel2)
-                        .addGap(80, 80, 80)
-                        .addComponent(jRadioButton1)
-                        .addGap(90, 90, 90)
-                        .addComponent(jRadioButton2)
-                        .addGap(90, 90, 90)
-                        .addComponent(jRadioButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                         .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jSeparator1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
-                .addGap(18, 18, 18)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jRadioButton4)
-                    .addComponent(jRadioButton5))
-                .addContainerGap(55, Short.MAX_VALUE))
+                        .addComponent(btnBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(199, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -257,33 +394,21 @@ public class panGarajes extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
-                .addGap(48, 48, 48)
+                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(80, 80, 80)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(dspFondoLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton5)))
+                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
 
@@ -299,58 +424,45 @@ public class panGarajes extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
+        buscarGaraje();
+    }//GEN-LAST:event_btnBusquedaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        JInternalFrame ifrm = new ifrmGaraje();
+        centrarInternalFrame(ifrm);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        eliminarGaraje();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        cargarGarajesEnTabla();
+    }//GEN-LAST:event_btnListarActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
-
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        actualizarGaraje();
+    }//GEN-LAST:event_btnEditarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBusqueda;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDesktopPane dspFondo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable tblPrestamos;
+    private javax.swing.JTable tblGarajes;
+    private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);
     private Color encimaBuscar = new Color(225,225,225);
+    private FacadeAlquiler facade;
 }
