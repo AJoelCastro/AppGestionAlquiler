@@ -76,17 +76,18 @@ public class BLAutomovil {
     
     public static String verificarDisponibilidadAutomovil(String placa) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
-        String estado;
+
         if (auto != null) {
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
-                if(reservaA.getPlaca().equals(placa));
-                    estado = "En reserva";
-                return estado;
+                if (reservaA.getPlaca().equals(placa)) {
+                    return "En reserva";
+                }
             }
+            return "Disponible";
         }
-        estado = "Disponible";
-        return estado;
+
+        return "No encontrado";
     }
 
     public static ArrayList<Automovil> listarAutomoviles() {
