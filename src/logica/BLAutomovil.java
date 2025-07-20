@@ -5,7 +5,9 @@
 package logica;
 
 import datos.DALAutomovil;
+import datos.DALReservaAutomovil;
 import entidades.Automovil;
+import entidades.ReservaAutomovil;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -59,8 +61,15 @@ public class BLAutomovil {
     public static boolean eliminarAutomovil(String placa) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
         if (auto != null) {
-            DALAutomovil.eliminarAutomovil(placa);
-            return true;
+            int cantReserv = 0;
+            ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
+            for (ReservaAutomovil reservaA : listaRA) {
+                if(reservaA.getPlaca().equals(placa));
+                    cantReserv++;
+            }
+            if(cantReserv==0) {
+                DALAutomovil.eliminarAutomovil(placa);
+                return true; }
         }
         return false;
     }
