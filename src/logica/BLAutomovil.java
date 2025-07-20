@@ -81,7 +81,7 @@ public class BLAutomovil {
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
                 if (reservaA.getPlaca().equals(placa)) {
-                    return "En reserva";
+                    return "En Reserva";
                 }
             }
             return "Disponible";
