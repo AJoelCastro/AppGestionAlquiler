@@ -116,7 +116,7 @@ public class FacadeAlquiler {
         return cliente.listarClientes();
     }
 
-    public int registrarReserva(int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF) {
+    public boolean registrarReserva(int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF) {
         return reserva.insertarReserva(IdCliente, IdAgencia, fechaI, fechaF);
     }
 
@@ -143,6 +143,19 @@ public class FacadeAlquiler {
     }
     public boolean editarReserva(int reservaId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         return reserva.editarReserva(reservaId, agenciaId, fechaInicio, fechaFin);
+    }
+    // Agregar estos métodos a la clase FacadeAlquiler
+
+    public ArrayList<Reserva> buscarReservasPorFecha(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+        return reserva.buscarReservasPorFecha(fechaInicio, fechaFin);
+    }
+
+    public ArrayList<Reserva> buscarReservasPorAgencia(int agenciaId) {
+        return reserva.buscarReservasPorAgencia(agenciaId);
+    }
+
+    public ArrayList<Reserva> listarReservasActivas() {
+        return reserva.listarReservasActivas();
     }
     
 }

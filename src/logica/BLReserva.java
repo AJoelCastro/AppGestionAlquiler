@@ -19,7 +19,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class BLReserva {
     
-    public static int insertarReserva(int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF) {
+    public static boolean insertarReserva(int IdCliente, int IdAgencia, GregorianCalendar fechaI, GregorianCalendar fechaF) {
         if (IdCliente > 0 && IdAgencia > 0
                 && fechaI != null && fechaF != null
                 && fechaI.before(fechaF)) {
@@ -29,20 +29,20 @@ public class BLReserva {
             reserva.setAgenciaId(IdAgencia);
             reserva.setFechaInicio(fechaI);
             reserva.setFechaFin(fechaF);
-            
+
             int resultado = DALReserva.insertarReserva(reserva);
 
             if (resultado > 0) {
                 showMessageDialog(null, "Reserva registrada", "Resultado", 1);
-                return 0;
+                return true;
             } else {
                 showMessageDialog(null, "Error al registrar reserva", "Error", 0);
-                return 1;
+                return false;
             }
 
         } else {
             showMessageDialog(null, "Datos no válidos o fechas incorrectas", "Error", 0);
-            return 3;
+            return false;
         }
     }
     
@@ -150,5 +150,29 @@ public class BLReserva {
             showMessageDialog(null, "Error al modificar reserva: " + mensaje, "Error", 0);
             return false;
         }
+    }
+    // Agregar estos métodos a la clase BLReserva
+
+    public static ArrayList<Reserva> buscarReservasPorFecha(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+        if (fechaInicio != null && fechaFin != null && !fechaInicio.after(fechaFin)) {
+            return DALReserva.buscarReservasPorFecha(fechaInicio, fechaFin);
+        } else {
+            showMessageDialog(null, "Rango de fechas inválido", "Error", 0);
+            return new ArrayList<>();
+        }
+    }
+
+    public static ArrayList<Reserva> buscarReservasPorAgencia(int agenciaId) {
+        if (agenciaId > 0) {
+            return DALReserva.buscarReservasPorAgencia(agenciaId);
+        } else {
+            showMessageDialog(null, "ID de agencia inválido", "Error", 0);
+            return new ArrayList<>();
+        }
+    }
+    // Agregar este método a la clase BLReserva
+
+    public static ArrayList<Reserva> listarReservasActivas() {
+        return DALReserva.listarReservasActivas();
     }
 }
