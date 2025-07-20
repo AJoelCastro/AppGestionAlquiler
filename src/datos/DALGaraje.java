@@ -4,6 +4,7 @@
  */
 package datos;
 import entidades.Garaje;
+import entidades.Automovil;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -77,8 +78,9 @@ public class DALGaraje {
         try {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_actualizar_garaje(?, ?)}";
-            cs.setString(1, garaje.getNombre());
-            cs.setString(2, garaje.getUbicacion());
+            cs.setInt(1, garaje.getIdGaraje());
+            cs.setString(2, garaje.getNombre());
+            cs.setString(3, garaje.getUbicacion());
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
@@ -136,6 +138,42 @@ public class DALGaraje {
                 cn.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", 0);
+            }
+        }
+        return lista;
+    }
+    
+     public static ArrayList<Automovil> listarAutomovilesPorGaraje(int garaje) {
+        ArrayList<Automovil> lista = new ArrayList<>();
+        try {
+            cn = Conexion.realizarconexion();
+            cs = cn.prepareCall("{call sp_listar_automovil_por_garaje(?)}");
+            cs.setInt(1, garaje);
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                lista.add(new Automovil(
+                        rs.getString("placa"),
+                        rs.getString("modelo"),
+                        rs.getString("color"),
+                        rs.getString("marca"),
+                        rs.getString("garaje")
+                ));
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
             }
         }
         return lista;
