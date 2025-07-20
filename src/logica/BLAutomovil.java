@@ -64,7 +64,7 @@ public class BLAutomovil {
             int cantReserv = 0;
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
-                if(reservaA.getPlaca().equals(placa));
+                if(reservaA.getPlaca().equals(placa))
                     cantReserv++;
             }
             if(cantReserv==0) {
