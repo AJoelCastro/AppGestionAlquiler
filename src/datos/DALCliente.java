@@ -86,6 +86,45 @@ public class DALCliente {
         }
         return cliente;
     }
+    
+     public static Cliente buscarClientePorDni(String Dni) {
+        Cliente cliente = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_buscar_cliente_por_dni(?)}";
+            cs = cn.prepareCall(sql);
+            cs.setString(1,Dni);
+            rs = cs.executeQuery();
+
+            if (rs.next()) {
+                cliente = new Cliente();
+                cliente.setDni(Dni);
+                cliente.setDni(rs.getString("dni"));
+                cliente.setNombre(rs.getString("mombre"));
+                cliente.setDireccion(rs.getString("direccion"));
+                cliente.setTelefono(rs.getString("telefono"));
+                cliente.setSponsor(rs.getString("sponsor_id")); 
+
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cs != null) {
+                    cs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return cliente;
+    }
 
     public static String actualizarCliente(Cliente cliente) {
         String mensaje = null;
