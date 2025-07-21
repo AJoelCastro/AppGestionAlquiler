@@ -39,20 +39,30 @@ public class BLReserva {
                 showMessageDialog(null, "Error al registrar reserva", "Error", 0);
                 return false;
             }
-
         } else {
             showMessageDialog(null, "Datos no válidos o fechas incorrectas", "Error", 0);
             return false;
         }
     }
-    
+
     public static Reserva buscarReservaPorId(int idReserva) {
-        return DALReserva.buscarReservaPorId(idReserva);
+        ArrayList<Reserva> listaR = DALReserva.listarReservas();
+        for (Reserva reserva : listaR) {
+            if (reserva.getReservaId() == idReserva)
+              return DALReserva.buscarReservaPorId(idReserva);
+        }
+        return null;
     }
-    
-    public static ArrayList<Reserva> buscarReservasPorCliente(int idCliente) {
-        return DALReserva.buscarReservasPorCliente(idCliente);
+
+    public static Reserva buscarReservaPorIdCliente(int idCliente) {
+        ArrayList<Reserva> listaR = DALReserva.listarReservas();
+        for (Reserva reserva : listaR) {
+            if (reserva.getClienteId() == idCliente)
+                return DALReserva.buscarReservaPorIdCliente(idCliente);
+        }
+        return null;
     }
+
     
     public static boolean actualizarPrecioReserva(int reservaId) {
         ArrayList<ReservaAutomovil> reservasAuto = DALReservaAutomovil.listarReservaAutomovil();
@@ -93,7 +103,7 @@ public class BLReserva {
         }
         return false;
     }
-    
+
     public static boolean eliminarReserva(int idReserva) {
         Reserva reserva = buscarReservaPorId(idReserva);
         if (reserva != null) {
@@ -117,6 +127,7 @@ public class BLReserva {
     public static ArrayList<Reserva> listarReservas() {
         return DALReserva.listarReservas();
     }
+
     
     public static boolean editarReserva(int reservaId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         // Validaciones
@@ -176,3 +187,4 @@ public class BLReserva {
         return DALReserva.listarReservasActivas();
     }
 }
+
