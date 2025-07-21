@@ -8,6 +8,7 @@ import datos.DALCliente;
 import datos.DALReserva;
 import entidades.Cliente;
 import entidades.Reserva;
+import entidades.ClienteFactory;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -24,28 +25,28 @@ public class BLCliente {
                 || c.getTelefono().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(null, "Datos no válidos", "Error", 0);
-            return 2; 
+            return 2;
         }
 
         if (buscarClientePorDni(c.getDni()) != null) {
             JOptionPane.showMessageDialog(null, "El Dni ingresado ya esta registrado", "Error", 0);
-            return 3; 
+            return 3;
         }
 
         String mensaje = DALCliente.insertarCliente(c);
         if (mensaje == null) {
             JOptionPane.showMessageDialog(null, "Cliente registrado correctamente");
-            return 0; 
+            return 0;
         } else {
             JOptionPane.showMessageDialog(null, mensaje, "Error en la BD", 0);
-            return 1; 
+            return 1;
         }
     }
 
     public static Cliente buscarClientePorId(int idCliente) {
         ArrayList<Cliente> listaC = DALCliente.listarClientes();
         for (Cliente c : listaC) {
-            if (c.getIdCliente() == idCliente) {  
+            if (c.getIdCliente() == idCliente) {
                 return DALCliente.buscarClientePorId(idCliente);
             }
         }
@@ -55,7 +56,7 @@ public class BLCliente {
     public static Cliente buscarClientePorDni(String dni) {
         ArrayList<Cliente> listaC = DALCliente.listarClientes();
         for (Cliente c : listaC) {
-            if (c.getDni().equals(dni)){
+            if (c.getDni().equals(dni)) {
                 return DALCliente.buscarClientePorDni(dni);
             }
         }
@@ -63,20 +64,25 @@ public class BLCliente {
     }
 
     public static boolean editarCliente(int idCliente, String nuevoNombre, String nuevaDireccion, String nuevoTelefono) {
-        if (nuevoNombre == null || nuevoNombre.trim().isEmpty() ||
-            nuevaDireccion == null || nuevaDireccion.trim().isEmpty() ||
-            nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) {
+        if (nuevoNombre == null || nuevoNombre.trim().isEmpty()
+                || nuevaDireccion == null || nuevaDireccion.trim().isEmpty()
+                || nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "Error", 0);
             return false;
         }
 
-        Cliente cliente = buscarClientePorId(idCliente);
-        if (cliente != null) {
-            cliente.setNombre(nuevoNombre.trim());
-            cliente.setDireccion(nuevaDireccion.trim());
-            cliente.setTelefono(nuevoTelefono.trim());
+        Cliente clienteOriginal = buscarClientePorId(idCliente);
+        if (clienteOriginal != null) {
+            Cliente clienteActualizado = ClienteFactory.crearClienteConSponsor(
+                    idCliente,
+                    clienteOriginal.getDni(), 
+                    nuevoNombre.trim(),
+                    nuevaDireccion.trim(),
+                    nuevoTelefono.trim(),
+                    clienteOriginal.getSponsor() 
+            );
 
-            String mensaje = DALCliente.actualizarCliente(cliente);
+            String mensaje = DALCliente.actualizarCliente(clienteActualizado);
 
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Cliente actualizado correctamente");
@@ -97,7 +103,7 @@ public class BLCliente {
             int cantReserv = 0;
             ArrayList<Reserva> listaR = DALReserva.listarReservas();
             for (Reserva reserva : listaR) {
-                if(reserva.getClienteId()== idCliente) {
+                if (reserva.getClienteId() == idCliente) {
                     cantReserv++;
                 }
             }
@@ -112,7 +118,7 @@ public class BLCliente {
     public static ArrayList<Cliente> listarClientes() {
         return DALCliente.listarClientes();
     }
-    
+
     public static ArrayList<Reserva> obtenerReservasPorCliente(int idCliente) {
         return DALCliente.listarReservasPorCliente(idCliente);
     }
