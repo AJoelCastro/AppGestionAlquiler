@@ -86,23 +86,30 @@ public class DALAutomovil {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?, ?, ?)}";
+
+            // Cambiar el SP call para que coincida con los parámetros correctos
+            String sql = "{call sp_actualizar_automovil(?, ?, ?, ?)}";
             cs = cn.prepareCall(sql);
-            cs.setString(1, auto.getPlaca());      
-            cs.setString(2, auto.getModelo());
-            cs.setString(3, auto.getColor());
-            cs.setString(4, auto.getMarca());
-            cs.setString(5, auto.getEstado()); 
-            cs.setInt(6, auto.getGarajeId());
-            cs.executeUpdate();
+            cs.setString(1, auto.getPlaca());     // p_placa
+            cs.setString(2, auto.getModelo());    // p_modelo  
+            cs.setString(3, auto.getColor());     // p_color
+            cs.setString(4, auto.getMarca());     // p_marca
+
+            int filasAfectadas = cs.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                mensaje = "No se encontró el automóvil o no se realizaron cambios";
+            }
+
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
+            ex.printStackTrace();
         } finally {
             try {
                 if (cs != null) cs.close();
                 if (cn != null) cn.close();
             } catch (SQLException ex) {
-                mensaje = ex.getMessage();
+                if (mensaje == null) mensaje = ex.getMessage();
             }
         }
         return mensaje;

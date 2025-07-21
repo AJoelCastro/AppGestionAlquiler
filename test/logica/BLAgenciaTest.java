@@ -6,10 +6,11 @@ package logica;
 
 import entidades.Agencia;
 import java.util.ArrayList;
-import org.junit.Test;
+import org.junit.*;
 import static org.junit.Assert.*;
 
 public class BLAgenciaTest {
+
 
     @Test
     public void testInsertarAgencia() {
@@ -26,7 +27,6 @@ public class BLAgenciaTest {
     @Test
     public void testBuscarAgenciaPorId() {
         System.out.println("buscarAgenciaPorId");
-
         // Insertar
         BLAgencia.insertarAgencia("Agencia Temporal", "Calle 45");
 
@@ -35,9 +35,9 @@ public class BLAgenciaTest {
         Agencia ultima = agencias.get(agencias.size() - 1);
 
         Agencia agencia = BLAgencia.buscarAgenciaPorId(ultima.getAgenciaId());
-
         assertNotNull(agencia);
         assertEquals("Agencia Temporal", agencia.getNombre());
+
     }
 
     @Test
@@ -77,3 +77,4 @@ public class BLAgenciaTest {
         assertTrue(lista.size() >= 0); // Puede estar vacía, pero debe existir
     }
 }
+

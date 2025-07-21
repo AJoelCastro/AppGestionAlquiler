@@ -48,32 +48,235 @@ public class panAutomoviles extends javax.swing.JPanel {
     }
     private void configurarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Dirección");
-        tblAgencias.setModel(modelo);
+        modelo.addColumn("Placa");
+        modelo.addColumn("Modelo");
+        modelo.addColumn("Color");
+        modelo.addColumn("Marca");
+        modelo.addColumn("Garaje");
+        tblAutomoviles.setModel(modelo);
 
         // Opcional: hacer que la tabla no sea editable
-        tblAgencias.setDefaultEditor(Object.class, null);
+        tblAutomoviles.setDefaultEditor(Object.class, null);
     }
 
     // 4. Agregar este método para cargar los datos en la tabla:
-    private void cargarAgenciasEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) tblAgencias.getModel();
-        modelo.setRowCount(0); // Limpiar la tabla
+    private void cargarAutomovilesEnTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        modelo.setRowCount(0);
 
         try {
-            ArrayList<Agencia> agencias = facade.listarAgencias();
-            for (Agencia agencia : agencias) {
+            ArrayList<Automovil> automoviles = facade.listarAutomoviles();
+            for (Automovil auto : automoviles) {
                 Object[] fila = {
-                    agencia.getAgenciaId(),
-                    agencia.getNombre(),
-                    agencia.getDireccion()
+                    auto.getPlaca(),
+                    auto.getModelo(),
+                    auto.getColor(),        // Corregir orden
+                    auto.getMarca(),        // Corregir orden
+                    auto.getNombreGaraje()
                 };
                 modelo.addRow(fila);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar las agencias: " + e.getMessage(), 
+            JOptionPane.showMessageDialog(this, "Error al cargar los automóviles: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void eliminarAutomovil() {
+        int filaSeleccionada = tblAutomoviles.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        String placa = (String) modelo.getValueAt(filaSeleccionada, 0); // Asumiendo que placa está en columna 0
+        String modelo_auto = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String marca = (String) modelo.getValueAt(filaSeleccionada, 2);
+        String color = (String) modelo.getValueAt(filaSeleccionada, 3);
+
+        // Verificar disponibilidad antes de eliminar
+        String disponibilidad = facade.verificarDisponibilidadAutomovil(placa);
+
+        if ("En reserva".equals(disponibilidad)) {
+            JOptionPane.showMessageDialog(this, 
+                "No se puede eliminar el automóvil porque está en reserva", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String mensaje = String.format(
+            "¿Está seguro de que desea eliminar el siguiente automóvil?\n\n" +
+            "Placa: %s\n" +
+            "Modelo: %s\n" +
+            "Marca: %s\n" +
+            "Color: %s\n\n" +
+            "Esta acción no se puede deshacer.",
+            placa, modelo_auto, marca, color
+        );
+
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            mensaje,
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                boolean exito = facade.eliminarAutomovil(placa);
+
+                if (exito) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Automóvil eliminado correctamente", 
+                        "Éxito", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                    cargarAutomovilesEnTabla(); // Método que deberás crear para recargar la tabla
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo eliminar el automóvil. Verifique que no tenga reservas activas.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al eliminar el automóvil: " + e.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void actualizarAutomovil() {
+        int filaSeleccionada = tblAutomoviles.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        String placa = (String) modelo.getValueAt(filaSeleccionada, 0); // Placa no se puede cambiar
+        String modeloActual = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String colorActual = (String) modelo.getValueAt(filaSeleccionada, 2);  // Color está en índice 2
+        String marcaActual = (String) modelo.getValueAt(filaSeleccionada, 3);  // Marca está en índice 3
+        // NO incluimos garaje porque no se debe cambiar según el SP
+
+        // Mostrar la placa (no editable)
+        JOptionPane.showMessageDialog(this, "Automóvil a actualizar - Placa: " + placa, 
+                                    "Información", JOptionPane.INFORMATION_MESSAGE);
+
+        String nuevoModelo = JOptionPane.showInputDialog(this, 
+            "Ingrese el nuevo modelo:", modeloActual);
+
+        if (nuevoModelo == null) return;
+
+        String nuevoColor = JOptionPane.showInputDialog(this, 
+            "Ingrese el nuevo color:", colorActual);
+
+        if (nuevoColor == null) return;
+
+        String nuevaMarca = JOptionPane.showInputDialog(this, 
+            "Ingrese la nueva marca:", marcaActual);
+
+        if (nuevaMarca == null) return;
+
+        if (nuevoModelo.trim().isEmpty() || nuevoColor.trim().isEmpty() || nuevaMarca.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos", 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Usar el método corregido que NO incluye garajeId
+            boolean exito = facade.editarAutomovil(placa, nuevoModelo.trim(), nuevoColor.trim(), nuevaMarca.trim());
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Automóvil actualizado correctamente", 
+                                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarAutomovilesEnTabla(); // Método para recargar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el automóvil. Verifique que la placa exista.", 
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar el automóvil: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void buscarAutomovil() {
+        String textoBusqueda = jTextField1.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            boolean encontrado = false;
+
+            if (jRadioButton2.isSelected()) { // Búsqueda por ID (placa)
+                // Usar el método específico del facade para buscar por placa
+                Automovil auto = facade.buscarAutomovilPorPlaca(textoBusqueda.toUpperCase());
+
+                if (auto != null) {
+                    Object[] fila = {
+                        auto.getPlaca(),
+                        auto.getModelo(),
+                        auto.getColor(),
+                        auto.getMarca(),
+                        auto.getNombreGaraje()
+                    };
+                    modelo.addRow(fila);
+                    encontrado = true;
+                }
+
+            } else if (jRadioButton1.isSelected()) { // Búsqueda por Garaje
+                // Para búsqueda por garaje, necesitamos primero obtener el ID del garaje
+                // Esto requiere un método adicional en el facade para buscar garaje por nombre
+                // Por ahora, usamos el método existente que lista todos y filtra
+                ArrayList<Automovil> todosLosAutomoviles = facade.listarAutomoviles();
+                String busquedaLower = textoBusqueda.toLowerCase();
+
+                for (Automovil auto : todosLosAutomoviles) {
+                    if (auto.getNombreGaraje() != null && 
+                        auto.getNombreGaraje().toLowerCase().contains(busquedaLower)) {
+                        Object[] fila = {
+                            auto.getPlaca(),
+                            auto.getModelo(),
+                            auto.getColor(),
+                            auto.getMarca(),
+                            auto.getNombreGaraje()
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione un tipo de búsqueda", 
+                                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!encontrado) {
+                String tipoBusqueda = jRadioButton2.isSelected() ? "placa" : "garaje";
+                JOptionPane.showMessageDialog(this, 
+                    "No se encontraron automóviles que coincidan con la " + tipoBusqueda + ": " + textoBusqueda, 
+                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+                cargarAutomovilesEnTabla(); // Mostrar todos los automóviles nuevamente
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar automóviles: " + e.getMessage(), 
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -88,7 +291,6 @@ public class panAutomoviles extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoPrestamos.png"));
         Image image = icon.getImage();
         dspFondo = new javax.swing.JDesktopPane(){
@@ -99,80 +301,91 @@ public class panAutomoviles extends javax.swing.JPanel {
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        jButton4 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton5 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton3 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jButton2 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnListar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnActualizar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnRegistrar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnBusqueda = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAgencias = new javax.swing.JTable();
+        tblAutomoviles = new javax.swing.JTable();
+        btnListar1 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        jLabel2 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         dspFondo.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
-        jButton4.setText("  Listar Agencia");
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnListar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
+        btnListar.setText("  Listar Automoviles");
+        btnListar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnListarActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
-        jButton5.setText("  Actualizar Agencia");
-        jButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
+        btnActualizar.setText("  Actualizar Automoviles");
+        btnActualizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnActualizarActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        jButton3.setText("  Eliminar Agencia");
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
+        btnEliminar.setText("  Eliminar Automoviles");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
-        jButton2.setText("  Agregar Agencia");
-        jButton2.setActionCommand("Agregar Préstamo");
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
+        btnRegistrar.setText("  Registrar Automoviles");
+        btnRegistrar.setActionCommand("Agregar Préstamo");
+        btnRegistrar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         jLabel1.setText("Control de Automoviles");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarAutomovil();
+                }
+            }
+        });
         jTextField1.setBorder(null);
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator1.setOpaque(true);
 
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBusqueda.setForeground(new java.awt.Color(255, 255, 255));
+        btnBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
+        btnBusqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBusquedaActionPerformed(evt);
             }
         });
 
-        tblAgencias.setModel(new javax.swing.table.DefaultTableModel(
+        tblAutomoviles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -183,43 +396,78 @@ public class panAutomoviles extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblAgencias);
+        jScrollPane1.setViewportView(tblAutomoviles);
 
-        dspFondo.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        btnListar1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnListar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/24-em-check.png"))); // NOI18N
+        btnListar1.setText("  Verificar Disponibilidad");
+        btnListar1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnListar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListar1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Buscar por:");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("Garaje");
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("Placa");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+
+        dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnRegistrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jTextField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnListar1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
         dspFondoLayout.setHorizontalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dspFondoLayout.createSequentialGroup()
-                .addGap(164, 164, 164)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(70, 70, 70)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
-                        .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSeparator1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(196, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(416, 416, 416))
+            .addGroup(dspFondoLayout.createSequentialGroup()
+                .addGap(164, 164, 164)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(143, 143, 143)
+                        .addComponent(jRadioButton1)
+                        .addGap(140, 140, 140)
+                        .addComponent(jRadioButton2))
+                    .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
+                            .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jSeparator1)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,20 +476,27 @@ public class panAutomoviles extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(80, 80, 80)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(16, 16, 16)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addGap(43, 43, 43)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(dspFondoLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnListar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
@@ -258,42 +513,53 @@ public class panAutomoviles extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
+        buscarAutomovil();
+    }//GEN-LAST:event_btnBusquedaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JInternalFrame ifrm = new ifrmAgencia();
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        JInternalFrame ifrm = new ifrmAutomoviles();
         centrarInternalFrame(ifrm);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        eliminarAutomovil();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        cargarAgenciasEnTabla();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        cargarAutomovilesEnTabla();
+    }//GEN-LAST:event_btnListarActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        actualizarAutomovil();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnListar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListar1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBusqueda;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnListar1;
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDesktopPane dspFondo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable tblAgencias;
+    private javax.swing.JTable tblAutomoviles;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);

@@ -45,15 +45,14 @@ public class BLAutomovil {
         return null;
     }
 
-    public static boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca, int nuevoGarajeId) {
+    public static boolean editarAutomovil(String placa, String nuevoModelo, String nuevoColor, String nuevaMarca) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
         if (auto != null) {
             auto.setModelo(nuevoModelo);
             auto.setColor(nuevoColor);
             auto.setMarca(nuevaMarca);
-            auto.setGarajeId(nuevoGarajeId);
-            DALAutomovil.actualizarAutomovil(auto);
-            return true;
+            String mensaje = DALAutomovil.actualizarAutomovil(auto);
+            return mensaje == null;
         }
         return false;
     }
@@ -64,19 +63,20 @@ public class BLAutomovil {
             int cantReserv = 0;
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
-                if(reservaA.getPlaca().equals(placa))
+                if(reservaA.getPlaca().equals(placa)){
                     cantReserv++;
+                }
             }
-            if(cantReserv==0) {
-                DALAutomovil.eliminarAutomovil(placa);
-                return true; }
+            if (cantReserv == 0) {
+                String mensaje = DALAutomovil.eliminarAutomovil(placa);
+                return mensaje == null; // Retornar true si no hay mensaje de error
+            }
         }
         return false;
     }
     
     public static String verificarDisponibilidadAutomovil(String placa) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
-
         if (auto != null) {
             ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
             for (ReservaAutomovil reservaA : listaRA) {
@@ -84,10 +84,8 @@ public class BLAutomovil {
                     return "En Reserva";
                 }
             }
-            return "Disponible";
         }
-
-        return "En Mantenimiento";
+        return "Disponible";
     }
 
     public static ArrayList<Automovil> listarAutomoviles() {

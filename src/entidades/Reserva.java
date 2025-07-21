@@ -4,13 +4,14 @@
  */
 package entidades;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
  *
- * @author Asus
+ * @author sanar
  */
+
+
 public class Reserva {
     private int reservaId;
     private int clienteId;
@@ -20,14 +21,27 @@ public class Reserva {
     private double precioTotal;
     private boolean entregado;
 
-    private String nombreCliente; // solo para mostrar
-    private String nombreAgencia; // solo para mostrar
+    private String nombreCliente;
+    private String nombreAgencia;
 
     public Reserva() {
-       this(0,0,0,new GregorianCalendar(),new GregorianCalendar(),0,false);
+        this.precioTotal = 0.0;
+        this.entregado = false;
+        this.fechaInicio = new GregorianCalendar();
+        this.fechaFin = new GregorianCalendar();
     }
     
-    public Reserva(int reservaId,int clienteId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, double precioTotal, boolean entregado) {
+    public Reserva(int clienteId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+        this.clienteId = clienteId;
+        this.agenciaId = agenciaId;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.precioTotal = 0.0;
+        this.entregado = false;
+    }
+    
+    public Reserva(int reservaId, int clienteId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, double precioTotal, boolean entregado) {
+        this.reservaId = reservaId;
         this.clienteId = clienteId;
         this.agenciaId = agenciaId;
         this.fechaInicio = fechaInicio;
@@ -107,8 +121,4 @@ public class Reserva {
     public void setNombreAgencia(String nombreAgencia) {
         this.nombreAgencia = nombreAgencia;
     }
-    
-    
-
-
 }

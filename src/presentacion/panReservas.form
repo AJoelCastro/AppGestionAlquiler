@@ -71,7 +71,7 @@
                       </Group>
                       <Component id="jScrollPane1" min="-2" pref="695" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="196" max="32767" attributes="0"/>
+                  <EmptySpace pref="194" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
@@ -120,7 +120,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/lista.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="  Listar Agencia"/>
+            <Property name="text" type="java.lang.String" value="  Listar Reservas"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
@@ -138,7 +138,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/editar.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="  Actualizar Agencia"/>
+            <Property name="text" type="java.lang.String" value="  Actualizar Reservas"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
@@ -156,7 +156,8 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/eliminar.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="  Eliminar Agencia"/>
+            <Property name="text" type="java.lang.String" value="  Eliminar Reservas"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
@@ -174,7 +175,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/a&#xf1;adir.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="  Registrar Agencia"/>
+            <Property name="text" type="java.lang.String" value="  Registrar Reservas"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
             <Property name="actionCommand" type="java.lang.String" value="Agregar Pr&#xe9;stamo"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
@@ -235,7 +236,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tblAgencias">
+            <Component class="javax.swing.JTable" name="tblReservas">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="4">
