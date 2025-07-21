@@ -29,4 +29,41 @@ public class BLReservaAutomovil {
     public static double obtenerTotalAlquiler(int reservaId) {
         return DALReservaAutomovil.obtenerTotalAlquiler(reservaId);
     }
+    public static boolean asignarAutomovilesAReserva(int reservaId, ArrayList<ReservaAutomovil> autosAsignados) {
+        if (reservaId <= 0 || autosAsignados == null || autosAsignados.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Datos no válidos para la asignación", "Error", 0);
+            return false;
+        }
+
+        boolean todosInsertados = true;
+        double precioTotalCalculado = 0.0;
+
+        for (ReservaAutomovil ra : autosAsignados) {
+            int resultado = DALReservaAutomovil.insertarReservaAutomovil(ra);
+            if (resultado <= 0) {
+                todosInsertados = false;
+                JOptionPane.showMessageDialog(null, 
+                    "Error al asignar el automóvil con placa: " + ra.getPlaca(), "Error", 0);
+            } else {
+                precioTotalCalculado += ra.getPrecioAlquiler();
+            }
+        }
+
+        if (todosInsertados) {
+            boolean precioActualizado = BLReserva.actualizarPrecioReserva(reservaId);
+
+            if (precioActualizado) {
+                JOptionPane.showMessageDialog(null, 
+                    "Automóviles asignados correctamente\nPrecio total: $" + 
+                    String.format("%.2f", precioTotalCalculado), "Éxito", 1);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, 
+                    "Automóviles asignados pero error al actualizar precio total", "Advertencia", 2);
+                return false;
+            }
+        }
+
+        return false;
+    }
 }

@@ -68,6 +68,7 @@ public class DALReservaAutomovil {
 
         return lista;
     }
+    
     public static double obtenerTotalAlquiler(int reservaId) {
         Connection cn = null;
         CallableStatement cs = null;
