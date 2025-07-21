@@ -48,11 +48,11 @@ public class BLAgenciaTest {
     
     @Test
     public void testEliminarAgencia_Existe() {
-        int idAgencia = 16; 
+        int idAgencia = 12; 
         boolean resultado = BLAgencia.eliminarAgencia(idAgencia);
         assertTrue(resultado);
     }
-    
+//    
     @Test
     public void testListarAgencias() {
         List<Agencia> agencias = BLAgencia.listarAgencias();

@@ -18,6 +18,10 @@ public class AutomovilFactory {
         return new Automovil(placa, modelo, color, marca, nombreGaraje);
     }
     
+    public static Automovil crearAutomovilCompleto(String placa, String modelo, String color, String marca, String estado, int garajeId) {
+    return new Automovil(placa, modelo, color, marca, estado, garajeId);
+    }
+    
     public static Automovil crearAutomovilVacio() {
         return new Automovil(); // valores por defecto
     }
