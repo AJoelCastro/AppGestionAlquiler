@@ -30,7 +30,6 @@ public class DALReserva {
             cs.setInt(2, r.getAgenciaId());
             cs.setDate(3, new java.sql.Date(r.getFechaInicio().getTimeInMillis()));
             cs.setDate(4, new java.sql.Date(r.getFechaFin().getTimeInMillis()));
-
             resultado = cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error en DALReserva", 0);
@@ -77,8 +76,6 @@ public class DALReserva {
                     fechaFin.setTime(sqlFechaFin);
                     reserva.setFechaFin(fechaFin);
                 }
-                reserva.setPrecioTotal(rs.getDouble("precio_total"));
-                reserva.setEntregado(rs.getBoolean("entregado"));
 
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -113,8 +110,8 @@ public class DALReserva {
             if (rs.next()) {
                 reserva = new Reserva();
                 reserva.setReservaId(idCliente);
+                reserva.setReservaId(rs.getInt("reserva_id"));
                 reserva.setClienteId(rs.getInt("cliente_id"));
-                reserva.setAgenciaId(rs.getInt("agencia_id"));
                 Date sqlFechaInicio = rs.getDate("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fechaInicio = new GregorianCalendar();
@@ -128,8 +125,7 @@ public class DALReserva {
                     fechaFin.setTime(sqlFechaFin);
                     reserva.setFechaFin(fechaFin);
                 }
-                reserva.setPrecioTotal(rs.getDouble("precio_total"));
-                reserva.setEntregado(rs.getBoolean("entregado"));
+                reserva.setEntregado(rs.getBoolean("estado"));
 
             }
         } catch (ClassNotFoundException | SQLException ex) {
