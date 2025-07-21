@@ -29,17 +29,14 @@ public class ifrmRegistrarReserva extends javax.swing.JInternalFrame {
     private void initComponentsCustom() {
         facade = new FacadeAlquiler();
 
-        // Crear JDateChoosers
         dateInicio = new JDateChooser();
         dateFin = new JDateChooser();
 
-        // Crear spinners para horas y minutos
         timeInicioHora = new JSpinner(new SpinnerNumberModel(9, 0, 23, 1)); // 9 AM por defecto
         timeInicioMinuto = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
         timeFinHora = new JSpinner(new SpinnerNumberModel(17, 0, 23, 1)); // 5 PM por defecto
         timeFinMinuto = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
 
-        // Posicionar componentes (ajusta según tu layout)
         dateInicio.setBounds(183, 150, 130, 22);
         timeInicioHora.setBounds(320, 150, 50, 22);
         timeInicioMinuto.setBounds(375, 150, 50, 22);
@@ -48,7 +45,6 @@ public class ifrmRegistrarReserva extends javax.swing.JInternalFrame {
         timeFinHora.setBounds(320, 180, 50, 22);
         timeFinMinuto.setBounds(375, 180, 50, 22);
 
-        // Añadir al contenedor
         getContentPane().add(dateInicio);
         getContentPane().add(timeInicioHora);
         getContentPane().add(timeInicioMinuto);

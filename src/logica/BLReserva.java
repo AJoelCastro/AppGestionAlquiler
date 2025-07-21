@@ -151,7 +151,6 @@ public class BLReserva {
             return false;
         }
     }
-    // Agregar estos métodos a la clase BLReserva
 
     public static ArrayList<Reserva> buscarReservasPorFecha(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         if (fechaInicio != null && fechaFin != null && !fechaInicio.after(fechaFin)) {
@@ -170,7 +169,6 @@ public class BLReserva {
             return new ArrayList<>();
         }
     }
-    // Agregar este método a la clase BLReserva
 
     public static ArrayList<Reserva> listarReservasActivas() {
         return DALReserva.listarReservasActivas();

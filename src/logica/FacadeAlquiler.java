@@ -19,6 +19,7 @@ public class FacadeAlquiler {
     private BLCliente cliente;
     private BLReserva reserva;
     private BLGaraje garaje;
+    private BLReservaAutomovil reserauto;
 
     public FacadeAlquiler() {
         this.agencia = new BLAgencia();
@@ -26,6 +27,7 @@ public class FacadeAlquiler {
         this.cliente = new BLCliente();
         this.reserva = new BLReserva();
         this.garaje = new BLGaraje();
+        this.reserauto = new BLReservaAutomovil();
     }
 
     public void registrarAgencia(String nombre, String direccion) {
@@ -156,6 +158,17 @@ public class FacadeAlquiler {
 
     public ArrayList<Reserva> listarReservasActivas() {
         return reserva.listarReservasActivas();
+    }
+    public boolean asignarAutomovilesAReserva(int reservaId, ArrayList<ReservaAutomovil> autosAsignados) {
+        return reserauto.asignarAutomovilesAReserva(reservaId, autosAsignados);
+    }
+
+    public ArrayList<ReservaAutomovil> listarReservaAutomovil() {
+        return reserauto.listarReservaAutomovil();
+    }
+
+    public double obtenerTotalAlquilerPorReserva(int reservaId) {
+        return reserauto.obtenerTotalAlquiler(reservaId);
     }
     
 }
