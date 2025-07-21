@@ -118,8 +118,8 @@ public class BLReserva {
         return DALReserva.listarReservas();
     }
     
+    
     public static boolean editarReserva(int reservaId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
-        // Validaciones
         if (reservaId <= 0 || agenciaId <= 0 || fechaInicio == null || fechaFin == null) {
             showMessageDialog(null, "Datos no válidos", "Error", 0);
             return false;
