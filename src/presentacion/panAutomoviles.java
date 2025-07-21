@@ -31,6 +31,55 @@ public class panAutomoviles extends javax.swing.JPanel {
         facade = new FacadeAlquiler(); // Inicializar el facade
         configurarTabla(); // Configurar las columnas de la tabla
     }
+    
+    private void verificarDisponibilidadSeleccionado() {
+        int filaSeleccionada = tblAutomoviles.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        String placa = (String) modelo.getValueAt(filaSeleccionada, 0); // Placa está en columna 0
+        String modeloAuto = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String color = (String) modelo.getValueAt(filaSeleccionada, 2);
+        String marca = (String) modelo.getValueAt(filaSeleccionada, 3);
+        String garaje = (String) modelo.getValueAt(filaSeleccionada, 4);
+
+        try {
+            String disponibilidad = facade.verificarDisponibilidadAutomovil(placa);
+
+            String mensaje = String.format(
+                "INFORMACIÓN DEL AUTOMÓVIL:\n\n" +
+                "Placa: %s\n" +
+                "Modelo: %s\n" +
+                "Color: %s\n" +
+                "Marca: %s\n" +
+                "Garaje: %s\n\n" +
+                "ESTADO: %s",
+                placa, modeloAuto, color, marca, garaje, disponibilidad
+            );
+
+            // Cambiar el tipo de mensaje según la disponibilidad
+            int tipoMensaje = "Disponible".equals(disponibilidad) ? 
+                             JOptionPane.INFORMATION_MESSAGE : 
+                             JOptionPane.WARNING_MESSAGE;
+
+            JOptionPane.showMessageDialog(this, 
+                mensaje, 
+                "Estado del Automóvil", 
+                tipoMensaje);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al verificar la disponibilidad: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
         
@@ -46,6 +95,7 @@ public class panAutomoviles extends javax.swing.JPanel {
         };
         
     }
+    
     private void configurarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Placa");
@@ -79,6 +129,7 @@ public class panAutomoviles extends javax.swing.JPanel {
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
     private void eliminarAutomovil() {
         int filaSeleccionada = tblAutomoviles.getSelectedRow();
 
@@ -533,7 +584,7 @@ public class panAutomoviles extends javax.swing.JPanel {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnListar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListar1ActionPerformed
-        // TODO add your handling code here:
+        verificarDisponibilidadSeleccionado();
     }//GEN-LAST:event_btnListar1ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
