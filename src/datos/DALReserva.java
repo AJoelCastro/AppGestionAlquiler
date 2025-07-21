@@ -156,13 +156,11 @@ public class DALReserva {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_actualizar_reserva(?,?,?,?,?,?)}";
+            String sql = "{call sp_editar_reserva(?,?,?,?)}";
             cs.setInt(1, r.getClienteId());
             cs.setInt(2, r.getAgenciaId());
             cs.setDate(3, new java.sql.Date(r.getFechaInicio().getTimeInMillis()));
             cs.setDate(4, new java.sql.Date(r.getFechaFin().getTimeInMillis()));
-            cs.setDouble(5, r.getPrecioTotal());
-            cs.setBoolean(6, r.isEntregado());
 
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
