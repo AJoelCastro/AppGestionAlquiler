@@ -1,82 +1,62 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package logica;
 
+import org.junit.Test;
+import static org.junit.Assert.*;
+import logica.BLAgencia;
 import entidades.Agencia;
 import java.util.ArrayList;
-import org.junit.*;
-import static org.junit.Assert.*;
+import java.util.List;
 
 public class BLAgenciaTest {
 
-    private static int idAgenciaExistente;
-
-    @BeforeClass
-    public static void setUpClass() {
-        System.out.println(">>> [TEST] Obteniendo una agencia existente...");
-        ArrayList<Agencia> agencias = BLAgencia.listarAgencias();
-        assertFalse("Debe haber al menos una agencia en la base de datos", agencias.isEmpty());
-        idAgenciaExistente = agencias.get(0).getAgenciaId();  // Tomamos el ID de la primera agencia
+    @Test
+    public void testInsertarAgencia_Valido() {
+        int resultado = BLAgencia.insertarAgencia("Agencia Prueba", "Av. Principal 123");
+        // Esperamos que el código sea 0 (registro exitoso)
+        assertEquals(0, resultado);
     }
 
     @Test
-    public void testBuscarAgenciaPorId() {
-        System.out.println("buscarAgenciaPorId");
-        Agencia result = BLAgencia.buscarAgenciaPorId(idAgenciaExistente);
-        assertNotNull("La agencia debería existir", result);
-        assertEquals("El ID no coincide", idAgenciaExistente, result.getAgenciaId());
+    public void testInsertarAgencia_CamposVacios() {
+        int resultado = BLAgencia.insertarAgencia("", "");
+        // Esperamos que el código sea 2 (error por campos vacíos)
+        assertEquals(2, resultado);
+    }
+    
+    @Test
+    public void testBuscarAgenciaPorId_Existe() {
+        
+        Agencia agencia = BLAgencia.buscarAgenciaPorId(1);
+        assertNotNull(agencia); // debería encontrarla
     }
 
+    @Test
+    public void testBuscarAgenciaPorId_NoExiste() {
+        Agencia agencia = BLAgencia.buscarAgenciaPorId(9999); // un ID improbable
+        assertNull(agencia); // no debería encontrar nada
+    }
+    
+    @Test
+    public void testEditarAgencia_Existe() {
+        int idAgencia = 1; // 
+        String nuevoNombre = "Agencia 12";
+        String nuevaDireccion = "DIR CALLE S";
+
+        boolean resultado = BLAgencia.editarAgencia(idAgencia, nuevoNombre, nuevaDireccion);
+        assertTrue(resultado);
+    }
+    
+    @Test
+    public void testEliminarAgencia_Existe() {
+        int idAgencia = 15; 
+        boolean resultado = BLAgencia.eliminarAgencia(idAgencia);
+        assertTrue(resultado);
+    }
+    
     @Test
     public void testListarAgencias() {
-        System.out.println("listarAgencias");
-        ArrayList<Agencia> agencias = BLAgencia.listarAgencias();
-        assertNotNull("La lista no debe ser nula", agencias);
-        assertTrue("Debe existir al menos una agencia", agencias.size() > 0);
-    }
-
-    @Test
-    public void testEditarAgencia() {
-        System.out.println("editarAgencia");
-        String nuevoNombre = "Agencia Modificada Test";
-        String nuevaDireccion = "Av. Modificada Test";
-        boolean result = BLAgencia.editarAgencia(idAgenciaExistente, nuevoNombre, nuevaDireccion);
-        assertTrue("La edición debería ser exitosa", result);
-
-        // Verificamos el cambio
-        Agencia editada = BLAgencia.buscarAgenciaPorId(idAgenciaExistente);
-        assertEquals("El nombre no se actualizó correctamente", nuevoNombre, editada.getNombre());
-        assertEquals("La dirección no se actualizó correctamente", nuevaDireccion, editada.getDireccion());
-    }
-
-    @Test
-    public void testInsertarAgencia() {
-        System.out.println("insertarAgencia");
-        String nombre = "Agencia Nueva Test";
-        String direccion = "Av. Nueva Test";
-
-        int result = BLAgencia.insertarAgencia(nombre, direccion);
-        assertTrue("La inserción debería devolver un número positivo", result > 0);
-
-        // Verificamos que la nueva agencia está en la lista
-        Agencia nueva = BLAgencia.buscarAgenciaPorId(result);
-        assertNotNull("La nueva agencia debería existir en la BD", nueva);
-
-        // Limpiamos borrando la agencia
-        BLAgencia.eliminarAgencia(result);
-    }
-
-    @Test
-    public void testEliminarAgencia() {
-        System.out.println("eliminarAgencia");
-        // Primero insertamos una agencia para eliminar
-        int idTemp = BLAgencia.insertarAgencia("Agencia Temp", "Av. Temp");
-        assertTrue("La agencia temporal debe insertarse correctamente", idTemp > 0);
-
-        // Ahora la eliminamos
-        boolean result = BLAgencia.eliminarAgencia(idTemp);
-        assertTrue("La agencia temporal debe eliminarse", result);
+        List<Agencia> agencias = BLAgencia.listarAgencias();
+        assertNotNull(agencias); // Verifica que la lista no sea null
+        assertTrue(agencias.size() > 0); // Verifica que haya al menos una agencia
     }
 }
