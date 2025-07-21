@@ -55,8 +55,9 @@ public class BLCliente {
     public static Cliente buscarClientePorDni(String dni) {
         ArrayList<Cliente> listaC = DALCliente.listarClientes();
         for (Cliente c : listaC) {
-            if (c.getDni().equals(dni));
-            return DALCliente.buscarClientePorDni(dni);
+            if (c.getDni().equals(dni)){
+                return DALCliente.buscarClientePorDni(dni);
+            }
         }
         return null;
     }

@@ -28,9 +28,10 @@ public class panReservas extends javax.swing.JPanel {
      */
     public panReservas() {
         initComponents();
-        facade = new FacadeAlquiler(); // Inicializar el facade
-        configurarTabla(); // Configurar las columnas de la tabla
+        facade = new FacadeAlquiler();
+        configurarTabla();
     }
+    
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
         
@@ -46,49 +47,580 @@ public class panReservas extends javax.swing.JPanel {
         };
         
     }
-    private void configurarTabla() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Dirección");
-        tblReservas.setModel(modelo);
-
-        // Opcional: hacer que la tabla no sea editable
-        tblReservas.setDefaultEditor(Object.class, null);
-    }
-
-    // 4. Agregar este método para cargar los datos en la tabla:
-    private void cargarAgenciasEnTabla() {
+    
+    private void cargarReservasActivasEnTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
-        modelo.setRowCount(0); // Limpiar la tabla
+        modelo.setRowCount(0);
 
         try {
-            ArrayList<Agencia> agencias = facade.listarAgencias();
-            for (Agencia agencia : agencias) {
+            ArrayList<Reserva> reservas = facade.listarReservasActivas();
+            for (Reserva reserva : reservas) {
+                String fechaInicio = String.format("%02d/%02d/%d %02d:%02d", 
+                    reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                    reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                    reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                    reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                    reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                String fechaFin = String.format("%02d/%02d/%d %02d:%02d", 
+                    reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                    reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                    reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                    reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                    reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                String estado = reserva.getEstadoReserva();
+
                 Object[] fila = {
-                    agencia.getAgenciaId(),
-                    agencia.getNombre(),
-                    agencia.getDireccion()
+                    reserva.getReservaId(),
+                    reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                    reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                    fechaInicio,
+                    fechaFin,
+                    String.format("S/. %.2f", reserva.getPrecioTotal()),
+                    estado
                 };
                 modelo.addRow(fila);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar las agencias: " + e.getMessage(), 
+            JOptionPane.showMessageDialog(this, "Error al cargar las reservas activas: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarReservasEnTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            ArrayList<Reserva> reservas = facade.listarReservas();
+            for (Reserva reserva : reservas) {
+                String fechaInicio = String.format("%02d/%02d/%d %02d:%02d", 
+                    reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                    reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                    reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                    reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                    reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                String fechaFin = String.format("%02d/%02d/%d %02d:%02d", 
+                    reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                    reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                    reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                    reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                    reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                String estado = reserva.getEstadoReserva();
+
+                Object[] fila = {
+                    reserva.getReservaId(),
+                    reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                    reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                    fechaInicio,
+                    fechaFin,
+                    String.format("S/. %.2f", reserva.getPrecioTotal()),
+                    estado
+                };
+                modelo.addRow(fila);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las reservas: " + e.getMessage(), 
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    private void aplicarColoresTabla() {
+        tblReservas.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                javax.swing.JTable table, Object value, boolean isSelected, 
+                boolean hasFocus, int row, int column) {
+
+                java.awt.Component c = super.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    String estado = (String) table.getValueAt(row, 6); // Columna del estado
+
+                    switch (estado) {
+                        case "ENTREGADA":
+                            c.setBackground(new java.awt.Color(200, 255, 200)); // Verde claro
+                            break;
+                        case "ACTIVA":
+                            c.setBackground(new java.awt.Color(255, 255, 200)); // Amarillo claro
+                            break;
+                        case "VENCIDA":
+                            c.setBackground(new java.awt.Color(255, 200, 200)); // Rojo claro
+                            break;
+                        case "FUTURA":
+                            c.setBackground(new java.awt.Color(200, 200, 255)); // Azul claro
+                            break;
+                        default:
+                            c.setBackground(java.awt.Color.WHITE);
+                            break;
+                    }
+                }
+
+                return c;
+            }
+        });
+    }
+
+    private void configurarTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Reserva");
+        modelo.addColumn("Cliente");
+        modelo.addColumn("Agencia");
+        modelo.addColumn("Fecha/Hora Inicio");
+        modelo.addColumn("Fecha/Hora Fin");
+        modelo.addColumn("Precio Total");
+        modelo.addColumn("Estado");
+        tblReservas.setModel(modelo);
+
+        tblReservas.setDefaultEditor(Object.class, null);
+
+        tblReservas.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tblReservas.getColumnModel().getColumn(4).setPreferredWidth(120);
+
+        // NUEVO: Aplicar colores según el estado
+        aplicarColoresTabla();
+    }
+
+    private void eliminarReserva() {
+        int filaSeleccionada = tblReservas.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una reserva de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
+        int idReserva = (int) modelo.getValueAt(filaSeleccionada, 0);
+        String cliente = (String) modelo.getValueAt(filaSeleccionada, 1);
+        String agencia = (String) modelo.getValueAt(filaSeleccionada, 2);
+        String fechaInicio = (String) modelo.getValueAt(filaSeleccionada, 3);
+        String fechaFin = (String) modelo.getValueAt(filaSeleccionada, 4);
+        String precioTotal = (String) modelo.getValueAt(filaSeleccionada, 5);
+        String estado = (String) modelo.getValueAt(filaSeleccionada, 6);
+
+        // CAMBIO: Verificar si la reserva está entregada usando el nuevo estado
+        if (!estado.equals("ENTREGADA")) {
+            JOptionPane.showMessageDialog(this, 
+                "Solo se pueden eliminar reservas que estén en estado 'ENTREGADA'", 
+                "Advertencia", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String mensaje = String.format(
+            "¿Está seguro de que desea eliminar la siguiente reserva?\n\n" +
+            "ID: %d\n" +
+            "Cliente: %s\n" +
+            "Agencia: %s\n" +
+            "Fecha Inicio: %s\n" +
+            "Fecha Fin: %s\n" +
+            "Precio Total: %s\n" +
+            "Estado: %s\n\n" +
+            "Esta acción no se puede deshacer.",
+            idReserva, cliente, agencia, fechaInicio, fechaFin, precioTotal, estado
+        );
+
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            mensaje,
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                boolean exito = facade.eliminarReserva(idReserva);
+
+                if (exito) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Reserva eliminada correctamente", 
+                        "Éxito", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                    cargarReservasEnTabla();
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo eliminar la reserva. Verifique que cumpla con los requisitos para eliminación.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al eliminar la reserva: " + e.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void actualizarReserva() {
+        int filaSeleccionada = tblReservas.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una reserva de la tabla", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
+        int idReserva = (int) modelo.getValueAt(filaSeleccionada, 0);
+
+        Reserva reservaActual = facade.buscarReservaPorId(idReserva);
+
+        if (reservaActual == null) {
+            JOptionPane.showMessageDialog(this, "No se pudo obtener la información de la reserva", 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (reservaActual.isEntregado()) {
+            JOptionPane.showMessageDialog(this, "No se pueden modificar reservas ya entregadas", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            ArrayList<Agencia> agencias = facade.listarAgencias();
+            String[] opcionesAgencias = new String[agencias.size()];
+            for (int i = 0; i < agencias.size(); i++) {
+                opcionesAgencias[i] = agencias.get(i).getAgenciaId() + " - " + agencias.get(i).getNombre();
+            }
+
+            String agenciaSeleccionada = (String) JOptionPane.showInputDialog(
+                this,
+                "Seleccione la nueva agencia:",
+                "Actualizar Agencia",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionesAgencias,
+                null
+            );
+
+            if (agenciaSeleccionada == null) return;
+
+            int nuevaAgenciaId = Integer.parseInt(agenciaSeleccionada.split(" - ")[0]);
+
+            String fechaInicioStr = JOptionPane.showInputDialog(this, 
+                "Ingrese la nueva fecha y hora de inicio (dd/MM/yyyy HH:mm):",
+                String.format("%02d/%02d/%04d %02d:%02d", 
+                    reservaActual.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                    reservaActual.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                    reservaActual.getFechaInicio().get(java.util.Calendar.YEAR),
+                    reservaActual.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                    reservaActual.getFechaInicio().get(java.util.Calendar.MINUTE))
+            );
+
+            if (fechaInicioStr == null) return;
+
+            String fechaFinStr = JOptionPane.showInputDialog(this, 
+                "Ingrese la nueva fecha y hora de fin (dd/MM/yyyy HH:mm):",
+                String.format("%02d/%02d/%04d %02d:%02d", 
+                    reservaActual.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                    reservaActual.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                    reservaActual.getFechaFin().get(java.util.Calendar.YEAR),
+                    reservaActual.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                    reservaActual.getFechaFin().get(java.util.Calendar.MINUTE))
+            );
+
+            if (fechaFinStr == null) return;
+
+            if (!fechaInicioStr.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}") || 
+                !fechaFinStr.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}")) {
+                JOptionPane.showMessageDialog(this, "Formato de fecha y hora inválido. Use dd/MM/yyyy HH:mm", 
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            java.util.GregorianCalendar nuevaFechaInicio = parseFechaHora(fechaInicioStr);
+            java.util.GregorianCalendar nuevaFechaFin = parseFechaHora(fechaFinStr);
+
+            if (nuevaFechaInicio == null || nuevaFechaFin == null) {
+                JOptionPane.showMessageDialog(this, "Error al procesar las fechas ingresadas", 
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!nuevaFechaInicio.before(nuevaFechaFin)) {
+                JOptionPane.showMessageDialog(this, "La fecha y hora de inicio debe ser anterior a la fecha y hora de fin", 
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            boolean exito = facade.editarReserva(idReserva, nuevaAgenciaId, nuevaFechaInicio, nuevaFechaFin);
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Reserva actualizada correctamente", 
+                                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarReservasEnTabla();
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error en el formato de los datos ingresados", 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar la reserva: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private java.util.GregorianCalendar parseFechaHora(String fechaHoraStr) {
+        try {
+            String[] partes = fechaHoraStr.split(" ");
+            if (partes.length != 2) return null;
+
+            String[] partesFecha = partes[0].split("/");
+            String[] partesHora = partes[1].split(":");
+
+            if (partesFecha.length != 3 || partesHora.length != 2) return null;
+
+            int dia = Integer.parseInt(partesFecha[0]);
+            int mes = Integer.parseInt(partesFecha[1]) - 1;
+            int año = Integer.parseInt(partesFecha[2]);
+            int hora = Integer.parseInt(partesHora[0]);
+            int minuto = Integer.parseInt(partesHora[1]);
+
+            if (dia < 1 || dia > 31 || mes < 0 || mes > 11 || año < 1900 || 
+                hora < 0 || hora > 23 || minuto < 0 || minuto > 59) {
+                return null;
+            }
+
+            java.util.GregorianCalendar calendario = new java.util.GregorianCalendar(año, mes, dia, hora, minuto, 0);
+            return calendario;
+
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
+    private void buscarReserva() {
+        String textoBusqueda = txtBusqueda.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda", 
+                                        "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblReservas.getModel();
+        modelo.setRowCount(0);
+
+        try {
+            boolean encontrado = false;
+
+            if (jRadioButton1.isSelected()) { // Búsqueda por ID Reserva
+                try {
+                    int idReserva = Integer.parseInt(textoBusqueda);
+                    Reserva reserva = facade.buscarReservaPorId(idReserva);
+
+                    if (reserva != null) {
+                        String fechaInicio = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                            reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                        String fechaFin = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                            reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                        String estado = reserva.isEntregado() ? "Entregado" : "Pendiente";
+
+                        Object[] fila = {
+                            reserva.getReservaId(),
+                            reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                            reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                            fechaInicio,
+                            fechaFin,
+                            String.format("S/. %.2f", reserva.getPrecioTotal()),
+                            estado
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "El ID de reserva debe ser un número válido", 
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            } else if (jRadioButton2.isSelected()) { // Búsqueda por Cliente
+                try {
+                    int idCliente = Integer.parseInt(textoBusqueda);
+                    ArrayList<Reserva> reservas = facade.buscarReservasPorCliente(idCliente);
+
+                    for (Reserva reserva : reservas) {
+                        String fechaInicio = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                            reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                        String fechaFin = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                            reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                        String estado = reserva.isEntregado() ? "Entregado" : "Pendiente";
+
+                        Object[] fila = {
+                            reserva.getReservaId(),
+                            reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                            reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                            fechaInicio,
+                            fechaFin,
+                            String.format("S/. %.2f", reserva.getPrecioTotal()),
+                            estado
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "El ID del cliente debe ser un número válido", 
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            } else if (jRadioButton3.isSelected()) { // Búsqueda por Rango de Fechas
+                // Formato esperado: "dd/mm/yyyy hh:mm - dd/mm/yyyy hh:mm"
+                String[] fechas = textoBusqueda.split("-");
+                if (fechas.length != 2) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Formato incorrecto. Use: dd/mm/yyyy hh:mm - dd/mm/yyyy hh:mm", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                java.util.GregorianCalendar fechaInicio = parseFechaHora(fechas[0].trim());
+                java.util.GregorianCalendar fechaFin = parseFechaHora(fechas[1].trim());
+
+                if (fechaInicio == null || fechaFin == null) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Formato de fecha incorrecto. Use: dd/mm/yyyy hh:mm", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (fechaInicio.after(fechaFin)) {
+                    JOptionPane.showMessageDialog(this, 
+                        "La fecha de inicio debe ser anterior a la fecha de fin", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                ArrayList<Reserva> reservas = facade.buscarReservasPorFecha(fechaInicio, fechaFin);
+
+                for (Reserva reserva : reservas) {
+                    String fechaInicioStr = String.format("%02d/%02d/%d %02d:%02d", 
+                        reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                        reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                        reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                        reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                        reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                    String fechaFinStr = String.format("%02d/%02d/%d %02d:%02d", 
+                        reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                        reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                        reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                        reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                        reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                    String estado = reserva.isEntregado() ? "Entregado" : "Pendiente";
+
+                    Object[] fila = {
+                        reserva.getReservaId(),
+                        reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                        reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                        fechaInicioStr,
+                        fechaFinStr,
+                        String.format("S/. %.2f", reserva.getPrecioTotal()),
+                        estado
+                    };
+                    modelo.addRow(fila);
+                    encontrado = true;
+                }
+
+            } else if (jRadioButton4.isSelected()) { // Búsqueda por Agencia
+                try {
+                    int idAgencia = Integer.parseInt(textoBusqueda);
+                    ArrayList<Reserva> reservas = facade.buscarReservasPorAgencia(idAgencia);
+
+                    for (Reserva reserva : reservas) {
+                        String fechaInicio = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaInicio().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaInicio().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaInicio().get(java.util.Calendar.YEAR),
+                            reserva.getFechaInicio().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaInicio().get(java.util.Calendar.MINUTE));
+
+                        String fechaFin = String.format("%02d/%02d/%d %02d:%02d", 
+                            reserva.getFechaFin().get(java.util.Calendar.DAY_OF_MONTH),
+                            reserva.getFechaFin().get(java.util.Calendar.MONTH) + 1,
+                            reserva.getFechaFin().get(java.util.Calendar.YEAR),
+                            reserva.getFechaFin().get(java.util.Calendar.HOUR_OF_DAY),
+                            reserva.getFechaFin().get(java.util.Calendar.MINUTE));
+
+                        String estado = reserva.isEntregado() ? "Entregado" : "Pendiente";
+
+                        Object[] fila = {
+                            reserva.getReservaId(),
+                            reserva.getNombreCliente() != null ? reserva.getNombreCliente() : "Cliente ID: " + reserva.getClienteId(),
+                            reserva.getNombreAgencia() != null ? reserva.getNombreAgencia() : "Agencia ID: " + reserva.getAgenciaId(),
+                            fechaInicio,
+                            fechaFin,
+                            String.format("S/. %.2f", reserva.getPrecioTotal()),
+                            estado
+                        };
+                        modelo.addRow(fila);
+                        encontrado = true;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "El ID de la agencia debe ser un número válido", 
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione un tipo de búsqueda", 
+                                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!encontrado) {
+                String tipoBusqueda = "";
+                if (jRadioButton1.isSelected()) tipoBusqueda = "ID de reserva";
+                else if (jRadioButton2.isSelected()) tipoBusqueda = "ID de cliente";
+                else if (jRadioButton3.isSelected()) tipoBusqueda = "rango de fechas";
+                else if (jRadioButton4.isSelected()) tipoBusqueda = "ID de agencia";
+
+                JOptionPane.showMessageDialog(this, 
+                    "No se encontraron reservas que coincidan con " + tipoBusqueda + ": " + textoBusqueda, 
+                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+                cargarReservasEnTabla(); // Mostrar todas las reservas nuevamente
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar reservas: " + e.getMessage(), 
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoPrestamos.png"));
         Image image = icon.getImage();
         dspFondo = new javax.swing.JDesktopPane(){
@@ -109,6 +641,12 @@ public class panReservas extends javax.swing.JPanel {
         btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReservas = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -160,6 +698,13 @@ public class panReservas extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         jLabel1.setText("Control de Reservas");
 
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarReserva();
+                }
+            }
+        });
         txtBusqueda.setBorder(null);
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
@@ -187,6 +732,33 @@ public class panReservas extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblReservas);
 
+        jLabel2.setText("Buscar por:");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("ID Reserva");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("ID Cliente");
+
+        buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setText("Rango Fecha inicio");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setText("ID Agencia");
+        jRadioButton4.setToolTipText("");
+
+        jLabel3.setText("Formato: dd/mm/yyyy hh:mm - dd/mm/yyyy hh:mm");
+
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -196,6 +768,12 @@ public class panReservas extends javax.swing.JPanel {
         dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -208,20 +786,38 @@ public class panReservas extends javax.swing.JPanel {
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(70, 70, 70)
+                .addGap(75, 75, 75)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
-                        .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSeparator1)
-                            .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(194, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(416, 416, 416))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(dspFondoLayout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(dspFondoLayout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(222, 222, 222))
+                                .addGroup(dspFondoLayout.createSequentialGroup()
+                                    .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jRadioButton4)
+                                        .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jSeparator1)
+                                            .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, dspFondoLayout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGap(80, 80, 80)
+                            .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jRadioButton3)
+                                .addGroup(dspFondoLayout.createSequentialGroup()
+                                    .addComponent(jRadioButton1)
+                                    .addGap(111, 111, 111)
+                                    .addComponent(jRadioButton2))
+                                .addGroup(dspFondoLayout.createSequentialGroup()
+                                    .addGap(21, 21, 21)
+                                    .addComponent(jLabel3)))
+                            .addGap(0, 0, Short.MAX_VALUE))))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +830,17 @@ public class panReservas extends javax.swing.JPanel {
                     .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(80, 80, 80)
+                .addGap(18, 18, 18)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jRadioButton4))
+                .addGap(10, 10, 10)
+                .addComponent(jRadioButton3)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel3)
+                .addGap(20, 20, 20)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,7 +851,7 @@ public class panReservas extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -261,25 +867,49 @@ public class panReservas extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-    
+        buscarReserva();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        JInternalFrame ifrm = new ifrmAgencia();
+        JInternalFrame ifrm = new ifrmRegistrarReserva();
         centrarInternalFrame(ifrm);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+        eliminarReserva();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        cargarAgenciasEnTabla();
+        String[] opciones = {"Todas las Reservas", "Solo Reservas Activas"};
+        int seleccion = JOptionPane.showOptionDialog(
+            this,
+            "¿Qué reservas desea listar?",
+            "Opciones de Listado",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+        );
+
+        if (seleccion == 0) {
+            cargarReservasEnTabla();
+        } else if (seleccion == 1) {
+            cargarReservasActivasEnTabla();
+        }
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        
+        actualizarReserva();
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -289,9 +919,14 @@ public class panReservas extends javax.swing.JPanel {
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable tblReservas;

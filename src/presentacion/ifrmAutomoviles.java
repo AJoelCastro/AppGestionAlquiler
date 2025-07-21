@@ -19,22 +19,19 @@ public class ifrmAutomoviles extends javax.swing.JInternalFrame {
      */
     public ifrmAutomoviles() {
         initComponents();
-        facade = new FacadeAlquiler(); // Inicializar el facade
-        cargarGarajes(); // Cargar los garajes en el ComboBox
+        facade = new FacadeAlquiler();
+        cargarGarajes();
     }
 
-    // 3. AGREGAR este método para cargar los garajes en el ComboBox:
     private void cargarGarajes() {
         try {
             listaGarajes = facade.listarGarajes();
-            jComboBox1.removeAllItems(); // Limpiar el ComboBox
+            jComboBox1.removeAllItems();
 
-            // Agregar cada garaje al ComboBox mostrando solo el nombre
             for (Garaje garaje : listaGarajes) {
                 jComboBox1.addItem(garaje.getNombre());
             }
 
-            // Deshabilitar el ComboBox inicialmente
             jComboBox1.setEnabled(false);
 
         } catch (Exception e) {
@@ -43,7 +40,6 @@ public class ifrmAutomoviles extends javax.swing.JInternalFrame {
         }
     }
 
-    // 4. MODIFICAR el método activar para incluir el ComboBox:
     private void activar(boolean estado){
         txtPlaca.setEnabled(estado);
         txtModelo.setEnabled(estado);
@@ -54,7 +50,6 @@ public class ifrmAutomoviles extends javax.swing.JInternalFrame {
         btnNuevo.setEnabled(!estado);
     }
 
-    // 5. MODIFICAR el método limpiar:
     private void limpiar(){
         txtPlaca.setText("");
         txtModelo.setText("");

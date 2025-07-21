@@ -29,8 +29,8 @@ public class DALReserva {
             cs = cn.prepareCall("{call sp_insertar_reserva(?,?,?,?)}");
             cs.setInt(1, r.getClienteId());
             cs.setInt(2, r.getAgenciaId());
-            cs.setDate(3, new java.sql.Date(r.getFechaInicio().getTimeInMillis()));
-            cs.setDate(4, new java.sql.Date(r.getFechaFin().getTimeInMillis()));
+            cs.setTimestamp(3, new java.sql.Timestamp(r.getFechaInicio().getTimeInMillis()));
+            cs.setTimestamp(4, new java.sql.Timestamp(r.getFechaFin().getTimeInMillis()));
             resultado = cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error en DALReserva", 0);
@@ -65,14 +65,14 @@ public class DALReserva {
                 reserva.setClienteId(rs.getInt("cliente_id"));
                 reserva.setAgenciaId(rs.getInt("agencia_id"));
                 
-                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                Timestamp sqlFechaInicio = rs.getTimestamp("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fechaInicio = new GregorianCalendar();
                     fechaInicio.setTime(sqlFechaInicio);
                     reserva.setFechaInicio(fechaInicio);
                 }
 
-                Date sqlFechaFin = rs.getDate("fecha_fin");
+                Timestamp sqlFechaFin = rs.getTimestamp("fecha_fin");
                 if (sqlFechaFin != null) {
                     GregorianCalendar fechaFin = new GregorianCalendar();
                     fechaFin.setTime(sqlFechaFin);
@@ -117,15 +117,15 @@ public class DALReserva {
                 reserva.setReservaId(rs.getInt("reserva_id"));
                 reserva.setClienteId(idCliente);
                 reserva.setAgenciaId(rs.getInt("agencia_id"));
-
-                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                
+                Timestamp sqlFechaInicio = rs.getTimestamp("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fechaInicio = new GregorianCalendar();
                     fechaInicio.setTime(sqlFechaInicio);
                     reserva.setFechaInicio(fechaInicio);
                 }
 
-                Date sqlFechaFin = rs.getDate("fecha_fin");
+                Timestamp sqlFechaFin = rs.getTimestamp("fecha_fin");
                 if (sqlFechaFin != null) {
                     GregorianCalendar fechaFin = new GregorianCalendar();
                     fechaFin.setTime(sqlFechaFin);
@@ -252,8 +252,8 @@ public class DALReserva {
                 GregorianCalendar fi = new GregorianCalendar();
                 GregorianCalendar ff = new GregorianCalendar();
 
-                fi.setTime(rs.getDate("fecha_inicio"));
-                ff.setTime(rs.getDate("fecha_fin"));
+                fi.setTime(rs.getTimestamp("fecha_inicio"));
+                ff.setTime(rs.getTimestamp("fecha_fin"));
 
                 Reserva r = new Reserva(
                         rs.getInt("reserva_id"),
@@ -287,6 +287,7 @@ public class DALReserva {
         }
         return lista;
     }
+    
     public static String editarReserva(int reservaId, int agenciaId, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         String mensaje = null;
         try {
@@ -295,8 +296,8 @@ public class DALReserva {
             cs = cn.prepareCall(sql);
             cs.setInt(1, reservaId);
             cs.setInt(2, agenciaId);
-            cs.setDate(3, new java.sql.Date(fechaInicio.getTimeInMillis()));
-            cs.setDate(4, new java.sql.Date(fechaFin.getTimeInMillis()));
+            cs.setTimestamp(3, new java.sql.Timestamp(fechaInicio.getTimeInMillis()));
+            cs.setTimestamp(4, new java.sql.Timestamp(fechaFin.getTimeInMillis()));
             cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             mensaje = ex.getMessage();
@@ -322,8 +323,8 @@ public class DALReserva {
             cn = Conexion.realizarconexion();
             String sql = "{call sp_buscar_reservas_por_fecha(?,?)}";
             cs = cn.prepareCall(sql);
-            cs.setDate(1, new java.sql.Date(fechaInicio.getTimeInMillis()));
-            cs.setDate(2, new java.sql.Date(fechaFin.getTimeInMillis()));
+            cs.setTimestamp(1, new java.sql.Timestamp(fechaInicio.getTimeInMillis()));
+            cs.setTimestamp(2, new java.sql.Timestamp(fechaFin.getTimeInMillis()));
             rs = cs.executeQuery();
 
             while (rs.next()) {
@@ -332,14 +333,14 @@ public class DALReserva {
                 reserva.setClienteId(rs.getInt("cliente_id"));
                 reserva.setAgenciaId(rs.getInt("agencia_id"));
 
-                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                Timestamp sqlFechaInicio = rs.getTimestamp("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fi = new GregorianCalendar();
                     fi.setTime(sqlFechaInicio);
                     reserva.setFechaInicio(fi);
                 }
 
-                Date sqlFechaFin = rs.getDate("fecha_fin");
+                Timestamp sqlFechaFin = rs.getTimestamp("fecha_fin");
                 if (sqlFechaFin != null) {
                     GregorianCalendar ff = new GregorianCalendar();
                     ff.setTime(sqlFechaFin);
@@ -382,14 +383,14 @@ public class DALReserva {
                 reserva.setClienteId(rs.getInt("cliente_id"));
                 reserva.setAgenciaId(rs.getInt("agencia_id"));
 
-                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                Timestamp sqlFechaInicio = rs.getTimestamp("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fi = new GregorianCalendar();
                     fi.setTime(sqlFechaInicio);
                     reserva.setFechaInicio(fi);
                 }
 
-                Date sqlFechaFin = rs.getDate("fecha_fin");
+                Timestamp sqlFechaFin = rs.getTimestamp("fecha_fin");
                 if (sqlFechaFin != null) {
                     GregorianCalendar ff = new GregorianCalendar();
                     ff.setTime(sqlFechaFin);
@@ -432,14 +433,14 @@ public class DALReserva {
                 reserva.setClienteId(rs.getInt("cliente_id"));
                 reserva.setAgenciaId(rs.getInt("agencia_id"));
 
-                Date sqlFechaInicio = rs.getDate("fecha_inicio");
+                Timestamp sqlFechaInicio = rs.getTimestamp("fecha_inicio");
                 if (sqlFechaInicio != null) {
                     GregorianCalendar fi = new GregorianCalendar();
                     fi.setTime(sqlFechaInicio);
                     reserva.setFechaInicio(fi);
                 }
 
-                Date sqlFechaFin = rs.getDate("fecha_fin");
+                Timestamp sqlFechaFin = rs.getTimestamp("fecha_fin");
                 if (sqlFechaFin != null) {
                     GregorianCalendar ff = new GregorianCalendar();
                     ff.setTime(sqlFechaFin);

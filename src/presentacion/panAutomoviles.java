@@ -55,11 +55,9 @@ public class panAutomoviles extends javax.swing.JPanel {
         modelo.addColumn("Garaje");
         tblAutomoviles.setModel(modelo);
 
-        // Opcional: hacer que la tabla no sea editable
         tblAutomoviles.setDefaultEditor(Object.class, null);
     }
 
-    // 4. Agregar este método para cargar los datos en la tabla:
     private void cargarAutomovilesEnTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
         modelo.setRowCount(0);
@@ -70,8 +68,8 @@ public class panAutomoviles extends javax.swing.JPanel {
                 Object[] fila = {
                     auto.getPlaca(),
                     auto.getModelo(),
-                    auto.getColor(),        // Corregir orden
-                    auto.getMarca(),        // Corregir orden
+                    auto.getColor(),
+                    auto.getMarca(),
                     auto.getNombreGaraje()
                 };
                 modelo.addRow(fila);
@@ -149,6 +147,7 @@ public class panAutomoviles extends javax.swing.JPanel {
             }
         }
     }
+    
     private void actualizarAutomovil() {
         int filaSeleccionada = tblAutomoviles.getSelectedRow();
 
@@ -207,7 +206,6 @@ public class panAutomoviles extends javax.swing.JPanel {
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
     
     private void buscarAutomovil() {
         String textoBusqueda = jTextField1.getText().trim();
@@ -411,7 +409,7 @@ public class panAutomoviles extends javax.swing.JPanel {
         jLabel2.setText("Buscar por:");
 
         buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Garaje");
+        jRadioButton1.setText("Nombre Garaje");
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Placa");

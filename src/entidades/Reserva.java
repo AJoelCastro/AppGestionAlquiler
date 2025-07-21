@@ -121,4 +121,22 @@ public class Reserva {
     public void setNombreAgencia(String nombreAgencia) {
         this.nombreAgencia = nombreAgencia;
     }
+    public String getEstadoReserva() {
+        java.util.Date fechaActual = new java.util.Date();
+        java.util.Date fechaInicio = this.fechaInicio.getTime();
+        java.util.Date fechaFin = this.fechaFin.getTime();
+
+        if (this.entregado) {
+            return "ENTREGADA";
+        } else if (fechaActual.before(fechaInicio)) {
+            return "FUTURA";
+        } else if (fechaActual.after(fechaFin)) {
+            return "VENCIDA";
+        } else if ((fechaActual.equals(fechaInicio) || fechaActual.after(fechaInicio)) && 
+                   (fechaActual.equals(fechaFin) || fechaActual.before(fechaFin))) {
+            return "ACTIVA";
+        } else {
+            return "OTRO";
+        }
+    }
 }
