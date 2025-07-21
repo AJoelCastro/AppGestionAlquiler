@@ -63,7 +63,6 @@ public class BLCliente {
     }
 
     public static boolean editarCliente(int idCliente, String nuevoNombre, String nuevaDireccion, String nuevoTelefono) {
-        // Validaciones básicas
         if (nuevoNombre == null || nuevoNombre.trim().isEmpty() ||
             nuevaDireccion == null || nuevaDireccion.trim().isEmpty() ||
             nuevoTelefono == null || nuevoTelefono.trim().isEmpty()) {
@@ -73,11 +72,9 @@ public class BLCliente {
 
         Cliente cliente = buscarClientePorId(idCliente);
         if (cliente != null) {
-            // Actualizar solo los campos que se pueden modificar
             cliente.setNombre(nuevoNombre.trim());
             cliente.setDireccion(nuevaDireccion.trim());
             cliente.setTelefono(nuevoTelefono.trim());
-            // Mantener el sponsor existente
 
             String mensaje = DALCliente.actualizarCliente(cliente);
 
