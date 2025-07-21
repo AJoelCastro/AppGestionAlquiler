@@ -48,7 +48,7 @@ public class BLAgenciaTest {
     
     @Test
     public void testEliminarAgencia_Existe() {
-        int idAgencia = 15; 
+        int idAgencia = 16; 
         boolean resultado = BLAgencia.eliminarAgencia(idAgencia);
         assertTrue(resultado);
     }
