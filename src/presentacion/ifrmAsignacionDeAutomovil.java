@@ -28,23 +28,58 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
         cargarReservas();
         configurarTabla();
         cargarAutomoviles();
+
         tblAutomoviles.getModel().addTableModelListener(e -> {
             if (e.getColumn() == 0) {
                 actualizarPreciosSeleccionados();
+            } else if (e.getColumn() == 5) { 
+                recalcularPrecioPorLitros(e.getFirstRow());
             }
             calcularPrecioTotal();
         });
     }
+    private void recalcularPrecioPorLitros(int fila) {
+    if (jComboBox1.getSelectedIndex() == -1) return;
     
-    private double calcularPrecioAlquiler(Date fechaInicio, Date fechaFin) {
+    Reserva reservaSeleccionada = reservasDisponibles.get(jComboBox1.getSelectedIndex());
+        Date fechaInicio = reservaSeleccionada.getFechaInicio().getTime();
+        Date fechaFin = reservaSeleccionada.getFechaFin().getTime();
+
+        DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
+        Boolean seleccionado = (Boolean) modelo.getValueAt(fila, 0);
+
+        if (seleccionado != null && seleccionado) {
+            Object litrosObj = modelo.getValueAt(fila, 5);
+            double litrosIniciales = 0.0;
+
+            if (litrosObj != null) {
+                try {
+                    litrosIniciales = Double.parseDouble(litrosObj.toString());
+                } catch (NumberFormatException e) {
+                    litrosIniciales = 0.0;
+                }
+            }
+
+            double precioCalculado = calcularPrecioAlquiler(fechaInicio, fechaFin, litrosIniciales);
+            modelo.setValueAt(precioCalculado, fila, 4);
+            calcularPrecioTotal();
+        }
+    }
+    
+    private double calcularPrecioAlquiler(Date fechaInicio, Date fechaFin, double litrosIniciales) {
         long diferenciaTiempo = fechaFin.getTime() - fechaInicio.getTime();
         int diasAlquiler = (int) (diferenciaTiempo / (1000 * 60 * 60 * 24));
-        
+
         if (diasAlquiler <= 0) {
             diasAlquiler = 1;
         }
-        
-        return diasAlquiler * PRECIO_POR_DIA;
+
+        double precioBase = diasAlquiler * PRECIO_POR_DIA;
+
+        double precioLitro = 4.50;
+        double costoLitros = litrosIniciales * precioLitro;
+
+        return precioBase + costoLitros;
     }
     
     private void actualizarPreciosSeleccionados() {
@@ -53,18 +88,28 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
         Reserva reservaSeleccionada = reservasDisponibles.get(jComboBox1.getSelectedIndex());
         Date fechaInicio = reservaSeleccionada.getFechaInicio().getTime();
         Date fechaFin = reservaSeleccionada.getFechaFin().getTime();
-        double precioCalculado = calcularPrecioAlquiler(fechaInicio, fechaFin);
 
         DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
 
         for (int i = 0; i < modelo.getRowCount(); i++) {
             Boolean seleccionado = (Boolean) modelo.getValueAt(i, 0);
             if (seleccionado != null && seleccionado) {
+                Object litrosObj = modelo.getValueAt(i, 5);
+                double litrosIniciales = 0.0;
+
+                if (litrosObj != null) {
+                    try {
+                        litrosIniciales = Double.parseDouble(litrosObj.toString());
+                    } catch (NumberFormatException e) {
+                        litrosIniciales = 0.0;
+                    }
+                }
+
+                double precioCalculado = calcularPrecioAlquiler(fechaInicio, fechaFin, litrosIniciales);
                 modelo.setValueAt(precioCalculado, i, 4);
-                // Solo establecer litros iniciales si la celda está vacía o es 0
-                Object litrosActual = modelo.getValueAt(i, 5);
-                if (litrosActual == null || litrosActual.equals(0.0)) {
-                    modelo.setValueAt(0.0, i, 5); // Valor por defecto, usuario puede editarlo
+
+                if (litrosObj == null || litrosObj.equals(0.0)) {
+                    modelo.setValueAt(20.0, i, 5);
                 }
             } else {
                 modelo.setValueAt(0.0, i, 4);
@@ -93,10 +138,10 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
                 if (column == 4 || column == 5) return Double.class;
                 return String.class;
             }
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 0;
+                return column == 0 || column == 5;
             }
         };
         tblAutomoviles.setModel(modelo);
@@ -276,7 +321,6 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
                     double precioAlquiler = Double.parseDouble(modelo.getValueAt(i, 4).toString());
                     double litrosInicial = Double.parseDouble(modelo.getValueAt(i, 5).toString());
 
-                    // Validar que los litros iniciales sean válidos
                     if (litrosInicial < 0) {
                         JOptionPane.showMessageDialog(this, 
                             "Los litros iniciales no pueden ser negativos para el automóvil: " + placa, 
@@ -331,4 +375,5 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
     private ArrayList<Reserva> reservasDisponibles;
     private ArrayList<Automovil> automovilesDisponibles;
     private static final double PRECIO_POR_DIA = 80.0;
+    private static final double PRECIO_POR_LITRO = 4.50;
 }
