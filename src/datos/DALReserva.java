@@ -31,7 +31,6 @@ public class DALReserva {
             cs.setInt(2, r.getAgenciaId());
             cs.setTimestamp(3, new java.sql.Timestamp(r.getFechaInicio().getTimeInMillis()));
             cs.setTimestamp(4, new java.sql.Timestamp(r.getFechaFin().getTimeInMillis()));
-
             resultado = cs.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error en DALReserva", 0);
@@ -106,7 +105,9 @@ public class DALReserva {
         ArrayList<Reserva> reservas = new ArrayList<>();
         try {
             cn = Conexion.realizarconexion();
+
             String sql = "{call sp_listar_reservas_por_cliente(?)}";
+
             cs = cn.prepareCall(sql);
             cs.setInt(1, idCliente);
             rs = cs.executeQuery();
@@ -130,6 +131,7 @@ public class DALReserva {
                     fechaFin.setTime(sqlFechaFin);
                     reserva.setFechaFin(fechaFin);
                 }
+
                 reserva.setPrecioTotal(rs.getDouble("precio_total"));
                 reserva.setEntregado(rs.getBoolean("entregado"));
                 reserva.setNombreAgencia(rs.getString("agencia"));
@@ -160,6 +162,7 @@ public class DALReserva {
         String mensaje = null;
         try {
             cn = Conexion.realizarconexion();
+
             String sql = "{call sp_actualizar_precio_reserva(?,?)}";
             cs = cn.prepareCall(sql);
             cs.setInt(1, reservaId);
@@ -181,6 +184,7 @@ public class DALReserva {
         }
         return mensaje;
     }
+
 
     public static String actualizarEstadoReserva(int reservaId, boolean entregado) {
         String mensaje = null;
