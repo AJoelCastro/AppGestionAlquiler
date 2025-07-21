@@ -105,7 +105,7 @@ public class DALReserva {
         Reserva reserva = null;
         try {
             cn = Conexion.realizarconexion();
-            String sql = "{call sp_buscar_reserva_por_id_cliente(?)}";
+            String sql = "{call sp_buscar_reserva_por_cliente_id(?)}";
             cs = cn.prepareCall(sql);
             cs.setInt(1, idCliente);
             rs = cs.executeQuery();
