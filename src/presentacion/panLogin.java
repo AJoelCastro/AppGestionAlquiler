@@ -22,6 +22,29 @@ public class panLogin extends javax.swing.JPanel {
      */
     public panLogin() {
         initComponents();
+        configurarEnterParaLogin();
+    }
+    
+    private void configurarEnterParaLogin() {
+        // KeyListener para el campo de identificación
+        txtIdentificacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    iniciarSesion();
+                }
+            }
+        });
+
+        // KeyListener para el campo de contraseña
+        txtContrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    iniciarSesion();
+                }
+            }
+        });
     }
     private void showPanel(JPanel panel) {
         panContenido.removeAll();

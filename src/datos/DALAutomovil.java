@@ -180,22 +180,24 @@ public class DALAutomovil {
             cs = cn.prepareCall("{call sp_listar_automovil()}");
             rs = cs.executeQuery();
             while (rs.next()) {
-                lista.add(new Automovil(
-                    rs.getString("placa"),
-                    rs.getString("modelo"),
-                    rs.getString("color"),
-                    rs.getString("marca"),
-                    rs.getString("estado"),
-                    rs.getInt("garaje_id")
-                ));
+                Automovil auto = new Automovil();
+                auto.setPlaca(rs.getString("placa"));
+                auto.setModelo(rs.getString("modelo"));
+                auto.setColor(rs.getString("color"));
+                auto.setMarca(rs.getString("marca"));
+                auto.setEstado(rs.getString("estado"));
+                auto.setNombreGaraje(rs.getString("garaje"));
+                auto.setGarajeId(0);
+
+                lista.add(auto);
             }
         } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
         } finally {
             try {
-                rs.close();
-                cs.close();
-                cn.close();
+                if (rs != null) rs.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
             }
