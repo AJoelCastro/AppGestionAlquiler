@@ -7,6 +7,7 @@ import datos.DALAutomovil;
 import datos.DALGaraje;
 import entidades.Automovil;
 import entidades.Garaje;
+import entidades.GarajeFactory;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 /**
@@ -16,9 +17,11 @@ import javax.swing.JOptionPane;
 public class BLGaraje {
     public static int insertarGaraje(String nombre, String ubicacion) {
         if (nombre.trim().length() > 0 && ubicacion.trim().length() > 0) {
-            Garaje g = new Garaje();
-            g.setNombre(nombre.trim());
-            g.setUbicacion(ubicacion.trim());
+//            Garaje g = new Garaje();
+//            g.setNombre(nombre.trim());
+//            g.setUbicacion(ubicacion.trim());
+              Garaje g = GarajeFactory.crearGarajeCompleto(0, nombre.trim(), ubicacion.trim());
+
             String mensaje = DALGaraje.insertarGaraje(g);
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Garaje registrado correctamente");

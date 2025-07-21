@@ -7,6 +7,7 @@ package logica;
 import datos.DALAutomovil;
 import datos.DALReservaAutomovil;
 import entidades.Automovil;
+import entidades.AutomovilFactory;
 import entidades.ReservaAutomovil;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -20,7 +21,9 @@ public class BLAutomovil {
     public static int insertarAutomovil(String placa, String modelo, String color, String marca, int garajeId) {
         String mensaje = null;
         if (placa.trim().length() > 0 && modelo.trim().length() > 0 && marca.trim().length() > 0) {
-            Automovil auto = new Automovil(placa, modelo, color, marca, "Disponible", garajeId);
+//            Automovil auto = new Automovil(placa, modelo, color, marca, "Disponible", garajeId);
+            Automovil auto = AutomovilFactory.crearAutomovilCompleto(placa, modelo, color, marca, "disponible", garajeId);
+
             mensaje = DALAutomovil.insertarAutomovil(auto);
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Automóvil registrado correctamente", "Éxito", 1);

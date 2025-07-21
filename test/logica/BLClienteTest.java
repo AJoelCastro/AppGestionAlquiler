@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class BLClienteTest {
     @Test
     public void testInsertarClienteValido() {
-        Cliente cliente = ClienteFactory.crearClienteSinSponsor(1000, "87654323", "Juan Pérez", "Av. Central 123", "987654321");
+        Cliente cliente = ClienteFactory.crearClienteSinSponsor(1000, "87654324", "Juan ", "Av. Central 12", "987654324");
         System.out.println("pasa por aqui");
         int resultado = BLCliente.insertarCliente(cliente);
         System.out.println("termina aqui");
@@ -85,7 +85,7 @@ public class BLClienteTest {
     
     @Test
     public void testEliminarClienteSinReservas() {
-        int idCliente = 12; // Asegúrate que no tenga reservas
+        int idCliente =30; // Asegúrate que no tenga reservas
         boolean resultado = BLCliente.eliminarCliente(idCliente);
         assertTrue(resultado);
     }
