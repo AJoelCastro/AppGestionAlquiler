@@ -204,5 +204,33 @@ public class DALAutomovil {
         }
         return lista;
     }
+    
+    public static String actualizarEstadoAutomovil(String placa, String nuevoEstado) {
+        String mensaje = null;
+        try {
+            cn = Conexion.realizarconexion();
+            String sql = "{call sp_actualizar_estado_automovil(?, ?)}";
+            cs = cn.prepareCall(sql);
+            cs.setString(1, placa);
+            cs.setString(2, nuevoEstado);
 
+            int filasAfectadas = cs.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                mensaje = "No se encontró el automóvil con placa: " + placa;
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            mensaje = ex.getMessage();
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException ex) {
+                if (mensaje == null) mensaje = ex.getMessage();
+            }
+        }
+        return mensaje;
+    }
 }

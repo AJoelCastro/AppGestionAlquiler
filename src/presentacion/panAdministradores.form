@@ -39,12 +39,13 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnAgencias" alignment="1" pref="116" max="32767" attributes="0"/>
+                      <Component id="btnAgencias" alignment="1" max="32767" attributes="0"/>
                       <Component id="btnGarajes" alignment="1" max="32767" attributes="0"/>
                       <Component id="btnInicio" alignment="1" max="32767" attributes="0"/>
                       <Component id="btnClientes" max="32767" attributes="0"/>
                       <Component id="btnAutomoviles" max="32767" attributes="0"/>
-                      <Component id="btnReservas" max="32767" attributes="0"/>
+                      <Component id="btnPagos" max="32767" attributes="0"/>
+                      <Component id="btnReservas" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="panContenido" min="-2" pref="1280" max="-2" attributes="0"/>
@@ -77,6 +78,8 @@
                           <Component id="btnAutomoviles" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnReservas" min="-2" pref="38" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnPagos" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -214,6 +217,27 @@
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;Inicio&quot;,botonMenu,presionadoMenu,encimaMenu)"/>
           </AuxValues>
         </Component>
+        <Component class="javax.swing.JButton" name="btnPagos">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="1e" green="1e" red="1e" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Roboto" size="14" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Gestion de Pagos"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPagosActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;Inicio&quot;,botonMenu,presionadoMenu,encimaMenu)"/>
+          </AuxValues>
+        </Component>
         <Component class="javax.swing.JButton" name="btnReservas">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -226,7 +250,6 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Reservas"/>
-            <Property name="actionCommand" type="java.lang.String" value="Reservas"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>

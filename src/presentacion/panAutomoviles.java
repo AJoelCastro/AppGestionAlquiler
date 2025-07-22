@@ -15,7 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 import logica.*;
-
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Component;
 
 /**
  *
@@ -46,7 +47,8 @@ public class panAutomoviles extends javax.swing.JPanel {
         String modeloAuto = (String) modelo.getValueAt(filaSeleccionada, 1);
         String color = (String) modelo.getValueAt(filaSeleccionada, 2);
         String marca = (String) modelo.getValueAt(filaSeleccionada, 3);
-        String garaje = (String) modelo.getValueAt(filaSeleccionada, 4);
+        String estado = (String) modelo.getValueAt(filaSeleccionada, 4);  // ← Estado en columna 4
+        String garaje = (String) modelo.getValueAt(filaSeleccionada, 5);  // ← Garaje movido a columna 5
 
         try {
             String disponibilidad = facade.verificarDisponibilidadAutomovil(placa);
@@ -57,13 +59,14 @@ public class panAutomoviles extends javax.swing.JPanel {
                 "Modelo: %s\n" +
                 "Color: %s\n" +
                 "Marca: %s\n" +
+                "Estado: %s\n" +
                 "Garaje: %s\n\n" +
-                "ESTADO: %s",
-                placa, modeloAuto, color, marca, garaje, disponibilidad
+                "ESTADO ACTUAL: %s",
+                placa, modeloAuto, color, marca, estado, garaje, disponibilidad
             );
 
             // Cambiar el tipo de mensaje según la disponibilidad
-            int tipoMensaje = "Disponible".equals(disponibilidad) ? 
+            int tipoMensaje = "disponible".equals(disponibilidad) ? 
                              JOptionPane.INFORMATION_MESSAGE : 
                              JOptionPane.WARNING_MESSAGE;
 
@@ -102,11 +105,13 @@ public class panAutomoviles extends javax.swing.JPanel {
         modelo.addColumn("Modelo");
         modelo.addColumn("Color");
         modelo.addColumn("Marca");
+        modelo.addColumn("Estado");      // ← Columna agregada
         modelo.addColumn("Garaje");
         tblAutomoviles.setModel(modelo);
 
         tblAutomoviles.setDefaultEditor(Object.class, null);
     }
+
 
     private void cargarAutomovilesEnTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
@@ -115,11 +120,15 @@ public class panAutomoviles extends javax.swing.JPanel {
         try {
             ArrayList<Automovil> automoviles = facade.listarAutomoviles();
             for (Automovil auto : automoviles) {
+                // Verificar disponibilidad actual del automóvil
+                String estadoActual = facade.verificarDisponibilidadAutomovil(auto.getPlaca());
+
                 Object[] fila = {
                     auto.getPlaca(),
                     auto.getModelo(),
                     auto.getColor(),
                     auto.getMarca(),
+                    estadoActual != null ? estadoActual : auto.getEstado(), // ← Estado agregado
                     auto.getNombreGaraje()
                 };
                 modelo.addRow(fila);
@@ -140,15 +149,16 @@ public class panAutomoviles extends javax.swing.JPanel {
         }
 
         DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
-        String placa = (String) modelo.getValueAt(filaSeleccionada, 0); // Asumiendo que placa está en columna 0
+        String placa = (String) modelo.getValueAt(filaSeleccionada, 0);
         String modelo_auto = (String) modelo.getValueAt(filaSeleccionada, 1);
-        String marca = (String) modelo.getValueAt(filaSeleccionada, 2);
-        String color = (String) modelo.getValueAt(filaSeleccionada, 3);
+        String color = (String) modelo.getValueAt(filaSeleccionada, 2);
+        String marca = (String) modelo.getValueAt(filaSeleccionada, 3);
+        String estado = (String) modelo.getValueAt(filaSeleccionada, 4); // ← Corregido índice
 
         // Verificar disponibilidad antes de eliminar
         String disponibilidad = facade.verificarDisponibilidadAutomovil(placa);
 
-        if ("En reserva".equals(disponibilidad)) {
+        if ("reserva".equals(disponibilidad)) { // ← Corregido de "en reserva" a "reserva"
             JOptionPane.showMessageDialog(this, 
                 "No se puede eliminar el automóvil porque está en reserva", 
                 "Error", 
@@ -160,10 +170,11 @@ public class panAutomoviles extends javax.swing.JPanel {
             "¿Está seguro de que desea eliminar el siguiente automóvil?\n\n" +
             "Placa: %s\n" +
             "Modelo: %s\n" +
+            "Color: %s\n" +
             "Marca: %s\n" +
-            "Color: %s\n\n" +
+            "Estado: %s\n\n" +
             "Esta acción no se puede deshacer.",
-            placa, modelo_auto, marca, color
+            placa, modelo_auto, color, marca, estado
         );
 
         int opcion = JOptionPane.showConfirmDialog(
@@ -183,7 +194,7 @@ public class panAutomoviles extends javax.swing.JPanel {
                         "Automóvil eliminado correctamente", 
                         "Éxito", 
                         JOptionPane.INFORMATION_MESSAGE);
-                    cargarAutomovilesEnTabla(); // Método que deberás crear para recargar la tabla
+                    cargarAutomovilesEnTabla();
                 } else {
                     JOptionPane.showMessageDialog(this, 
                         "No se pudo eliminar el automóvil. Verifique que no tenga reservas activas.", 
@@ -209,11 +220,11 @@ public class panAutomoviles extends javax.swing.JPanel {
         }
 
         DefaultTableModel modelo = (DefaultTableModel) tblAutomoviles.getModel();
-        String placa = (String) modelo.getValueAt(filaSeleccionada, 0); // Placa no se puede cambiar
+        String placa = (String) modelo.getValueAt(filaSeleccionada, 0);
         String modeloActual = (String) modelo.getValueAt(filaSeleccionada, 1);
-        String colorActual = (String) modelo.getValueAt(filaSeleccionada, 2);  // Color está en índice 2
-        String marcaActual = (String) modelo.getValueAt(filaSeleccionada, 3);  // Marca está en índice 3
-        // NO incluimos garaje porque no se debe cambiar según el SP
+        String colorActual = (String) modelo.getValueAt(filaSeleccionada, 2);
+        String marcaActual = (String) modelo.getValueAt(filaSeleccionada, 3);
+        // El estado está en índice 4, garaje en índice 5
 
         // Mostrar la placa (no editable)
         JOptionPane.showMessageDialog(this, "Automóvil a actualizar - Placa: " + placa, 
@@ -241,13 +252,12 @@ public class panAutomoviles extends javax.swing.JPanel {
         }
 
         try {
-            // Usar el método corregido que NO incluye garajeId
             boolean exito = facade.editarAutomovil(placa, nuevoModelo.trim(), nuevoColor.trim(), nuevaMarca.trim());
 
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Automóvil actualizado correctamente", 
                                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                cargarAutomovilesEnTabla(); // Método para recargar la tabla
+                cargarAutomovilesEnTabla();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo actualizar el automóvil. Verifique que la placa exista.", 
                                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -274,15 +284,17 @@ public class panAutomoviles extends javax.swing.JPanel {
             boolean encontrado = false;
 
             if (jRadioButton2.isSelected()) { // Búsqueda por ID (placa)
-                // Usar el método específico del facade para buscar por placa
                 Automovil auto = facade.buscarAutomovilPorPlaca(textoBusqueda.toUpperCase());
 
                 if (auto != null) {
+                    String estadoActual = facade.verificarDisponibilidadAutomovil(auto.getPlaca());
+
                     Object[] fila = {
                         auto.getPlaca(),
                         auto.getModelo(),
                         auto.getColor(),
                         auto.getMarca(),
+                        estadoActual != null ? estadoActual : auto.getEstado(), // ← Estado agregado
                         auto.getNombreGaraje()
                     };
                     modelo.addRow(fila);
@@ -290,20 +302,21 @@ public class panAutomoviles extends javax.swing.JPanel {
                 }
 
             } else if (jRadioButton1.isSelected()) { // Búsqueda por Garaje
-                // Para búsqueda por garaje, necesitamos primero obtener el ID del garaje
-                // Esto requiere un método adicional en el facade para buscar garaje por nombre
-                // Por ahora, usamos el método existente que lista todos y filtra
                 ArrayList<Automovil> todosLosAutomoviles = facade.listarAutomoviles();
                 String busquedaLower = textoBusqueda.toLowerCase();
 
                 for (Automovil auto : todosLosAutomoviles) {
                     if (auto.getNombreGaraje() != null && 
                         auto.getNombreGaraje().toLowerCase().contains(busquedaLower)) {
+
+                        String estadoActual = facade.verificarDisponibilidadAutomovil(auto.getPlaca());
+
                         Object[] fila = {
                             auto.getPlaca(),
                             auto.getModelo(),
                             auto.getColor(),
                             auto.getMarca(),
+                            estadoActual != null ? estadoActual : auto.getEstado(), // ← Estado agregado
                             auto.getNombreGaraje()
                         };
                         modelo.addRow(fila);
