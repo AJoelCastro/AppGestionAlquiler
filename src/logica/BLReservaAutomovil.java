@@ -45,13 +45,19 @@ public class BLReservaAutomovil {
                 JOptionPane.showMessageDialog(null, 
                     "Error al asignar el automóvil con placa: " + ra.getPlaca(), "Error", 0);
             } else {
+                // Si la inserción fue exitosa, actualizar el estado del automóvil
+                boolean estadoActualizado = BLAutomovil.actualizarEstadoAutomovil(ra.getPlaca(), "reserva");
+                if (!estadoActualizado) {
+                    JOptionPane.showMessageDialog(null, 
+                        "Automóvil asignado pero error al actualizar estado: " + ra.getPlaca(), 
+                        "Advertencia", 2);
+                }
                 precioTotalCalculado += ra.getPrecioAlquiler();
             }
         }
 
         if (todosInsertados) {
             boolean precioActualizado = BLReserva.actualizarPrecioReserva(reservaId);
-
             if (precioActualizado) {
                 JOptionPane.showMessageDialog(null, 
                     "Automóviles asignados correctamente\nPrecio total: $" + 
@@ -63,7 +69,6 @@ public class BLReservaAutomovil {
                 return false;
             }
         }
-
         return false;
     }
 }

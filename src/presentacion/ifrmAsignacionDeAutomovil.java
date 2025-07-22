@@ -153,7 +153,7 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
         modelo.setRowCount(0);
         
         for (Automovil auto : automovilesDisponibles) {
-            if ("Disponible".equals(facade.verificarDisponibilidadAutomovil(auto.getPlaca()))) {
+            if ("disponible".equals(facade.verificarDisponibilidadAutomovil(auto.getPlaca()))) {
                 Object[] fila = {
                     false,
                     auto.getPlaca(),

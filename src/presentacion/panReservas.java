@@ -647,6 +647,8 @@ public class panReservas extends javax.swing.JPanel {
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
+        btnListar1 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnListar2 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -759,6 +761,26 @@ public class panReservas extends javax.swing.JPanel {
 
         jLabel3.setText("Formato: dd/mm/yyyy hh:mm - dd/mm/yyyy hh:mm");
 
+        btnListar1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnListar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
+        btnListar1.setText("  Entrega Automoviles");
+        btnListar1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnListar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListar1ActionPerformed(evt);
+            }
+        });
+
+        btnListar2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnListar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
+        btnListar2.setText("  Devolucion Automoviles");
+        btnListar2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnListar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListar2ActionPerformed(evt);
+            }
+        });
+
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -774,6 +796,8 @@ public class panReservas extends javax.swing.JPanel {
         dspFondo.setLayer(jRadioButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnListar1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnListar2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -785,7 +809,9 @@ public class panReservas extends javax.swing.JPanel {
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(75, 75, 75)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -817,7 +843,7 @@ public class panReservas extends javax.swing.JPanel {
                                     .addGap(21, 21, 21)
                                     .addComponent(jLabel3)))
                             .addGap(0, 0, Short.MAX_VALUE))))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -843,15 +869,21 @@ public class panReservas extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(42, Short.MAX_VALUE))
+                    .addGroup(dspFondoLayout.createSequentialGroup()
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnListar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnListar2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -911,12 +943,22 @@ public class panReservas extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
+    private void btnListar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListar1ActionPerformed
+
+    private void btnListar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListar2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnListar1;
+    private javax.swing.JButton btnListar2;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JDesktopPane dspFondo;

@@ -23,7 +23,6 @@ public class BLAutomovil {
         if (placa.trim().length() > 0 && modelo.trim().length() > 0 && marca.trim().length() > 0) {
 //            Automovil auto = new Automovil(placa, modelo, color, marca, "Disponible", garajeId);
             Automovil auto = AutomovilFactory.crearAutomovilCompleto(placa, modelo, color, marca, "disponible", garajeId);
-
             mensaje = DALAutomovil.insertarAutomovil(auto);
             if (mensaje == null) {
                 JOptionPane.showMessageDialog(null, "Automóvil registrado correctamente", "Éxito", 1);
@@ -63,16 +62,10 @@ public class BLAutomovil {
     public static boolean eliminarAutomovil(String placa) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
         if (auto != null) {
-            int cantReserv = 0;
-            ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
-            for (ReservaAutomovil reservaA : listaRA) {
-                if(reservaA.getPlaca().equals(placa)){
-                    cantReserv++;
-                }
-            }
-            if (cantReserv == 0) {
+            String estado = verificarDisponibilidadAutomovil(placa);
+            if ("disponible".equals(estado)) {
                 String mensaje = DALAutomovil.eliminarAutomovil(placa);
-                return mensaje == null; // Retornar true si no hay mensaje de error
+                return mensaje == null;
             }
         }
         return false;
@@ -80,18 +73,37 @@ public class BLAutomovil {
     
     public static String verificarDisponibilidadAutomovil(String placa) {
         Automovil auto = buscarAutomovilPorPlaca(placa);
-        if (auto != null) {
-            ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
-            for (ReservaAutomovil reservaA : listaRA) {
-                if (reservaA.getPlaca().equals(placa)) {
-                    return "En Reserva";
-                }
+        if (auto == null) {
+            return null; 
+        }
+
+        ArrayList<ReservaAutomovil> listaRA = DALReservaAutomovil.listarReservaAutomovil();
+        for (ReservaAutomovil reservaA : listaRA) {
+            if (reservaA.getPlaca().equals(placa)) {
+                return "reserva";
             }
         }
-        return "Disponible";
+        return "disponible";
     }
+    public static boolean actualizarEstadoAutomovil(String placa, String nuevoEstado) {
+        Automovil auto = buscarAutomovilPorPlaca(placa);
+        if (auto == null) {
+            return false;
+        }
 
+        if (!nuevoEstado.equals("disponible") && 
+            !nuevoEstado.equals("reserva") && 
+            !nuevoEstado.equals("mantenimiento")) {
+            return false;
+        }
+
+        String mensaje = DALAutomovil.actualizarEstadoAutomovil(placa, nuevoEstado);
+        return mensaje == null;
+    }
     public static ArrayList<Automovil> listarAutomoviles() {
         return DALAutomovil.listarAutomoviles();
+    }
+    public static boolean liberarAutomovil(String placa) {
+        return actualizarEstadoAutomovil(placa, "disponible");
     }
 }

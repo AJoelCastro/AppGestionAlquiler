@@ -56,6 +56,7 @@ public class panAdministradores extends javax.swing.JPanel {
         jToggleButton1 = new javax.swing.JToggleButton();
         btnClientes = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         btnAutomoviles = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnPagos = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         btnReservas = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
 
         panFondo.setBackground(new java.awt.Color(8, 100, 60));
@@ -128,11 +129,21 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
+        btnPagos.setBackground(new java.awt.Color(30, 30, 30));
+        btnPagos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnPagos.setForeground(new java.awt.Color(255, 255, 255));
+        btnPagos.setText("Gestion de Pagos");
+        btnPagos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagosActionPerformed(evt);
+            }
+        });
+
         btnReservas.setBackground(new java.awt.Color(30, 30, 30));
         btnReservas.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnReservas.setForeground(new java.awt.Color(255, 255, 255));
         btnReservas.setText("Reservas");
-        btnReservas.setActionCommand("Reservas");
         btnReservas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnReservas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,11 +158,12 @@ public class panAdministradores extends javax.swing.JPanel {
             .addGroup(panFondoLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAgencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                    .addComponent(btnAgencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGarajes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAutomoviles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20)
                 .addComponent(panContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -181,6 +193,8 @@ public class panAdministradores extends javax.swing.JPanel {
                         .addComponent(btnAutomoviles, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
@@ -224,6 +238,10 @@ public class panAdministradores extends javax.swing.JPanel {
         JPanel panel = new panAutomoviles();
         showPanel(panel);
     }//GEN-LAST:event_btnAutomovilesActionPerformed
+
+    private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
+        
+    }//GEN-LAST:event_btnPagosActionPerformed
 
     private void btnReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservasActionPerformed
         JPanel panel = new panReservas();
@@ -321,6 +339,7 @@ public class panAdministradores extends javax.swing.JPanel {
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnGarajes;
     private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPagos;
     private javax.swing.JButton btnReservas;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JPanel panContenido;

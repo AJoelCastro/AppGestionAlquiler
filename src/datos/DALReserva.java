@@ -413,7 +413,6 @@ public class DALReserva {
         }
         return reservas;
     }
-    // Agregar este método a la clase DALReserva
 
     public static ArrayList<Reserva> listarReservasActivas() {
         ArrayList<Reserva> reservas = new ArrayList<>();
