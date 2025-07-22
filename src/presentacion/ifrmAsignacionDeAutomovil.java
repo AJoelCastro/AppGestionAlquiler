@@ -128,7 +128,7 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
             jComboBox1.addItem(item);
         }
     }
-    
+           
     private void configurarTabla() {
         String[] columnas = {"Seleccionar", "Placa", "Modelo", "Marca", "Precio Alquiler", "Litros Inicial"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
@@ -214,6 +214,11 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
         jLabel1.setText("Reserva:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Seleccione los automoviles:");
 
@@ -359,6 +364,9 @@ public class ifrmAsignacionDeAutomovil extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnAsignarActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
