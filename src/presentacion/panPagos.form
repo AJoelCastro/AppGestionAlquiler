@@ -60,7 +60,9 @@
                       <Component id="btnActualizar" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnListar" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnEliminar" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnRegistrar" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnRegistrar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnGenerarReporte" alignment="1" max="32767" attributes="0"/>
+                      <Component id="cmbAgencias" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="695" max="-2" attributes="0"/>
@@ -83,6 +85,10 @@
                           <Component id="btnActualizar" min="-2" pref="35" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnListar" min="-2" pref="35" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="cmbAgencias" min="-2" pref="34" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
+                          <Component id="btnGenerarReporte" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jScrollPane1" min="-2" pref="440" max="-2" attributes="0"/>
                   </Group>
@@ -196,6 +202,36 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="btnGenerarReporte">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI Semibold" size="12" style="0"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/lista.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Generar reporte"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarReporteActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;&quot;, botonBlanco,presionadoBuscar,encimaBuscar)"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cmbAgencias">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="1">
+                <StringItem index="0" value="Agencias"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

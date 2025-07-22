@@ -4,6 +4,7 @@
  */
 package logica;
 
+import datos.Conexion;
 import entidades.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -174,5 +175,51 @@ public class FacadeAlquiler {
     public double obtenerTotalAlquilerPorReserva(int reservaId) {
         return reserauto.obtenerTotalAlquiler(reservaId);
     }
-    
+    // ...existing code...
+    public double obtenerIngresosPorMesAgencia(String nombreAgencia, java.util.Date fecha) {
+        double total = 0.0;
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(fecha);
+        int anio = cal.get(java.util.Calendar.YEAR);
+        int mes = cal.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH es 0-based
+
+        try (java.sql.Connection conn = Conexion.realizarconexion()) {
+            // Obtener el id de la agencia por nombre
+            String sqlAgencia = "SELECT agencia_id FROM Agencia WHERE nombre = ?";
+            try (java.sql.PreparedStatement psAgencia = conn.prepareStatement(sqlAgencia)) {
+                psAgencia.setString(1, nombreAgencia);
+                try (java.sql.ResultSet rsAgencia = psAgencia.executeQuery()) {
+                    if (rsAgencia.next()) {
+                        int agenciaId = rsAgencia.getInt("agencia_id");
+
+                        // Consulta directa a ReservaInactiva
+                        String sql = """
+                            SELECT SUM(precio_total) AS total_ingresos
+                            FROM ReservaInactiva
+                            WHERE agencia_id = ? 
+                              AND YEAR(fecha_inicio) = ? 
+                              AND MONTH(fecha_inicio) = ?
+                        """;
+
+                        try (java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+                            ps.setInt(1, agenciaId);
+                            ps.setInt(2, anio);
+                            ps.setInt(3, mes);
+
+                            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                                if (rs.next()) {
+                                    total = rs.getDouble("total_ingresos");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return total;
+    }
+
 }

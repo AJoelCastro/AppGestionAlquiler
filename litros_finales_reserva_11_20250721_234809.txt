@@ -1,0 +1,11 @@
+REGISTRO DE LITROS FINALES - DEVOLUCIÓN DE AUTOMÓVILES
+=========================================================
+Reserva ID: 11
+Cliente: Ana Gómez
+Fecha de devolución: 21/07/2025 23:48:09
+Multa aplicada: $0.00
+
+AUTOMÓVILES DEVUELTOS:
+Placa		Litros Inicial	Litros Final	Diferencia
+------------------------------------------------------------
+WWW77778		20.00		10.00		10.00

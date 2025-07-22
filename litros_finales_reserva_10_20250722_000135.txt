@@ -1,0 +1,11 @@
+REGISTRO DE LITROS FINALES - DEVOLUCIÓN DE AUTOMÓVILES
+=========================================================
+Reserva ID: 10
+Cliente: Rosa Jiménez
+Fecha de devolución: 22/07/2025 00:01:35
+Multa aplicada: $1600.00
+
+AUTOMÓVILES DEVUELTOS:
+Placa		Litros Inicial	Litros Final	Diferencia
+------------------------------------------------------------
+JJJ000		55.00		55.00		0.00

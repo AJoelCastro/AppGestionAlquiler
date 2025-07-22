@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 import logica.*;
+import com.toedter.calendar.JDateChooser;
 
 
 /**
@@ -29,7 +30,7 @@ public class panPagos extends javax.swing.JPanel {
     public panPagos() {
         initComponents();
         facade = new FacadeAlquiler();
-        
+        cargarAgencias(); // <-- Llama aquí para poblar el combo box
     }
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
@@ -45,6 +46,15 @@ public class panPagos extends javax.swing.JPanel {
             interna.show();
         };
         
+    }
+    
+    private void cargarAgencias() {
+        cmbAgencias.removeAllItems();
+        cmbAgencias.addItem("Agencias");
+        ArrayList<Agencia> agencias = facade.listarAgencias();
+        for (Agencia ag : agencias) {
+            cmbAgencias.addItem(ag.getNombre());
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -69,6 +79,10 @@ public class panPagos extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReservas = new javax.swing.JTable();
+        btnGenerarReporte = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        cmbAgencias = new javax.swing.JComboBox<>();
+        dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("MMMM yyyy");
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -133,12 +147,28 @@ public class panPagos extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblReservas);
 
+        btnGenerarReporte.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnGenerarReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
+        btnGenerarReporte.setText("Generar reporte");
+        btnGenerarReporte.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarReporteActionPerformed(evt);
+            }
+        });
+
+        cmbAgencias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agencias" }));
+        dateChooser.setDateFormatString("MMMM yyyy"); // Solo mes y año
+
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnRegistrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnGenerarReporte, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(cmbAgencias, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(dateChooser, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -154,7 +184,10 @@ public class panPagos extends javax.swing.JPanel {
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegistrar))
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGenerarReporte, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbAgencias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
                 .addGap(75, 75, 75)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(191, Short.MAX_VALUE))
@@ -173,7 +206,13 @@ public class panPagos extends javax.swing.JPanel {
                         .addGap(12, 12, 12)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbAgencias, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(112, 112, 112)
+                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(124, Short.MAX_VALUE))
         );
@@ -208,17 +247,33 @@ public class panPagos extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnListarActionPerformed
 
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+        String agencia = (String) cmbAgencias.getSelectedItem();
+        java.util.Date fecha = dateChooser.getDate();
+        if (agencia == null || agencia.equals("Agencias") || fecha == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione una agencia y una fecha.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Lógica para generar el reporte de ingresos totales por mes de la agencia
+        double ingresos = facade.obtenerIngresosPorMesAgencia(agencia, fecha);
+        JOptionPane.showMessageDialog(this, "Ingresos totales de " + agencia + " en " +
+            new java.text.SimpleDateFormat("MMMM yyyy").format(fecha) + ": $" + ingresos);
+    }//GEN-LAST:event_btnGenerarReporteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cmbAgencias;
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblReservas;
+    private com.toedter.calendar.JDateChooser dateChooser;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);
