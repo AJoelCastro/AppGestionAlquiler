@@ -151,7 +151,7 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
         }
 
         Reserva reservaSeleccionada = reservasConAutomoviles.get(indiceSeleccionado);
-        
+
         int opcion = JOptionPane.showConfirmDialog(this, 
             "¿Confirma realizar el pago y marcar la reserva como entregada?\n" +
             "Precio total: $" + jLabel7.getText(), 
@@ -161,24 +161,14 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
         if (opcion == JOptionPane.YES_OPTION) {
             try {
                 boolean estadoCambiado = facade.cambiarEstadoReserva(reservaSeleccionada.getReservaId(), true);
-                
+
                 if (estadoCambiado) {
-                    ArrayList<ReservaAutomovil> reservasAuto = facade.listarReservaAutomovil();
-                    for (ReservaAutomovil ra : reservasAuto) {
-                        if (ra.getReservaId() == reservaSeleccionada.getReservaId()) {
-                            var automovil = facade.buscarAutomovilPorPlaca(ra.getPlaca());
-                            if (automovil != null) {
-                                // Actualizar estado del automóvil a disponible (usando el método de BLAutomovil)
-                                logica.BLAutomovil.liberarAutomovil(ra.getPlaca());
-                            }
-                        }
-                    }
-                    
+
                     JOptionPane.showMessageDialog(this, 
                         "Pago realizado exitosamente.\nReserva marcada como entregada.", 
                         "Éxito", 
                         JOptionPane.INFORMATION_MESSAGE);
-                    
+
                     cargarReservas();
                 } else {
                     JOptionPane.showMessageDialog(this, 
@@ -186,7 +176,7 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
                         "Error", 
                         JOptionPane.ERROR_MESSAGE);
                 }
-                
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, 
                     "Error al realizar el pago: " + e.getMessage(), 
@@ -289,6 +279,8 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
+
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
