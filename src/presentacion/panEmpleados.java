@@ -49,8 +49,9 @@ public class panEmpleados extends javax.swing.JPanel {
         panContenido = new javax.swing.JPanel();
         btnInicio = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         btnPrestamos = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
-        btnLibros = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnAutomovil = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         jButton1 = new javax.swing.JButton();
+        btnCliente = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
 
         panFondo.setBackground(new java.awt.Color(8, 100, 60));
 
@@ -80,14 +81,15 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
-        btnLibros.setBackground(new java.awt.Color(30, 30, 30));
-        btnLibros.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        btnLibros.setForeground(new java.awt.Color(255, 255, 255));
-        btnLibros.setText("  Conductores");
-        btnLibros.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnLibros.addActionListener(new java.awt.event.ActionListener() {
+        btnAutomovil.setBackground(new java.awt.Color(30, 30, 30));
+        btnAutomovil.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnAutomovil.setForeground(new java.awt.Color(255, 255, 255));
+        btnAutomovil.setText("  Automoviles");
+        btnAutomovil.setActionCommand("");
+        btnAutomovil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAutomovil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLibrosActionPerformed(evt);
+                btnAutomovilActionPerformed(evt);
             }
         });
 
@@ -100,6 +102,18 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
+        btnCliente.setBackground(new java.awt.Color(30, 30, 30));
+        btnCliente.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnCliente.setForeground(new java.awt.Color(255, 255, 255));
+        btnCliente.setText("Cliente");
+        btnCliente.setActionCommand("");
+        btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panFondoLayout = new javax.swing.GroupLayout(panFondo);
         panFondo.setLayout(panFondoLayout);
         panFondoLayout.setHorizontalGroup(
@@ -108,9 +122,12 @@ public class panEmpleados extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLibros, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(20, 20, 20)
+                    .addGroup(panFondoLayout.createSequentialGroup()
+                        .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(2, 2, 2))
+                    .addComponent(btnAutomovil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addComponent(panContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -128,10 +145,12 @@ public class panEmpleados extends javax.swing.JPanel {
                     .addGroup(panFondoLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)
                         .addComponent(btnPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAutomovil, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
@@ -153,18 +172,24 @@ public class panEmpleados extends javax.swing.JPanel {
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
-//        JPanel panel = new panReservas();
-//        showPanel(panel);
+        JPanel panel = new panReservasEmpleado();
+        showPanel(panel);
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
-    private void btnLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosActionPerformed
-//        JPanel panel = new panConductores();
-//        showPanel(panel);
-    }//GEN-LAST:event_btnLibrosActionPerformed
+    private void btnAutomovilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutomovilActionPerformed
+        JPanel panel = new panAutomovilesEmpleado();
+        showPanel(panel);
+    }//GEN-LAST:event_btnAutomovilActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         cerrarSesion();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
+        JPanel panel = new panClientesEmpleado();
+        showPanel(panel);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClienteActionPerformed
     private void cerrarSesion() {
        try {
            // Confirmar acción con el usuario
@@ -248,8 +273,9 @@ public class panEmpleados extends javax.swing.JPanel {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAutomovil;
+    private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnInicio;
-    private javax.swing.JButton btnLibros;
     private javax.swing.JButton btnPrestamos;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel panContenido;

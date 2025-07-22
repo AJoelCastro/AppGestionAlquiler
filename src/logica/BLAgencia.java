@@ -17,9 +17,10 @@ public class BLAgencia {
     public static int insertarAgencia(String nombre, String direccion) {
         String mensaje;
         if (nombre.trim().length() > 0 && direccion.trim().length() > 0) {
-            Agencia ag = new Agencia();
-            ag.setNombre(nombre.trim());
-            ag.setDireccion(direccion.trim());
+//            Agencia ag = new Agencia();
+//            ag.setNombre(nombre.trim());
+//            ag.setDireccion(direccion.trim());
+              Agencia ag = AgenciaFactory.crearAgenciaSinId(nombre.trim(), direccion.trim());
 
             mensaje = DALAgencia.insertarAgencia(ag);
             if (mensaje == null) {

@@ -18,8 +18,10 @@ import static org.junit.Assert.*;
 public class BLClienteTest {
     @Test
     public void testInsertarClienteValido() {
-        Cliente cliente = ClienteFactory.crearClienteSinSponsor(1000, "87654321", "Juan Pérez", "Av. Central 123", "987654321");
+        Cliente cliente = ClienteFactory.crearClienteSinSponsor(1000, "87654324", "Juan ", "Av. Central 12", "987654324");
+        System.out.println("pasa por aqui");
         int resultado = BLCliente.insertarCliente(cliente);
+        System.out.println("termina aqui");
         assertEquals(0, resultado);
     }
     
@@ -39,7 +41,7 @@ public class BLClienteTest {
     
     @Test
     public void testBuscarClientePorId_Existente() {
-        int idCliente = 25; // Este cliente debe existir en la BD
+        int idCliente = 5; // Este cliente debe existir en la BD
         Cliente resultado = BLCliente.buscarClientePorId(idCliente);
         assertNotNull(resultado);
         assertEquals(idCliente, resultado.getIdCliente());
@@ -69,7 +71,7 @@ public class BLClienteTest {
     
     @Test
     public void testEditarClienteExistente() {
-        int idCliente = 25; // Asegúrate que este cliente exista
+        int idCliente = 5; // Asegúrate que este cliente exista
         boolean resultado = BLCliente.editarCliente(idCliente, "Juan Actualizado", "Calle Actualizada 456", "999999999");
         assertTrue(resultado);
     }
@@ -83,14 +85,14 @@ public class BLClienteTest {
     
     @Test
     public void testEliminarClienteSinReservas() {
-        int idCliente = 26; // Asegúrate que no tenga reservas
+        int idCliente =30; // Asegúrate que no tenga reservas
         boolean resultado = BLCliente.eliminarCliente(idCliente);
         assertTrue(resultado);
     }
     
     @Test
     public void testEliminarClienteConReservas() {
-        int idCliente = 3; // Debe tener reservas registradas
+        int idCliente = 7; // Debe tener reservas registradas
         boolean resultado = BLCliente.eliminarCliente(idCliente);
         assertFalse(resultado);
     }

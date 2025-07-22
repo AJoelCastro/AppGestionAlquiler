@@ -39,7 +39,7 @@ public class BLAutomovilTest {
      */
     @Test
     public void testInsertarAutomovil() {
-        String placa = "WWW777"; // Placa nueva y única
+        String placa = "WWW77775"; // Placa nueva y única
         String modelo = "Hyundai";
         String color = "Negro";
         String marca = "Honda";
@@ -69,7 +69,7 @@ public class BLAutomovilTest {
     @Test
     public void testEditarAutomovil() {
         System.out.println("editarAutomovil");
-        String placa = "XXX123";
+        String placa = "AAA111";
         String nuevoModelo = "Justines";
         String nuevoColor = "Turquesa";
         String nuevaMarca = "Papu";
