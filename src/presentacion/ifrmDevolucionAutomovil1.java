@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import datos.Conexion;
 import entidades.Automovil;
 import entidades.Cliente;
 import entidades.Reserva;
@@ -17,6 +18,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import logica.FacadeAlquiler;
+import entidades.Reserva;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -363,6 +369,8 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
             }
 
             guardarLitrosFinales();
+            
+            boolean archivada = archivarReservaAntesDeDevolion(reservaSeleccionada);
 
             boolean reservaEliminada = facade.eliminarReserva(reservaSeleccionada.getReservaId());
             
@@ -393,7 +401,109 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+    private boolean archivarReservaAntesDeDevolion(Reserva reserva) {
+        if (reserva == null || reserva.getReservaId() <= 0) {
+            JOptionPane.showMessageDialog(this, "Reserva no válida para archivar", "Error de validación", 0);
+            return false;
+        }
+
+        if (!reserva.isEntregado()) {
+            JOptionPane.showMessageDialog(this, "Solo se pueden archivar reservas entregadas", "Error de negocio", 0);
+            return false;
+        }
+
+        Connection cn = null;
+        CallableStatement cs = null;
+        PreparedStatement psCheck = null;
+        ResultSet rs = null;
+
+        try {
+            cn = Conexion.realizarconexion();
+
+            String checkQuery = "SELECT COUNT(*) FROM ReservaInactiva WHERE reserva_id = ?";
+            psCheck = cn.prepareStatement(checkQuery);
+            psCheck.setInt(1, reserva.getReservaId());
+            rs = psCheck.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("DEBUG - La reserva " + reserva.getReservaId() + " ya está archivada");
+                JOptionPane.showMessageDialog(this, "La reserva ya ha sido archivada anteriormente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                return true; 
+            }
+
+            if (reserva.getFechaInicio() == null || reserva.getFechaFin() == null) {
+                JOptionPane.showMessageDialog(this, "Error: Fechas de reserva no válidas", "Error de datos", 0);
+                return false;
+            }
+
+            cs = cn.prepareCall("{call sp_insertar_reserva_inactiva(?,?,?,?,?,?)}");
+            cs.setInt(1, reserva.getReservaId());
+            cs.setInt(2, reserva.getClienteId());
+            cs.setInt(3, reserva.getAgenciaId());
+            cs.setTimestamp(4, new java.sql.Timestamp(reserva.getFechaInicio().getTimeInMillis()));
+            cs.setTimestamp(5, new java.sql.Timestamp(reserva.getFechaFin().getTimeInMillis()));
+            cs.setDouble(6, reserva.getPrecioTotal());
+
+            System.out.println("DEBUG - Archivando reserva:");
+            System.out.println("ID: " + reserva.getReservaId());
+            System.out.println("Cliente: " + reserva.getClienteId());
+            System.out.println("Agencia: " + reserva.getAgenciaId());
+            System.out.println("Fecha inicio: " + new java.sql.Timestamp(reserva.getFechaInicio().getTimeInMillis()));
+            System.out.println("Fecha fin: " + new java.sql.Timestamp(reserva.getFechaFin().getTimeInMillis()));
+            System.out.println("Precio: " + reserva.getPrecioTotal());
+
+            int resultado = cs.executeUpdate();
+            System.out.println("Resultado executeUpdate: " + resultado);
+
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(this, "Reserva archivada exitosamente", "Archivo completado", 1);
+                return true;
+            } else {
+                psCheck = cn.prepareStatement(checkQuery);
+                psCheck.setInt(1, reserva.getReservaId());
+                rs = psCheck.executeQuery();
+
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("DEBUG - La reserva se archivó correctamente (INSERT IGNORE no reportó el insert)");
+                    JOptionPane.showMessageDialog(this, "Reserva archivada exitosamente", "Archivo completado", 1);
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo archivar la reserva. Posibles causas:\n" +
+                        "- La reserva ya existe en el archivo\n" +
+                        "- Error en los datos proporcionados\n" +
+                        "- Problema con la base de datos", 
+                        "Error de archivo", 0);
+                    return false;
+                }
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Error: Driver de base de datos no encontrado\n" + e.getMessage(), 
+                "Error de configuración", 0);
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Error SQL al archivar reserva:\n" + 
+                "Código: " + e.getErrorCode() + "\n" +
+                "Estado SQL: " + e.getSQLState() + "\n" +
+                "Mensaje: " + e.getMessage(), 
+                "Error en Base de Datos", 0);
+            return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (psCheck != null) psCheck.close();
+                if (cs != null) cs.close();
+                if (cn != null) cn.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
