@@ -35,26 +35,22 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
     }
 
     private void inicializarComponentes() {
-        // Configurar el modelo de la tabla
         String[] columnas = {"Placa", "Modelo", "Marca", "Color", "Precio Alquiler", "Litros Inicial", "Litros Final"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 6; // Solo la columna de Litros Final es editable
+                return column == 6;
             }
         };
         jTable1.setModel(modeloTabla);
 
-        // Configurar ComboBox
         jComboBox1.addActionListener(e -> cargarDatosReserva());
 
-        // Inicializar labels
         jLabel3.setText("N/N");
         jLabel5.setText("Fecha de entrega: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         jLabel7.setText("0.00");
         jLabel8.setText("Fecha Fin de reserva: N/N");
 
-        // Configurar botones
         jToggleButton1.setText("Realizar Devolución");
         jToggleButton2.setText("Pagar Multa y Devolver");
         jToggleButton2.setEnabled(false);
@@ -62,13 +58,11 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
 
     private void cargarReservasEntregadas() {
         try {
-            // Obtener todas las reservas y filtrar las que están entregadas pero no devueltas
             ArrayList<Reserva> todasReservas = facade.listarReservas();
             reservasEntregadas = new ArrayList<>();
             
             for (Reserva reserva : todasReservas) {
                 if (reserva.isEntregado()) {
-                    // Verificar que tenga automóviles asignados
                     ArrayList<ReservaAutomovil> autos = obtenerAutomovilesDeReserva(reserva.getReservaId());
                     if (!autos.isEmpty()) {
                         reservasEntregadas.add(reserva);
@@ -76,7 +70,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 }
             }
 
-            // Llenar el ComboBox
             DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
             modelo.addElement("Seleccione una reserva...");
             
@@ -107,21 +100,17 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
             reservaSeleccionada = reservasEntregadas.get(indice - 1);
             clienteSeleccionado = facade.buscarClientePorId(reservaSeleccionada.getClienteId());
             
-            // Mostrar nombre del cliente
             if (clienteSeleccionado != null) {
                 jLabel3.setText(clienteSeleccionado.getNombre());
             } else {
                 jLabel3.setText("Cliente " + reservaSeleccionada.getClienteId());
             }
 
-            // Mostrar fecha fin de reserva
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             jLabel8.setText("Fecha Fin de reserva: " + sdf.format(reservaSeleccionada.getFechaFin().getTime()));
 
-            // Cargar automóviles de la reserva
             cargarAutomovilesReserva();
             
-            // Calcular multa si corresponde
             calcularMulta();
 
         } catch (Exception e) {
@@ -135,7 +124,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
         automovilesReserva = obtenerAutomovilesDeReserva(reservaSeleccionada.getReservaId());
         
         for (ReservaAutomovil ra : automovilesReserva) {
-            // Buscar información adicional del automóvil
             Automovil auto = facade.buscarAutomovilPorPlaca(ra.getPlaca());
             
             Object[] fila = {
@@ -169,7 +157,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
         Date fechaFinReserva = reservaSeleccionada.getFechaFin().getTime();
         
         if (fechaActual.after(fechaFinReserva)) {
-            // Calcular días de retraso
             long diferenciaMilisegundos = fechaActual.getTime() - fechaFinReserva.getTime();
             int diasRetraso = (int) Math.ceil(diferenciaMilisegundos / (1000.0 * 60 * 60 * 24));
             
@@ -199,7 +186,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
             Object litrosFinalesObj = modeloTabla.getValueAt(i, 6);
 
-            // Verificar si es null
             if (litrosFinalesObj == null) {
                 JOptionPane.showMessageDialog(this, 
                     "Por favor, ingrese los litros finales para el vehículo con placa: " + 
@@ -208,7 +194,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 return false;
             }
 
-            // Convertir a string y limpiar
             String litrosFinalesStr = litrosFinalesObj.toString().trim();
 
             if (litrosFinalesStr.isEmpty()) {
@@ -220,11 +205,9 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
             }
 
             try {
-                // Limpiar el string más exhaustivamente
                 litrosFinalesStr = litrosFinalesStr.replace(",", ".")
                                                  .replaceAll("[^0-9.]", ""); // Eliminar caracteres no numéricos excepto punto
 
-                // Verificar que no esté vacío después de la limpieza
                 if (litrosFinalesStr.isEmpty()) {
                     JOptionPane.showMessageDialog(this, 
                         "Por favor, ingrese un número válido para los litros finales del vehículo: " + 
@@ -271,18 +254,28 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
             writer.write("Multa aplicada: $" + String.format("%.2f", multaCalculada) + "\n\n");
             writer.write("AUTOMÓVILES DEVUELTOS:\n");
             writer.write("Placa\t\tLitros Inicial\tLitros Final\tDiferencia\n");
-            writer.write("-".repeat(60) + "\n");
+            for (int j = 0; j < 60; j++) {
+                writer.write("-");
+            }
+            writer.write("\n");
 
             for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                 String placa = (String) modeloTabla.getValueAt(i, 0);
                 double litrosInicial = Double.parseDouble(modeloTabla.getValueAt(i, 5).toString());
-                
-                // Obtener y limpiar los litros finales
+
                 Object litrosFinalesObj = modeloTabla.getValueAt(i, 6);
-                String litrosFinalesStr = litrosFinalesObj.toString().trim()
-                                                        .replace(",", ".")
-                                                        .replaceAll("[^0-9.]", "");
-                double litrosFinales = Double.parseDouble(litrosFinalesStr);
+                double litrosFinales;
+
+                if (litrosFinalesObj instanceof Double) {
+                    litrosFinales = (Double) litrosFinalesObj;
+                } else if (litrosFinalesObj instanceof Integer) {
+                    litrosFinales = ((Integer) litrosFinalesObj).doubleValue();
+                } else {
+                    String litrosFinalesStr = litrosFinalesObj.toString().trim()
+                                                            .replace(",", ".");
+                    litrosFinalesStr = litrosFinalesStr.replaceAll("[^0-9.-]", "");
+                    litrosFinales = Double.parseDouble(litrosFinalesStr);
+                }
 
                 double diferencia = litrosInicial - litrosFinales;
 
@@ -297,13 +290,21 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 "Archivo guardado", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (IOException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, 
-                "Error al guardar el archivo de litros: " + e.getMessage(), 
+                "Error al guardar el archivo de litros: " + e.getMessage() + 
+                "\nVerifique que tenga permisos de escritura en el directorio.", 
                 "Error", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException e) {
+            e.printStackTrace(); // Para ver el error completo en consola
             JOptionPane.showMessageDialog(this, 
                 "Error al procesar los números de litros: " + e.getMessage(), 
                 "Error de formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace(); // Para capturar cualquier otro error
+            JOptionPane.showMessageDialog(this, 
+                "Error inesperado al guardar el archivo: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -344,7 +345,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
             boolean exito = true;
             StringBuilder errores = new StringBuilder();
 
-            // 1. Liberar automóviles
             for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                 String placa = (String) modeloTabla.getValueAt(i, 0);
                 boolean liberado = facade.liberarAutomovil(placa);
@@ -362,10 +362,8 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 return;
             }
 
-            // 2. Guardar registro de litros finales
             guardarLitrosFinales();
 
-            // 3. Eliminar la reserva
             boolean reservaEliminada = facade.eliminarReserva(reservaSeleccionada.getReservaId());
             
             if (reservaEliminada) {
@@ -380,7 +378,6 @@ public class ifrmDevolucionAutomovil1 extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, mensajeExito, 
                     "Devolución Exitosa", JOptionPane.INFORMATION_MESSAGE);
 
-                // Recargar datos y limpiar formulario
                 cargarReservasEntregadas();
                 limpiarFormulario();
             } else {

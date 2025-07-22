@@ -67,9 +67,6 @@ public class panPagos extends javax.swing.JPanel {
         btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         btnRegistrar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jLabel1 = new javax.swing.JLabel();
-        txtBusqueda = new javax.swing.JTextField();
-        jSeparator1 = new javax.swing.JSeparator();
-        btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReservas = new javax.swing.JTable();
 
@@ -121,26 +118,7 @@ public class panPagos extends javax.swing.JPanel {
         });
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
-        jLabel1.setText("Control de Reservas");
-
-        txtBusqueda.setBorder(null);
-        txtBusqueda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBusquedaActionPerformed(evt);
-            }
-        });
-
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setOpaque(true);
-
-        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("Control de Pagos");
 
         tblReservas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -160,51 +138,33 @@ public class panPagos extends javax.swing.JPanel {
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnRegistrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(txtBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(btnBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
         dspFondoLayout.setHorizontalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(493, 493, 493))
             .addGroup(dspFondoLayout.createSequentialGroup()
-                .addGap(164, 164, 164)
+                .addGap(132, 132, 132)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRegistrar))
                 .addGap(75, 75, 75)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(dspFondoLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(dspFondoLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(222, 222, 222))
-                            .addGroup(dspFondoLayout.createSequentialGroup()
-                                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jSeparator1)
-                                    .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(191, Short.MAX_VALUE))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dspFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(52, 52, 52)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(108, 108, 108)
+                .addGap(75, 75, 75)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,7 +175,7 @@ public class panPagos extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -230,10 +190,6 @@ public class panPagos extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         JInternalFrame ifrm = new ifrmEntregaAutomovil();
         centrarInternalFrame(ifrm);
@@ -244,22 +200,17 @@ public class panPagos extends javax.swing.JPanel {
         centrarInternalFrame(ifrm);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        
-    }//GEN-LAST:event_btnListarActionPerformed
-
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        
+
     }//GEN-LAST:event_btnActualizarActionPerformed
 
-    private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaActionPerformed
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+
+    }//GEN-LAST:event_btnListarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnRegistrar;
@@ -267,9 +218,7 @@ public class panPagos extends javax.swing.JPanel {
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable tblReservas;
-    private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);
