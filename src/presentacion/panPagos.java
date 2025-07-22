@@ -31,6 +31,22 @@ public class panPagos extends javax.swing.JPanel {
         facade = new FacadeAlquiler();
         
     }
+    private void centrarInternalFrame (JInternalFrame interna) {
+        int x,y;
+        
+        x=dspFondo.getWidth()/2 - interna.getWidth()/2;
+        y=dspFondo.getHeight()/2- interna.getHeight()/2;
+        if(interna.isShowing())
+        interna.setLocation(x,y);
+        
+        else {
+            dspFondo.add(interna);
+            interna.setLocation(x,y);
+            interna.show();
+        };
+        
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -219,7 +235,8 @@ public class panPagos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        
+        JInternalFrame ifrm = new ifrmEntregaAutomovil();
+        centrarInternalFrame(ifrm);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed

@@ -74,6 +74,10 @@ public class FacadeAlquiler {
         return auto.listarAutomoviles();
     }
     
+    public boolean liberarAutomovil(String placa) {
+        return auto.liberarAutomovil(placa);
+    }
+    
     public void registrarGaraje(String nombre, String ubicacion) {
         garaje.insertarGaraje(nombre, ubicacion);
     }

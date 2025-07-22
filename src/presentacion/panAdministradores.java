@@ -240,7 +240,8 @@ public class panAdministradores extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAutomovilesActionPerformed
 
     private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
-        
+        JPanel panel = new panPagos();
+        showPanel(panel);
     }//GEN-LAST:event_btnPagosActionPerformed
 
     private void btnReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservasActionPerformed

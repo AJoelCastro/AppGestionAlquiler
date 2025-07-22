@@ -101,7 +101,7 @@ public class panLogin extends javax.swing.JPanel {
         jLabel3.setText("Iniciar sesión en");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setText("Enterprise Plus");
+        jLabel4.setText("AUTORENT");
 
         btnIniciarSesion.setBackground(new java.awt.Color(8, 100, 60));
         btnIniciarSesion.setForeground(new java.awt.Color(255, 255, 255));
