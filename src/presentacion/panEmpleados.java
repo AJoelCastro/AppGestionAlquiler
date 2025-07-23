@@ -58,7 +58,7 @@ public class panEmpleados extends javax.swing.JPanel {
         panContenido.setBackground(new java.awt.Color(255, 255, 255));
         panContenido.setLayout(new java.awt.BorderLayout());
 
-        btnInicio.setBackground(new java.awt.Color(30, 30, 30));
+        btnInicio.setBackground(new java.awt.Color(8, 100, 60));
         btnInicio.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnInicio.setForeground(new java.awt.Color(255, 255, 255));
         btnInicio.setText("  Inicio");
@@ -70,7 +70,7 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
-        btnPrestamos.setBackground(new java.awt.Color(30, 30, 30));
+        btnPrestamos.setBackground(new java.awt.Color(8, 100, 60));
         btnPrestamos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnPrestamos.setForeground(new java.awt.Color(255, 255, 255));
         btnPrestamos.setText("  Reservas");
@@ -81,7 +81,7 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
-        btnAutomovil.setBackground(new java.awt.Color(30, 30, 30));
+        btnAutomovil.setBackground(new java.awt.Color(8, 100, 60));
         btnAutomovil.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnAutomovil.setForeground(new java.awt.Color(255, 255, 255));
         btnAutomovil.setText("  Automoviles");
@@ -102,7 +102,7 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
-        btnCliente.setBackground(new java.awt.Color(30, 30, 30));
+        btnCliente.setBackground(new java.awt.Color(8, 100, 60));
         btnCliente.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnCliente.setForeground(new java.awt.Color(255, 255, 255));
         btnCliente.setText("Cliente");
@@ -143,7 +143,6 @@ public class panEmpleados extends javax.swing.JPanel {
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                     .addGroup(panFondoLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -151,7 +150,7 @@ public class panEmpleados extends javax.swing.JPanel {
                         .addComponent(btnPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAutomovil, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -281,7 +280,7 @@ public class panEmpleados extends javax.swing.JPanel {
     private javax.swing.JPanel panContenido;
     private javax.swing.JPanel panFondo;
     // End of variables declaration//GEN-END:variables
-    private Color presionadoMenu = new Color(60,60,60);
-    private Color encimaMenu = new Color(50,50,50);
-    private Color botonMenu= new Color(30,30,30);
+    private Color presionadoMenu = new Color(108,200,160);
+    private Color encimaMenu = new Color(58,150,110);
+    private Color botonMenu= new Color(8,100,60);
 }

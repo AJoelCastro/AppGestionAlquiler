@@ -36,7 +36,7 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Hacer la tabla no editable
+                return false;
             }
         };
         jTable1.setModel(modeloTabla);
@@ -106,11 +106,9 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
 
             for (ReservaAutomovil ra : reservasAuto) {
                 if (ra.getReservaId() == reservaId) {
-                    // Obtener detalles del automóvil
                     Object[] fila = new Object[6];
                     fila[0] = ra.getPlaca();
                     
-                    // Buscar detalles del automóvil
                     var automovil = facade.buscarAutomovilPorPlaca(ra.getPlaca());
                     if (automovil != null) {
                         fila[1] = automovil.getModelo();
@@ -349,11 +347,11 @@ public class ifrmEntregaAutomovil extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel2))
                                 .addGap(205, 205, 205)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(126, Short.MAX_VALUE))
         );
