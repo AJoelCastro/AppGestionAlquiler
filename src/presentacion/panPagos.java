@@ -16,6 +16,7 @@ import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 import logica.*;
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 
 /**
@@ -31,6 +32,9 @@ public class panPagos extends javax.swing.JPanel {
         initComponents();
         facade = new FacadeAlquiler();
         cargarAgencias(); // <-- Llama aquí para poblar el combo box
+        jDateChooser1.setDateFormatString("MMMM yyyy"); 
+    JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser1.getDateEditor();
+    editor.setEditable(false);
     }
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
@@ -72,8 +76,6 @@ public class panPagos extends javax.swing.JPanel {
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        btnListar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        btnActualizar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         btnRegistrar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jLabel1 = new javax.swing.JLabel();
@@ -81,32 +83,11 @@ public class panPagos extends javax.swing.JPanel {
         tblReservas = new javax.swing.JTable();
         btnGenerarReporte = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         cmbAgencias = new javax.swing.JComboBox<>();
-        dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString("MMMM yyyy");
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         dspFondo.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnListar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lista.png"))); // NOI18N
-        btnListar.setText("  Listar Reservas");
-        btnListar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnListar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListarActionPerformed(evt);
-            }
-        });
-
-        btnActualizar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/editar.png"))); // NOI18N
-        btnActualizar.setText("  Actualizar Reservas");
-        btnActualizar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarActionPerformed(evt);
-            }
-        });
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
@@ -158,17 +139,14 @@ public class panPagos extends javax.swing.JPanel {
         });
 
         cmbAgencias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agencias" }));
-        dateChooser.setDateFormatString("MMMM yyyy"); // Solo mes y año
 
-        dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnRegistrar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnGenerarReporte, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(cmbAgencias, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(dateChooser, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jDateChooser1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -181,13 +159,11 @@ public class panPagos extends javax.swing.JPanel {
             .addGroup(dspFondoLayout.createSequentialGroup()
                 .addGap(132, 132, 132)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGenerarReporte, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbAgencias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(75, 75, 75)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(191, Short.MAX_VALUE))
@@ -203,15 +179,11 @@ public class panPagos extends javax.swing.JPanel {
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(106, 106, 106)
                         .addComponent(cmbAgencias, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
                         .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(124, Short.MAX_VALUE))
@@ -239,17 +211,9 @@ public class panPagos extends javax.swing.JPanel {
         centrarInternalFrame(ifrm);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-
-    }//GEN-LAST:event_btnActualizarActionPerformed
-
-    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-
-    }//GEN-LAST:event_btnListarActionPerformed
-
     private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
         String agencia = (String) cmbAgencias.getSelectedItem();
-        java.util.Date fecha = dateChooser.getDate();
+        java.util.Date fecha = jDateChooser1.getDate();
         if (agencia == null || agencia.equals("Agencias") || fecha == null) {
             JOptionPane.showMessageDialog(this, "Seleccione una agencia y una fecha.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
@@ -262,18 +226,16 @@ public class panPagos extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGenerarReporte;
-    private javax.swing.JButton btnListar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cmbAgencias;
     private javax.swing.JDesktopPane dspFondo;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblReservas;
-    private com.toedter.calendar.JDateChooser dateChooser;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);
