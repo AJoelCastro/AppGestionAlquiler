@@ -52,6 +52,7 @@ public class panEmpleados extends javax.swing.JPanel {
         btnAutomovil = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
         jButton1 = new javax.swing.JButton();
         btnCliente = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
+        btnPagos = new BotonPersonalizado("Inicio",botonMenu,presionadoMenu,encimaMenu);
 
         panFondo.setBackground(new java.awt.Color(8, 100, 60));
 
@@ -114,6 +115,17 @@ public class panEmpleados extends javax.swing.JPanel {
             }
         });
 
+        btnPagos.setBackground(new java.awt.Color(30, 30, 30));
+        btnPagos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnPagos.setForeground(new java.awt.Color(255, 255, 255));
+        btnPagos.setText("Gestion de Pagos");
+        btnPagos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panFondoLayout = new javax.swing.GroupLayout(panFondo);
         panFondo.setLayout(panFondoLayout);
         panFondoLayout.setHorizontalGroup(
@@ -126,7 +138,8 @@ public class panEmpleados extends javax.swing.JPanel {
                         .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(2, 2, 2))
                     .addComponent(btnAutomovil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addComponent(btnPagos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(panContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
@@ -151,6 +164,8 @@ public class panEmpleados extends javax.swing.JPanel {
                         .addComponent(btnPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAutomovil, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
@@ -190,6 +205,11 @@ public class panEmpleados extends javax.swing.JPanel {
         showPanel(panel);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnClienteActionPerformed
+
+    private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
+        JPanel panel = new panPagosEmpleado();
+        showPanel(panel);
+    }//GEN-LAST:event_btnPagosActionPerformed
     private void cerrarSesion() {
        try {
            // Confirmar acción con el usuario
@@ -276,6 +296,7 @@ public class panEmpleados extends javax.swing.JPanel {
     private javax.swing.JButton btnAutomovil;
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPagos;
     private javax.swing.JButton btnPrestamos;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel panContenido;

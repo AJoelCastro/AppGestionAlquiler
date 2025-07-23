@@ -46,6 +46,7 @@
                       </Group>
                       <Component id="btnAutomovil" max="32767" attributes="0"/>
                       <Component id="btnCliente" alignment="1" pref="178" max="32767" attributes="0"/>
+                      <Component id="btnPagos" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="panContenido" min="-2" pref="1280" max="-2" attributes="0"/>
@@ -74,6 +75,8 @@
                           <Component id="btnPrestamos" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnAutomovil" min="-2" pref="38" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="btnPagos" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -187,6 +190,27 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClienteActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;Inicio&quot;,botonMenu,presionadoMenu,encimaMenu)"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnPagos">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="1e" green="1e" red="1e" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Roboto" size="14" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Gestion de Pagos"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPagosActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonPersonalizado(&quot;Inicio&quot;,botonMenu,presionadoMenu,encimaMenu)"/>

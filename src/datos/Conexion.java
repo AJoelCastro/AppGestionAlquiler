@@ -14,7 +14,7 @@ public class Conexion {
         Class.forName("com.mysql.cj.jdbc.Driver");
         url="jdbc:mysql://localhost:3306/alquiler_automoviles";
         user="root";
-        password="Cnic2024#kiki";
+        password="7389209350";
         
         System.out.println("Intentando conectar a: " + url);
         System.out.println("Usuario: " + user);

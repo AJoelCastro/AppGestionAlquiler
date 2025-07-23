@@ -1,0 +1,11 @@
+REGISTRO DE LITROS FINALES - DEVOLUCIÓN DE AUTOMÓVILES
+=========================================================
+Reserva ID: 7
+Cliente: Pedro Sánchez
+Fecha de devolución: 22/07/2025 00:40:05
+Multa aplicada: $2000.00
+
+AUTOMÓVILES DEVUELTOS:
+Placa		Litros Inicial	Litros Final	Diferencia
+------------------------------------------------------------
+GGG777		60.00		40.00		20.00
