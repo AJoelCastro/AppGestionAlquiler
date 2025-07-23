@@ -64,7 +64,7 @@ public class panAdministradores extends javax.swing.JPanel {
         panContenido.setBackground(new java.awt.Color(255, 255, 255));
         panContenido.setLayout(new java.awt.BorderLayout());
 
-        btnInicio.setBackground(new java.awt.Color(30, 30, 30));
+        btnInicio.setBackground(new java.awt.Color(8, 100, 60));
         btnInicio.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnInicio.setForeground(new java.awt.Color(255, 255, 255));
         btnInicio.setText("Inicio");
@@ -76,7 +76,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnAgencias.setBackground(new java.awt.Color(30, 30, 30));
+        btnAgencias.setBackground(new java.awt.Color(8, 100, 60));
         btnAgencias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnAgencias.setForeground(new java.awt.Color(255, 255, 255));
         btnAgencias.setText("Agencias");
@@ -87,7 +87,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnGarajes.setBackground(new java.awt.Color(30, 30, 30));
+        btnGarajes.setBackground(new java.awt.Color(8, 100, 60));
         btnGarajes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnGarajes.setForeground(new java.awt.Color(255, 255, 255));
         btnGarajes.setText("Garajes");
@@ -107,7 +107,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnClientes.setBackground(new java.awt.Color(30, 30, 30));
+        btnClientes.setBackground(new java.awt.Color(8, 100, 60));
         btnClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnClientes.setForeground(new java.awt.Color(255, 255, 255));
         btnClientes.setText("Clientes");
@@ -118,7 +118,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnAutomoviles.setBackground(new java.awt.Color(30, 30, 30));
+        btnAutomoviles.setBackground(new java.awt.Color(8, 100, 60));
         btnAutomoviles.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnAutomoviles.setForeground(new java.awt.Color(255, 255, 255));
         btnAutomoviles.setText("Automoviles");
@@ -129,7 +129,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnPagos.setBackground(new java.awt.Color(30, 30, 30));
+        btnPagos.setBackground(new java.awt.Color(8, 100, 60));
         btnPagos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnPagos.setForeground(new java.awt.Color(255, 255, 255));
         btnPagos.setText("Gestion de Pagos");
@@ -140,7 +140,7 @@ public class panAdministradores extends javax.swing.JPanel {
             }
         });
 
-        btnReservas.setBackground(new java.awt.Color(30, 30, 30));
+        btnReservas.setBackground(new java.awt.Color(8, 100, 60));
         btnReservas.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         btnReservas.setForeground(new java.awt.Color(255, 255, 255));
         btnReservas.setText("Reservas");
@@ -156,7 +156,7 @@ public class panAdministradores extends javax.swing.JPanel {
         panFondoLayout.setHorizontalGroup(
             panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panFondoLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(22, 22, 22)
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAgencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGarajes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -165,7 +165,7 @@ public class panAdministradores extends javax.swing.JPanel {
                     .addComponent(btnAutomoviles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addComponent(panContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -181,7 +181,6 @@ public class panAdministradores extends javax.swing.JPanel {
                 .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                     .addGroup(panFondoLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(btnAgencias, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,7 +194,7 @@ public class panAdministradores extends javax.swing.JPanel {
                         .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -240,7 +239,7 @@ public class panAdministradores extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAutomovilesActionPerformed
 
     private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
-        JPanel panel = new panPagos();
+        JPanel panel = new panPagosNew();
         showPanel(panel);
     }//GEN-LAST:event_btnPagosActionPerformed
 
@@ -254,7 +253,6 @@ public class panAdministradores extends javax.swing.JPanel {
     */
    private void cerrarSesion() {
        try {
-           // Confirmar acción con el usuario
            int respuesta = JOptionPane.showConfirmDialog(
                this,
                "¿Está seguro que desea cerrar la sesión?",
@@ -264,13 +262,10 @@ public class panAdministradores extends javax.swing.JPanel {
            );
 
            if (respuesta == JOptionPane.YES_OPTION) {
-               // Cerrar la sesión usando el GestorSesion
                GestorSesion.getInstance().cerrarSesion();
 
-               // Mostrar mensaje de confirmación
                mostrarExito("Sesión cerrada correctamente");
 
-               // Regresar al panel de login
                regresarAlLogin();
            }
 
@@ -292,7 +287,7 @@ public class panAdministradores extends javax.swing.JPanel {
 
             if (parent instanceof FrmPrincipal2) {
                 FrmPrincipal2 ventanaPrincipal = (FrmPrincipal2) parent;
-                ventanaPrincipal.mostrarLogin(); // Usar el método centralizado
+                ventanaPrincipal.mostrarLogin();
             }
         } catch (Exception e) {
             mostrarError("Error al regresar al login: " + e.getMessage());
@@ -311,10 +306,8 @@ public class panAdministradores extends javax.swing.JPanel {
     */
    private void cerrarSesionDirecto() {
        try {
-           // Cerrar sesión directamente
            GestorSesion.getInstance().cerrarSesion();
 
-           // Regresar al login
            regresarAlLogin();
 
        } catch (Exception e) {
@@ -346,7 +339,7 @@ public class panAdministradores extends javax.swing.JPanel {
     private javax.swing.JPanel panContenido;
     private javax.swing.JPanel panFondo;
     // End of variables declaration//GEN-END:variables
-    private Color presionadoMenu = new Color(60,60,60);
-    private Color encimaMenu = new Color(50,50,50);
-    private Color botonMenu= new Color(30,30,30);
+    private Color presionadoMenu = new Color(108,200,160);
+    private Color encimaMenu = new Color(58,150,110);
+    private Color botonMenu= new Color(8,100,60);
 }

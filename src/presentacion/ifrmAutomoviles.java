@@ -45,7 +45,7 @@ public class ifrmAutomoviles extends javax.swing.JInternalFrame {
         txtModelo.setEnabled(estado);
         txtcolor.setEnabled(estado);
         txtMarca.setEnabled(estado);
-        jComboBox1.setEnabled(estado); // Cambiar txtGaraje por jComboBox1
+        jComboBox1.setEnabled(estado);
         btnRegistrar.setEnabled(estado);
         btnNuevo.setEnabled(!estado);
     }
@@ -56,7 +56,7 @@ public class ifrmAutomoviles extends javax.swing.JInternalFrame {
         txtcolor.setText("");
         txtMarca.setText("");
         if (jComboBox1.getItemCount() > 0) {
-            jComboBox1.setSelectedIndex(0); // Seleccionar el primer item
+            jComboBox1.setSelectedIndex(0);
         }
     }
     

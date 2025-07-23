@@ -30,8 +30,9 @@ public class panPagos extends javax.swing.JPanel {
     public panPagos() {
         initComponents();
         facade = new FacadeAlquiler();
-        cargarAgencias(); // <-- Llama aquí para poblar el combo box
+        cargarAgencias();
     }
+    
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
         
@@ -81,8 +82,6 @@ public class panPagos extends javax.swing.JPanel {
         tblReservas = new javax.swing.JTable();
         btnGenerarReporte = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         cmbAgencias = new javax.swing.JComboBox<>();
-        dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString("MMMM yyyy");
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -158,7 +157,6 @@ public class panPagos extends javax.swing.JPanel {
         });
 
         cmbAgencias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agencias" }));
-        dateChooser.setDateFormatString("MMMM yyyy"); // Solo mes y año
 
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnActualizar, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -168,7 +166,6 @@ public class panPagos extends javax.swing.JPanel {
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnGenerarReporte, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(cmbAgencias, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(dateChooser, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -186,8 +183,7 @@ public class panPagos extends javax.swing.JPanel {
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGenerarReporte, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbAgencias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                    .addComponent(cmbAgencias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(75, 75, 75)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(191, Short.MAX_VALUE))
@@ -209,8 +205,6 @@ public class panPagos extends javax.swing.JPanel {
                         .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbAgencias, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(112, 112, 112)
                         .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -248,18 +242,37 @@ public class panPagos extends javax.swing.JPanel {
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
-        String agencia = (String) cmbAgencias.getSelectedItem();
-        java.util.Date fecha = dateChooser.getDate();
-        if (agencia == null || agencia.equals("Agencias") || fecha == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione una agencia y una fecha.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        // Lógica para generar el reporte de ingresos totales por mes de la agencia
-        double ingresos = facade.obtenerIngresosPorMesAgencia(agencia, fecha);
-        JOptionPane.showMessageDialog(this, "Ingresos totales de " + agencia + " en " +
-            new java.text.SimpleDateFormat("MMMM yyyy").format(fecha) + ": $" + ingresos);
+//        String agencia = (String) cmbAgencias.getSelectedItem();
+//        java.util.Date fecha = dateChooser.getDate();
+//
+//        if (agencia == null || agencia.equals("Agencias") || fecha == null) {
+//            JOptionPane.showMessageDialog(this, "Seleccione una agencia y una fecha.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
+//
+//        // Configurar el modelo de la tabla para el reporte
+//        String[] columnas = {"Concepto", "Valor"};
+//        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+//
+//        // Obtener los ingresos
+//        double ingresos = facade.obtenerIngresosPorMesAgencia(agencia, fecha);
+//        String fechaFormateada = new java.text.SimpleDateFormat("MMMM yyyy").format(fecha);
+//
+//        // Agregar datos al modelo
+//        modelo.addRow(new Object[]{"Agencia", agencia});
+//        modelo.addRow(new Object[]{"Período", fechaFormateada});
+//        modelo.addRow(new Object[]{"Ingresos Totales", "$" + String.format("%.2f", ingresos)});
+//
+//        // Aplicar el modelo a la tabla
+//        tblReservas.setModel(modelo);
+//
+//        // Mensaje de confirmación
+//        JOptionPane.showMessageDialog(this, 
+//            "Reporte generado exitosamente.\nIngresos totales: $" + String.format("%.2f", ingresos), 
+//            "Reporte Generado", 
+//            JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnGenerarReporteActionPerformed
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
@@ -273,7 +286,6 @@ public class panPagos extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblReservas;
-    private com.toedter.calendar.JDateChooser dateChooser;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);

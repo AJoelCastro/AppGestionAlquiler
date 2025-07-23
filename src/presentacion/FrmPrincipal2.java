@@ -62,6 +62,7 @@ public class FrmPrincipal2 extends javax.swing.JFrame {
         panContenido = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         panContenido.setBackground(new java.awt.Color(8, 100, 60));
 
