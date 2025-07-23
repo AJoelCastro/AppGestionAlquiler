@@ -26,7 +26,7 @@ public class FrmPrincipal2 extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         mostrarLogin();
     }
-    public void showPanel(JPanel panel) { // Cambiar de private a public
+    public void showPanel(JPanel panel) {
         panContenido.removeAll();
         panel.setSize(panContenido.getSize());
         panel.setLocation(0, 0);
